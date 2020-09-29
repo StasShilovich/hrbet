@@ -26,7 +26,7 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement statement = null;
         try {
             DaoFactory factory = DaoFactory.getInstance();
-            connection = factory.getConnection().getConnection();
+            connection = factory.getConnectionPool().getConnection();
             statement = connection.prepareStatement(ADD_USER_SQL);
             statement.setString(1, registrationUser.getName());
             statement.setString(2, registrationUser.getSurname());

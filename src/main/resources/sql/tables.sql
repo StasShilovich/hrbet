@@ -60,11 +60,6 @@ CREATE TABLE `hrbet`.`role_permissions` (
   `permission_id` INT NOT NULL,
   PRIMARY KEY (`role_id`, `permission_id`));
 
-CREATE TABLE `hrbet`.`horse_jockey_ratio` (
-  `horse_id` INT NOT NULL,
-  `jockey_id` INT NOT NULL,
-  PRIMARY KEY (`horse_id`, `jockey_id`));
-
 CREATE TABLE `hrbet`.`race_archive` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `race_id` INT NOT NULL,
@@ -73,6 +68,10 @@ CREATE TABLE `hrbet`.`race_archive` (
   `third_horse` INT NOT NULL,
   PRIMARY KEY (`id`));
 
+CREATE TABLE `hrbet`.`horse_participatings` (
+  `races_id` INT NOT NULL,
+  `horse_id` INT NOT NULL,
+  PRIMARY KEY (`races_id`, `horse_id`));
 
 ||||||||||||||||||||||||||||||||||||||||||||||
 
@@ -157,6 +156,21 @@ ADD CONSTRAINT `fk_race_archive_third_horse`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
+  ALTER TABLE `hrbet`.`horse_participatings`
+  ADD INDEX `fk_horse_participatings_horse_idx` (`horse_id` ASC) VISIBLE;
+  ;
+  ALTER TABLE `hrbet`.`horse_participatings`
+  ADD CONSTRAINT `fk_horse_participatings_race`
+    FOREIGN KEY (`races_id`)
+    REFERENCES `hrbet`.`races` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_horse_participatings_horse`
+    FOREIGN KEY (`horse_id`)
+    REFERENCES `hrbet`.`horses` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
 ||||||||||||||||||||||||||||||||||||||||||||||||||
 
 INSERT INTO `hrbet`.`roles` (`name`) VALUES ('admin');
@@ -192,25 +206,23 @@ INSERT INTO `hrbet`.`races` (`location`, `time`, `bank_dollars`) VALUES ('TRP Э
 INSERT INTO `hrbet`.`races` (`location`, `time`, `bank_dollars`) VALUES ('Седжфилд', '2017-09-17 19:00:00', '5000');
 INSERT INTO `hrbet`.`races` (`location`, `time`, `bank_dollars`) VALUES ('Эр', '2017-08-28 15:15:00', '1500');
 
-
-
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('The Butcher Said', '7');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('The Wolf', '6');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Thegallantway', '7');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Brecon Hill', '7');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Cool Destination', '7');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Diomede des Mottes', '7');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Reve', '6');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Snow Leopardess', '8');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Teqany', '6');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Midnights\' Gift', '4');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('See The Sea', '6');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Ask Himself', '6');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Beach Break', '6');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Valentino Dancer', '5');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Kajaki', '7');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('Tidal Watch', '6');
-INSERT INTO `hrbet`.`horses` (`name`, `age`) VALUES ('El Borracho', '7');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('The Butcher Said', '7','P J Brennan');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('The Wolf', '6','Adrian Heskin');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Thegallantway', '7','Nick Scholfield');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Brecon Hill', '7','F O\'Brien');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Cool Destination', '7','P J Brennan');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Diomede des Mottes', '7','D Skelton');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Reve', '6','M Keighley');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Snow Leopardess', '8','R Johnson');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Teqany', '6','C E Longsdon');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Midnights\' Gift', '4','B S Hughes');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('See The Sea', '6','F O\'Brien');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Ask Himself', '6','P J Brennan');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Beach Break', '6','A King');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Valentino Dancer', '5','Tom Cannon');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Kajaki', '7','Theo Gillard');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('Tidal Watch', '6','M Scudamore');
+INSERT INTO `hrbet`.`horses` (`name`, `age`, `jockey`) VALUES ('El Borracho', '7','R T Dunne');
 
 
 INSERT INTO `hrbet`.`horse_participatings` (`races_id`, `horse_id`) VALUES ('1', '4');
@@ -237,23 +249,6 @@ INSERT INTO `hrbet`.`horse_participatings` (`races_id`, `horse_id`) VALUES ('3',
 INSERT INTO `hrbet`.`horse_participatings` (`races_id`, `horse_id`) VALUES ('3', '14');
 INSERT INTO `hrbet`.`horse_participatings` (`races_id`, `horse_id`) VALUES ('3', '12');
 INSERT INTO `hrbet`.`horse_participatings` (`races_id`, `horse_id`) VALUES ('3', '10');
-UPDATE `hrbet`.`horses` SET `jockey` = 'P J Brennan' WHERE (`id` = '1');
-UPDATE `hrbet`.`horses` SET `jockey` = 'Adrian Heskin' WHERE (`id` = '2');
-UPDATE `hrbet`.`horses` SET `jockey` = 'Nick Scholfield' WHERE (`id` = '3');
-UPDATE `hrbet`.`horses` SET `jockey` = 'F O\'Brien' WHERE (`id` = '4');
-UPDATE `hrbet`.`horses` SET `jockey` = 'P J Brennan' WHERE (`id` = '5');
-UPDATE `hrbet`.`horses` SET `jockey` = 'D Skelton' WHERE (`id` = '6');
-UPDATE `hrbet`.`horses` SET `jockey` = 'M Keighley' WHERE (`id` = '7');
-UPDATE `hrbet`.`horses` SET `jockey` = 'R Johnson' WHERE (`id` = '8');
-UPDATE `hrbet`.`horses` SET `jockey` = 'C E Longsdon' WHERE (`id` = '9');
-UPDATE `hrbet`.`horses` SET `jockey` = 'B S Hughes' WHERE (`id` = '10');
-UPDATE `hrbet`.`horses` SET `jockey` = 'F O\'Brien' WHERE (`id` = '11');
-UPDATE `hrbet`.`horses` SET `jockey` = 'P J Brennan' WHERE (`id` = '12');
-UPDATE `hrbet`.`horses` SET `jockey` = 'A King' WHERE (`id` = '13');
-UPDATE `hrbet`.`horses` SET `jockey` = 'Tom Cannon' WHERE (`id` = '14');
-UPDATE `hrbet`.`horses` SET `jockey` = 'Theo Gillard' WHERE (`id` = '15');
-UPDATE `hrbet`.`horses` SET `jockey` = 'M Scudamore' WHERE (`id` = '16');
-UPDATE `hrbet`.`horses` SET `jockey` = 'R T Dunne' WHERE (`id` = '17');
 
 
 INSERT INTO `hrbet`.`bet_types` (`name`) VALUES ('win');

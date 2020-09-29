@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         DaoFactory factory = DaoFactory.getInstance();
         UserDao userDao = factory.getUserDao();
-        UserRegistration userRegistration = new UserRegistration("322", "1488", "2312321e1e2", "teset");
+        UserRegistration userRegistration = new UserRegistration("322", "1adda8", "2312321e1e2", "teset");
         try {
             userDao.registration(userRegistration);
         } catch (DaoException e) {
