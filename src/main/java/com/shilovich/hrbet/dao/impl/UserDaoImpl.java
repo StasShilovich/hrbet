@@ -7,6 +7,7 @@ import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.UserDao;
 import com.shilovich.hrbet.dao.exception.DaoException;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

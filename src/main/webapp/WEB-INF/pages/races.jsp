@@ -13,7 +13,6 @@
         </div>
     </h1>
 </div>
-<br>
 <div class="col-md-10">
     <div class="ml-auto">
         <table class="table" border="4">
@@ -26,7 +25,6 @@
             </thead>
             <tbody>
             <c:forEach  var="race" items="${races}">
-               <jsp:useBean id="race" scope="request" type="com.shilovich.hrbet.beans.Race"/>
                 <tr>
                     <td>${race.location}</td>
                     <td>${race.date}</td>
