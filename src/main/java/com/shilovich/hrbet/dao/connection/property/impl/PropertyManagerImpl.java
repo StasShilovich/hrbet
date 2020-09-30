@@ -16,6 +16,7 @@ public class PropertyManagerImpl implements PropertyManager {
     public static final String INITIAL_POOL_SIZE = "database.initialPoolSize";
     public static final String MAX_TIMEOUT = "database.maxTimeout";
     public static final String MAX_OPEN_STATEMENTS = "database.maxOpenStatements";
+    public static final String DRIVER_CLASS_NAME = "database.driverClassName";
 
     @Override
     public String getProperty(String key) throws DaoException {

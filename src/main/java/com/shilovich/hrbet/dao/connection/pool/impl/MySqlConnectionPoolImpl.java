@@ -17,6 +17,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
 
     static {
         try {
+            Class.forName(manager.getProperty(DRIVER_CLASS_NAME));
             String url = manager.getProperty(URL);
             String user = manager.getProperty(USERNAME);
             String password = manager.getProperty(PASSWORD);
@@ -25,7 +26,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
             int maxTimeout = Integer.parseInt(manager.getProperty(MAX_TIMEOUT));
             connectionPool = CustomConnectionPoolImpl
                     .create(url, user, password, initialPoolSize, maxPoolSize, maxTimeout);
-        } catch (SQLException | DaoException e) {
+        } catch (Exception e) {
             // TODO: 28.09.2020 logger maybe runtime when pool will be
             System.out.println("Exception due sql connection");
         }

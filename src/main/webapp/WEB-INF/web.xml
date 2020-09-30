@@ -5,11 +5,11 @@
 <web-app>
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
-        <servlet-name>TestServlet</servlet-name>
-        <servlet-class>com.shilovich.hrbet.controller.TestServlet</servlet-class>
+        <servlet-name>RacesServlet</servlet-name>
+        <servlet-class>com.shilovich.hrbet.controller.RacesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>TestServlet</servlet-name>
-        <url-pattern>/test</url-pattern>
+        <servlet-name>RacesServlet</servlet-name>
+        <url-pattern>/races</url-pattern>
     </servlet-mapping>
 </web-app>
