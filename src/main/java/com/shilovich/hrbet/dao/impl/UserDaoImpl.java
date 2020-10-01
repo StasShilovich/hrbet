@@ -1,5 +1,6 @@
 package com.shilovich.hrbet.dao.impl;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.shilovich.hrbet.beans.UserAuthorized;
 import com.shilovich.hrbet.beans.UserLogIn;
 import com.shilovich.hrbet.beans.UserRegistration;
@@ -31,7 +32,9 @@ public class UserDaoImpl implements UserDao {
             statement = connection.prepareStatement(ADD_USER_SQL);
             statement.setString(1, registrationUser.getName());
             statement.setString(2, registrationUser.getSurname());
-            statement.setString(3, registrationUser.getPassword());
+            String password = registrationUser.getPassword();
+            String hashPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+            statement.setString(3, hashPassword);
             statement.setString(4, registrationUser.getEmail());
             int rows = statement.executeUpdate();
             if (rows == 0) {
