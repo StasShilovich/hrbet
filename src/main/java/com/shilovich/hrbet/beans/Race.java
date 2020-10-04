@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Race implements Serializable {
     private transient String serialVersionUID;
+    private Long id;
     private String location;
     private Date date;
     private Long bank;
@@ -16,10 +17,19 @@ public class Race implements Serializable {
     public Race() {
     }
 
-    public Race(String location, Date date, Long bank) {
+    public Race(Long id, String location, Date date, Long bank) {
+        this.id = id;
         this.location = location;
         this.date = date;
         this.bank = bank;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLocation() {
@@ -49,7 +59,8 @@ public class Race implements Serializable {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder("Race{");
-        builder.append("location='").append(location).append('\'');
+        builder.append("id=").append(id);
+        builder.append(", location='").append(location).append('\'');
         builder.append(", date=").append(date);
         builder.append(", bank=").append(bank);
         builder.append('}');
@@ -65,7 +76,10 @@ public class Race implements Serializable {
             return false;
         }
         Race race = (Race) o;
-        if (!location.equals(race.location)) {
+        if (!id.equals(race.id)){
+            return false;
+        }
+        if (!location.equals(race.location)){
             return false;
         }
         if (!date.equals(race.date)) {
@@ -76,7 +90,8 @@ public class Race implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = location.hashCode();
+        int result = id.hashCode();
+        result = 31 * result + location.hashCode();
         result = 31 * result + date.hashCode();
         result = 31 * result + (bank != null ? bank.hashCode() : 0);
         return result;

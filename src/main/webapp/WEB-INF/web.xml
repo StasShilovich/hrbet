@@ -2,11 +2,11 @@
 
 <display-name>Web Application</display-name>
     <servlet>
-        <servlet-name>RacesServlet</servlet-name>
-        <servlet-class>com.shilovich.hrbet.controller.RacesServlet</servlet-class>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <servlet-class>com.shilovich.hrbet.controller.DispatcherServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RacesServlet</servlet-name>
+        <servlet-name>DispatcherServlet</servlet-name>
         <url-pattern>/races</url-pattern>
     </servlet-mapping>
 </web-app>

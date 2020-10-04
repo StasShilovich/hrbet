@@ -15,7 +15,7 @@ import java.util.List;
 
 public class RaceDaoImpl implements RaceDao {
     private static final String SHOW_ALL_RACES_SQL =
-            "SELECT location,time,bank_dollars FROM races;";
+            "SELECT id,location,time,bank_dollars FROM races;";
 
     @Override
     public List<Race> showAll() throws DaoException {
@@ -31,12 +31,14 @@ public class RaceDaoImpl implements RaceDao {
             while (set.next()) {
                 Race race = new Race();
                 // TODO: 30.09.2020 Make constants class for column names
+                race.setId(set.getLong("id"));
                 race.setLocation(set.getString("location"));
                 Date date = new Date(set.getTimestamp("time").getTime());
                 race.setDate(date);
                 race.setBank(set.getLong("bank_dollars"));
                 races.add(race);
             }
+            return races;
         } catch (SQLException e) {
             throw new DaoException("Show all races exception!", e);
         } finally {
@@ -44,6 +46,5 @@ public class RaceDaoImpl implements RaceDao {
             close(statement);
             close(connection);
         }
-        return races;
     }
 }
