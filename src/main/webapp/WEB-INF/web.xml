@@ -7,6 +7,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>DispatcherServlet</servlet-name>
-        <url-pattern>/races</url-pattern>
+        <url-pattern>/dispatcher</url-pattern>
     </servlet-mapping>
 </web-app>

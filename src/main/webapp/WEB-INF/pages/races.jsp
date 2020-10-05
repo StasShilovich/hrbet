@@ -12,14 +12,16 @@
         <table class="table" border="4">
             <thead>
             <tr>
+                <th scope="col">№</th>
                 <th scope="col">Location</th>
                 <th scope="col">Date</th>
                 <th scope="col">Bank</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="race" items="${races}">
+            <c:forEach var="race" items="${races}" varStatus="count">
                 <tr>
+                    <td>${count.index+1}</td>
                     <td>${race.location}</td>
                     <td>${race.date}</td>
                     <td>${race.bank}</td>

@@ -45,7 +45,7 @@ public class UserDaoImpl implements UserDao {
                 String password = set.getString("u.password");
                 BCrypt.Result verify = BCrypt.verifyer().verify(logInUser.getPassword().toCharArray(), password);
                 if (!verify.verified) {
-                    return new UserAuthorized();
+                    return null;
                 }
                 String roleName = set.getString("r.name");
                 Role role = new Role();

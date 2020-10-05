@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.controller;
 
 import com.shilovich.hrbet.controller.command.impl.LogInCommandImpl;
+import com.shilovich.hrbet.controller.command.impl.LogOutCommandImpl;
 import com.shilovich.hrbet.controller.command.impl.RacesPageCommandImpl;
 import com.shilovich.hrbet.controller.command.model.CommandEnum;
 import com.shilovich.hrbet.service.exception.ServiceException;
@@ -49,5 +50,6 @@ public class DispatcherServlet extends HttpServlet {
     public void init() throws ServletException {
         commands.put(CommandEnum.RACES, new RacesPageCommandImpl());
         commands.put(CommandEnum.LOGIN, new LogInCommandImpl());
+        commands.put(CommandEnum.LOGOUT, new LogOutCommandImpl());
     }
 }

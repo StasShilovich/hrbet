@@ -14,13 +14,24 @@ import java.io.IOException;
 
 public class LogInCommandImpl implements Command {
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, ServiceException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        ServiceFactory factory=ServiceFactory.getInstance();
-        UserAuthorized userAuthorized = factory.getUserService().authorization(new UserLogIn(email, password));
-        HttpSession session = req.getSession();
-        session.setAttribute("userAuth",userAuthorized);
-        return "/WEB-INF/index.jsp";
+        try {
+            if (email.isEmpty()|| password.isEmpty()) {
+                req.setAttribute("emptyParams", "There should be no empty fields!");
+                return "/index.jsp";
+            }
+            ServiceFactory factory = ServiceFactory.getInstance();
+            UserAuthorized userAuthorized = factory.getUserService().authorization(new UserLogIn(email, password));
+            if (userAuthorized != null) {
+                HttpSession session = req.getSession();
+                session.setAttribute("userAuth", userAuthorized);
+            }
+        } catch (ServiceException e) {
+            // TODO: 05.10.2020 logger
+            System.out.println(e.getMessage());
+        }
+        return "/index.jsp";
     }
 }
