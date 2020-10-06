@@ -1,6 +1,5 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
-
-<display-name>Web Application</display-name>
+    <display-name>Web Application</display-name>
     <servlet>
         <servlet-name>DispatcherServlet</servlet-name>
         <servlet-class>com.shilovich.hrbet.controller.DispatcherServlet</servlet-class>
