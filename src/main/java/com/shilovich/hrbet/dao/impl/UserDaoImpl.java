@@ -13,14 +13,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class UserDaoImpl implements UserDao {
     private static final String ADD_USER_SQL =
             "INSERT INTO users (name,surname,password,email,role_id,deleted) VALUES (?,?,?,?,2,0)";
-    private static final String USER_PASSWORD_SQL = "SELECT id FROM users WHERE email=?";
+    private static final String USER_PASSWORD_SQL =
+            "SELECT id FROM users WHERE email=?";
     private static final String USER_AUTHORIZED_SQL =
-            "SELECT u.id,u.name, u.surname,u.password, r.name FROM users u INNER JOIN roles r ON u.role_id=r.id WHERE u.id=?";
+            "SELECT u.id,u.name, u.surname,u.password, r.name FROM users u " +
+                    "INNER JOIN roles r ON u.role_id=r.id WHERE u.id=?";
+    /*
+    select u.id,u.name,u.surname,u.password,r.id,r.name,dt.id,dt.name from users as u
+inner join roles as r ON u.role_id=r.id
+inner join
+(select rep.role_id,per.id,per.name from role_permissions rep
+inner join permission per ON rep.permission_id=per.id) as dt ON r.id=dt.role_id ;
+     */
 
     @Override
     public UserAuthorized authorization(UserLogIn logInUser) throws DaoException {
@@ -39,15 +47,15 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, userId.toString());
             set = statement.executeQuery();
             while (set.next()) {
-                Long id = set.getLong("u.id");
-                String userName = set.getString("u.name");
-                String surname = set.getString("u.surname");
-                String password = set.getString("u.password");
+                Long id = set.getLong(ALIAS_ID);
+                String userName = set.getString(ALIAS_NAME);
+                String surname = set.getString(ALIAS_SURNAME);
+                String password = set.getString(ALIAS_PASSWORD);
                 BCrypt.Result verify = BCrypt.verifyer().verify(logInUser.getPassword().toCharArray(), password);
                 if (!verify.verified) {
                     return null;
                 }
-                String roleName = set.getString("r.name");
+                String roleName = set.getString(ALIAS_ROLE_NAME);
                 Role role = new Role();
                 role.setName(roleName);
                 userAuthorized = new UserAuthorized(id, userName, surname, role);
@@ -96,7 +104,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(1, email);
         ResultSet set = statement.executeQuery();
         while (set.next()) {
-            return set.getLong("id");
+            return set.getLong(ID);
         }
         return null;
     }

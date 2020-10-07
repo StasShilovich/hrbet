@@ -11,6 +11,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public interface UserDao {
+    String ID = "id";
+    String ALIAS_ID = "u.id";
+    String ALIAS_NAME = "u.name";
+    String ALIAS_SURNAME = "u.surname";
+    String ALIAS_PASSWORD = "u.password";
+    String ALIAS_ROLE_NAME = "r.name";
+
+
     UserAuthorized authorization(UserLogIn logInUser) throws DaoException;
 
     void registration(UserRegistration registrationUser) throws DaoException;
