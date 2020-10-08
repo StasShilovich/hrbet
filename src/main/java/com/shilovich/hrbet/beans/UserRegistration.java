@@ -3,8 +3,8 @@ package com.shilovich.hrbet.beans;
 import java.io.Serializable;
 
 public class UserRegistration implements Serializable {
-    private transient String serialVersionUID;
-    private Long id;
+    private static final long serialVersionUID = 1307355100646370176L;
+
     private String name;
     private String surname;
     private String password;
@@ -13,24 +13,11 @@ public class UserRegistration implements Serializable {
     public UserRegistration() {
     }
 
-    public UserRegistration(Long id, String name, String surname, String password, String email) {
-        this.id = id;
+    public UserRegistration(String name, String surname, String password, String email) {
         this.name = name;
         this.surname = surname;
         this.password = password;
         this.email = email;
-    }
-
-    final void setSerialVersionUID(String uid) {
-        this.serialVersionUID = uid;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -68,8 +55,7 @@ public class UserRegistration implements Serializable {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder("UserRegistration{");
-        builder.append("id=").append(id);
-        builder.append(", name='").append(name).append('\'');
+        builder.append("name='").append(name).append('\'');
         builder.append(", surname='").append(surname).append('\'');
         builder.append(", password='").append(password).append('\'');
         builder.append(", email='").append(email).append('\'');
@@ -79,23 +65,20 @@ public class UserRegistration implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o){
+        if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()){
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         UserRegistration that = (UserRegistration) o;
-        if (!id.equals(that.id)){
+        if (!name.equals(that.name)) {
             return false;
         }
-        if (!name.equals(that.name)){
+        if (!surname.equals(that.surname)) {
             return false;
         }
-        if (!surname.equals(that.surname)){
-            return false;
-        }
-        if (!password.equals(that.password)){
+        if (!password.equals(that.password)) {
             return false;
         }
         return email.equals(that.email);
@@ -103,8 +86,7 @@ public class UserRegistration implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + name.hashCode();
+        int result = name.hashCode();
         result = 31 * result + surname.hashCode();
         result = 31 * result + password.hashCode();
         result = 31 * result + email.hashCode();

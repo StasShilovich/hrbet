@@ -1,28 +1,15 @@
 package com.shilovich.hrbet.dao;
 
+import com.shilovich.hrbet.beans.RoleHolder;
 import com.shilovich.hrbet.dao.exception.DaoException;
-import com.shilovich.hrbet.beans.UserAuthorized;
-import com.shilovich.hrbet.beans.UserLogIn;
-import com.shilovich.hrbet.beans.UserRegistration;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public interface UserDao {
-    String ID = "id";
-    String ALIAS_ID = "u.id";
-    String ALIAS_NAME = "u.name";
-    String ALIAS_SURNAME = "u.surname";
-    String ALIAS_PASSWORD = "u.password";
-    String ALIAS_ROLE_ID = "r.id";
-    String ALIAS_ROLE_NAME = "r.name";
-
-
-    UserAuthorized authorization(UserLogIn logInUser) throws DaoException;
-
-    void registration(UserRegistration registrationUser) throws DaoException;
+public interface RolePermissionsDao {
+    RoleHolder findAll() throws DaoException;
 
     default void close(Connection connection) throws DaoException {
         if (connection != null) {

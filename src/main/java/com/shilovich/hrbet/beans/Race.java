@@ -4,15 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Race implements Serializable {
-    private transient String serialVersionUID;
+    private static final long serialVersionUID = 4834209940652886210L;
+
     private Long id;
     private String location;
     private Date date;
     private Long bank;
-
-    final void setSerialVersionUID(String uid) {
-        this.serialVersionUID = uid;
-    }
 
     public Race() {
     }

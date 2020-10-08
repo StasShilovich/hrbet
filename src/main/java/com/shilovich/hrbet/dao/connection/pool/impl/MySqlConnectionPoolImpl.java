@@ -13,24 +13,24 @@ import static com.shilovich.hrbet.dao.connection.property.impl.PropertyManagerIm
 
 public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
     private static CustomConnectionPool connectionPool;
-    private static PropertyManager manager = new PropertyManagerImpl();
 
-    static {
-        try {
-            Class.forName(manager.getProperty(DRIVER_CLASS_NAME));
-            String url = manager.getProperty(URL);
-            String user = manager.getProperty(USERNAME);
-            String password = manager.getProperty(PASSWORD);
-            int initialPoolSize = Integer.parseInt(manager.getProperty(INITIAL_POOL_SIZE));
-            int maxPoolSize = Integer.parseInt(manager.getProperty(MAX_OPEN_STATEMENTS));
-            int maxTimeout = Integer.parseInt(manager.getProperty(MAX_TIMEOUT));
-            connectionPool = CustomConnectionPoolImpl
-                    .create(url, user, password, initialPoolSize, maxPoolSize, maxTimeout);
-        } catch (Exception e) {
-            // TODO: 28.09.2020 logger maybe runtime when pool will be
-            System.out.println("Exception due sql connection");
-        }
-    }
+
+//    static {
+//        try {
+//            Class.forName(manager.getProperty(DRIVER_CLASS_NAME));
+//            String url = manager.getProperty(URL);
+//            String user = manager.getProperty(USERNAME);
+//            String password = manager.getProperty(PASSWORD);
+//            int initialPoolSize = Integer.parseInt(manager.getProperty(INITIAL_POOL_SIZE));
+//            int maxPoolSize = Integer.parseInt(manager.getProperty(MAX_OPEN_STATEMENTS));
+//            int maxTimeout = Integer.parseInt(manager.getProperty(MAX_TIMEOUT));
+//            connectionPool = CustomConnectionPoolImpl
+//                    .create(url, user, password, initialPoolSize, maxPoolSize, maxTimeout);
+//        } catch (Exception e) {
+//            // TODO: 28.09.2020 logger maybe runtime when pool will be
+//            System.out.println("Exception due sql connection");
+//        }
+//    }
 
     @Override
     public Connection getConnection() throws DaoException {
@@ -38,6 +38,15 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
             return connectionPool.getConnection();
         } catch (SQLException e) {
             throw new DaoException("Connection Exception", e);
+        }
+    }
+
+    @Override
+    public void shutdown() throws DaoException {
+        try {
+            connectionPool.shutdown();
+        } catch (SQLException e) {
+            throw new DaoException("Connection pool shutdown fail!", e);
         }
     }
 }

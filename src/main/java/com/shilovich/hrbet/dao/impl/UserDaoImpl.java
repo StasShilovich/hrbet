@@ -1,10 +1,7 @@
 package com.shilovich.hrbet.dao.impl;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.shilovich.hrbet.beans.Role;
-import com.shilovich.hrbet.beans.UserAuthorized;
-import com.shilovich.hrbet.beans.UserLogIn;
-import com.shilovich.hrbet.beans.UserRegistration;
+import com.shilovich.hrbet.beans.*;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.UserDao;
 import com.shilovich.hrbet.dao.exception.DaoException;
@@ -13,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 public class UserDaoImpl implements UserDao {
     private static final String ADD_USER_SQL =
@@ -20,15 +18,8 @@ public class UserDaoImpl implements UserDao {
     private static final String USER_PASSWORD_SQL =
             "SELECT id FROM users WHERE email=?";
     private static final String USER_AUTHORIZED_SQL =
-            "SELECT u.id,u.name, u.surname,u.password, r.name FROM users u " +
+            "SELECT u.id,u.name, u.surname,u.password,r.id, r.name FROM users u " +
                     "INNER JOIN roles r ON u.role_id=r.id WHERE u.id=?";
-    /*
-    select u.id,u.name,u.surname,u.password,r.id,r.name,dt.id,dt.name from users as u
-inner join roles as r ON u.role_id=r.id
-inner join
-(select rep.role_id,per.id,per.name from role_permissions rep
-inner join permission per ON rep.permission_id=per.id) as dt ON r.id=dt.role_id ;
-     */
 
     @Override
     public UserAuthorized authorization(UserLogIn logInUser) throws DaoException {
@@ -55,10 +46,11 @@ inner join permission per ON rep.permission_id=per.id) as dt ON r.id=dt.role_id 
                 if (!verify.verified) {
                     return null;
                 }
+                Long roleId = set.getLong(ALIAS_ROLE_ID);
                 String roleName = set.getString(ALIAS_ROLE_NAME);
-                Role role = new Role();
-                role.setName(roleName);
-                userAuthorized = new UserAuthorized(id, userName, surname, role);
+                Set<Permission> permissions = factory.getRolePermissionsDao().findAll().getRoles().get(roleId);
+                userAuthorized = new UserAuthorized(id, userName, surname,
+                        new Role(roleId, roleName, permissions));
             }
             return userAuthorized;
         } catch (SQLException e) {

@@ -1,17 +1,30 @@
 package com.shilovich.hrbet.beans;
 
-import java.security.Permission;
+import java.io.Serializable;
+import java.util.Set;
 
-public class Role {
+public class Role implements Serializable {
+    private static final long serialVersionUID = 4404594163784224613L;
+
+    private Long id;
     private String name;
-    private Permission permission;
+    private Set<Permission> permissions;
 
     public Role() {
     }
 
-    public Role(String name, Permission permission) {
+    public Role(Long id, String name, Set<Permission> permissions) {
+        this.id = id;
         this.name = name;
-        this.permission = permission;
+        this.permissions = permissions;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -22,19 +35,20 @@ public class Role {
         this.name = name;
     }
 
-    public Permission getPermission() {
-        return permission;
+    public Set<Permission> getPermissions() {
+        return permissions;
     }
 
-    public void setPermission(Permission permission) {
-        this.permission = permission;
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder("Role{");
-        builder.append("name='").append(name).append('\'');
-        builder.append(", permission=").append(permission);
+        builder.append("id=").append(id);
+        builder.append(", name='").append(name).append('\'');
+        builder.append(", permissions=").append(permissions);
         builder.append('}');
         return builder.toString();
     }
@@ -48,16 +62,20 @@ public class Role {
             return false;
         }
         Role role = (Role) o;
+        if (!id.equals(role.id)) {
+            return false;
+        }
         if (!name.equals(role.name)) {
             return false;
         }
-        return permission.equals(role.permission);
+        return permissions.equals(role.permissions);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + permission.hashCode();
+        int result = id.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + permissions.hashCode();
         return result;
     }
 }

@@ -1,14 +1,27 @@
 package com.shilovich.hrbet.beans;
 
-public class Permission {
-    private String name;
+import java.io.Serializable;
 
+public class Permission implements Serializable {
+    private static final long serialVersionUID = -3266311567007614575L;
+
+    private Long id;
+    private String name;
 
     public Permission() {
     }
 
-    public Permission(String name) {
+    public Permission(Long id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -21,10 +34,11 @@ public class Permission {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Permission{");
-        sb.append("name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
+        final StringBuilder builder = new StringBuilder("Permission{");
+        builder.append("id=").append(id);
+        builder.append(", name='").append(name).append('\'');
+        builder.append('}');
+        return builder.toString();
     }
 
     @Override
@@ -32,15 +46,20 @@ public class Permission {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()){
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         Permission that = (Permission) o;
+        if (!id.equals(that.id)) {
+            return false;
+        }
         return name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        int result = id.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
     }
 }

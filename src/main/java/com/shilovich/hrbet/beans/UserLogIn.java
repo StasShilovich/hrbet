@@ -3,7 +3,8 @@ package com.shilovich.hrbet.beans;
 import java.io.Serializable;
 
 public class UserLogIn implements Serializable {
-    private transient String serialVersionUID;
+    private static final long serialVersionUID = 246521420386215924L;
+
     private String email;
     private String password;
 
@@ -13,10 +14,6 @@ public class UserLogIn implements Serializable {
     public UserLogIn(String email, String password) {
         this.email = email;
         this.password = password;
-    }
-
-    final void setSerialVersionUID(String uid) {
-        this.serialVersionUID = uid;
     }
 
     public String getEmail() {

@@ -3,15 +3,12 @@ package com.shilovich.hrbet.beans;
 import java.io.Serializable;
 
 public class UserAuthorized implements Serializable {
-    private transient String serialVersionUID;
+    private static final long serialVersionUID = 7677463613635885247L;
+
     private Long id;
     private String userName;
     private String surname;
     private Role role;
-
-    final void setSerialVersionUID(String uid) {
-        this.serialVersionUID = uid;
-    }
 
     public UserAuthorized() {
     }

@@ -3,6 +3,7 @@ package com.shilovich.hrbet.dao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
 import com.shilovich.hrbet.dao.impl.RaceDaoImpl;
+import com.shilovich.hrbet.dao.impl.RolePermissionsDaoImpl;
 import com.shilovich.hrbet.dao.impl.UserDaoImpl;
 
 public class DaoFactory {
@@ -10,8 +11,13 @@ public class DaoFactory {
     private final MySqlConnectionPool connectionPool = new MySqlConnectionPoolImpl();
     private final UserDao userDao = new UserDaoImpl();
     private final RaceDao raceDao = new RaceDaoImpl();
+    private final RolePermissionsDao rolePermissionsDao = new RolePermissionsDaoImpl();
 
     private DaoFactory() {
+    }
+
+    public RolePermissionsDao getRolePermissionsDao() {
+        return rolePermissionsDao;
     }
 
     public RaceDao getRaceDao() {
