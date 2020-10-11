@@ -2,8 +2,12 @@ package com.shilovich.hrbet.dao.impl;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.shilovich.hrbet.beans.*;
+import com.shilovich.hrbet.constant.CommonConstant;
+import com.shilovich.hrbet.dao.DaoCRUD;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.UserDao;
+import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
+import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
 import com.shilovich.hrbet.dao.exception.DaoException;
 
 import java.sql.Connection;
@@ -12,7 +16,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class UserDaoImpl implements UserDao {
+import static com.shilovich.hrbet.constant.CommonConstant.*;
+
+public class UserDaoImpl extends UserDao {
+    private MySqlConnectionPool pool = new MySqlConnectionPoolImpl();
+
     private static final String ADD_USER_SQL =
             "INSERT INTO users (name,surname,password,email,role_id,deleted) VALUES (?,?,?,?,2,0)";
     private static final String USER_PASSWORD_SQL =
@@ -28,8 +36,7 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement statement = null;
         ResultSet set = null;
         try {
-            DaoFactory factory = DaoFactory.getInstance();
-            connection = factory.getConnectionPool().getConnection();
+            connection = pool.getConnection();
             Long userId = findUserId(connection, logInUser.getEmail());
             if (userId == null) {
                 return null;
@@ -48,6 +55,7 @@ public class UserDaoImpl implements UserDao {
                 }
                 Long roleId = set.getLong(ALIAS_ROLE_ID);
                 String roleName = set.getString(ALIAS_ROLE_NAME);
+                // TODO: 11.10.2020 factory 
                 Set<Permission> permissions = factory.getRolePermissionsDao().findAll().getRoles().get(roleId);
                 userAuthorized = new UserAuthorized(id, userName, surname,
                         new Role(roleId, roleName, permissions));

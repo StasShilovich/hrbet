@@ -8,10 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public interface RolePermissionsDao {
-    RoleHolder findAll() throws DaoException;
+public abstract class RolePermissionsDao implements DaoCRUD {
+    public abstract RoleHolder findAll() throws DaoException;
 
-    default void close(Connection connection) throws DaoException {
+    public void close(Connection connection) throws DaoException {
         if (connection != null) {
             try {
                 connection.close();
@@ -21,7 +21,7 @@ public interface RolePermissionsDao {
         }
     }
 
-    default void close(Statement statement) throws DaoException {
+    public void close(Statement statement) throws DaoException {
         if (statement != null) {
             try {
                 statement.close();
@@ -31,7 +31,7 @@ public interface RolePermissionsDao {
         }
     }
 
-    default void close(ResultSet set) throws DaoException {
+    public void close(ResultSet set) throws DaoException {
         if (set != null) {
             try {
                 set.close();

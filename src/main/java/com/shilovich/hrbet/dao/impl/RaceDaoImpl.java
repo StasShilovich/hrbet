@@ -3,6 +3,8 @@ package com.shilovich.hrbet.dao.impl;
 import com.shilovich.hrbet.beans.Race;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.RaceDao;
+import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
+import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
 import com.shilovich.hrbet.dao.exception.DaoException;
 
 import java.sql.Connection;
@@ -13,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RaceDaoImpl implements RaceDao {
+public class RaceDaoImpl extends RaceDao {
+    // TODO: 11.10.2020 todo
+    private MySqlConnectionPool pool = new MySqlConnectionPoolImpl();
     private static final String SHOW_ALL_RACES_SQL =
             "SELECT id,location,time,bank_dollars FROM races;";
 
@@ -24,8 +28,7 @@ public class RaceDaoImpl implements RaceDao {
         Statement statement = null;
         ResultSet set = null;
         try {
-            DaoFactory factory = DaoFactory.getInstance();
-            connection = factory.getConnectionPool().getConnection();
+            connection = pool.getConnection();
             statement = connection.createStatement();
             set = statement.executeQuery(SHOW_ALL_RACES_SQL);
             while (set.next()) {
@@ -42,6 +45,7 @@ public class RaceDaoImpl implements RaceDao {
         } catch (SQLException e) {
             throw new DaoException("Show all races exception!", e);
         } finally {
+
             close(set);
             close(statement);
             close(connection);

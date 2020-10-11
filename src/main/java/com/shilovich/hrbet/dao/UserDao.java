@@ -1,30 +1,40 @@
 package com.shilovich.hrbet.dao;
 
+import com.shilovich.hrbet.beans.*;
 import com.shilovich.hrbet.dao.exception.DaoException;
-import com.shilovich.hrbet.beans.UserAuthorized;
-import com.shilovich.hrbet.beans.UserLogIn;
-import com.shilovich.hrbet.beans.UserRegistration;
 
+import javax.ws.rs.NotSupportedException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public interface UserDao {
-    String ID = "id";
-    String ALIAS_ID = "u.id";
-    String ALIAS_NAME = "u.name";
-    String ALIAS_SURNAME = "u.surname";
-    String ALIAS_PASSWORD = "u.password";
-    String ALIAS_ROLE_ID = "r.id";
-    String ALIAS_ROLE_NAME = "r.name";
+public abstract class UserDao implements DaoCRUD<User,Long>{
+    public abstract UserAuthorized authorization(UserLogIn logInUser) throws DaoException;
 
+    public abstract void registration(UserRegistration registrationUser) throws DaoException;
 
-    UserAuthorized authorization(UserLogIn logInUser) throws DaoException;
+    @Override
+    public User create(User user) throws DaoException {
+        throw new NotSupportedException();
+    }
 
-    void registration(UserRegistration registrationUser) throws DaoException;
+    @Override
+    public User read(Long id) throws DaoException {
+        throw new NotSupportedException();
+    }
 
-    default void close(Connection connection) throws DaoException {
+    @Override
+    public User update(User user) throws DaoException {
+        throw new NotSupportedException();
+    }
+
+    @Override
+    public boolean delete(User user) throws DaoException {
+        throw new NotSupportedException();
+    }
+
+    public void close(Connection connection) throws DaoException {
         if (connection != null) {
             try {
                 connection.close();
@@ -34,7 +44,7 @@ public interface UserDao {
         }
     }
 
-    default void close(Statement statement) throws DaoException {
+    public void close(Statement statement) throws DaoException {
         if (statement != null) {
             try {
                 statement.close();
@@ -44,7 +54,7 @@ public interface UserDao {
         }
     }
 
-    default void close(ResultSet set) throws DaoException {
+    public void close(ResultSet set) throws DaoException {
         if (set != null) {
             try {
                 set.close();
