@@ -3,13 +3,34 @@ package com.shilovich.hrbet.dao;
 import com.shilovich.hrbet.beans.RoleHolder;
 import com.shilovich.hrbet.dao.exception.DaoException;
 
+import javax.ws.rs.NotSupportedException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class RolePermissionsDao implements DaoCRUD {
+public abstract class RolePermissionsDao implements DaoCRUD<RoleHolder, Long> {
     public abstract RoleHolder findAll() throws DaoException;
+
+    @Override
+    public RoleHolder create(RoleHolder roleHolder) throws DaoException {
+        throw new NotSupportedException();
+    }
+
+    @Override
+    public RoleHolder read(Long id) throws DaoException {
+        throw new NotSupportedException();
+    }
+
+    @Override
+    public RoleHolder update(RoleHolder roleHolder) throws DaoException {
+        throw new NotSupportedException();
+    }
+
+    @Override
+    public boolean delete(RoleHolder roleHolder) throws DaoException {
+        throw new NotSupportedException();
+    }
 
     public void close(Connection connection) throws DaoException {
         if (connection != null) {

@@ -1,7 +1,6 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.beans.Race;
-import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.RaceDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;

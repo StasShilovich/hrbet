@@ -18,6 +18,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
 
     static {
         try {
+            System.out.println("|||||||||||||||||||||||||||||||||||||||||||");
             Class.forName(manager.getProperty(DRIVER_CLASS_NAME));
             String url = manager.getProperty(URL);
             String user = manager.getProperty(USERNAME);

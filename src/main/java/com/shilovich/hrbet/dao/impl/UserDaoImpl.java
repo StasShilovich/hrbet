@@ -5,6 +5,7 @@ import com.shilovich.hrbet.beans.*;
 import com.shilovich.hrbet.constant.CommonConstant;
 import com.shilovich.hrbet.dao.DaoCRUD;
 import com.shilovich.hrbet.dao.DaoFactory;
+import com.shilovich.hrbet.dao.RolePermissionsDao;
 import com.shilovich.hrbet.dao.UserDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
@@ -16,7 +17,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import static com.shilovich.hrbet.constant.CommonConstant.*;
+import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_ID;
+import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_NAME;
+import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_PASSWORD;
+import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_ROLE_ID;
+import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_ROLE_NAME;
+import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_SURNAME;
+import static com.shilovich.hrbet.constant.CommonConstant.ID;
 
 public class UserDaoImpl extends UserDao {
     private MySqlConnectionPool pool = new MySqlConnectionPoolImpl();
@@ -55,8 +62,8 @@ public class UserDaoImpl extends UserDao {
                 }
                 Long roleId = set.getLong(ALIAS_ROLE_ID);
                 String roleName = set.getString(ALIAS_ROLE_NAME);
-                // TODO: 11.10.2020 factory 
-                Set<Permission> permissions = factory.getRolePermissionsDao().findAll().getRoles().get(roleId);
+                RolePermissionsDao rolePermissionsDao = (RolePermissionsDao) DaoFactory.getInstance().getClass(RolePermissionsDao.class);
+                Set<Permission> permissions = rolePermissionsDao.findAll().getRoles().get(roleId);
                 userAuthorized = new UserAuthorized(id, userName, surname,
                         new Role(roleId, roleName, permissions));
             }
@@ -75,8 +82,7 @@ public class UserDaoImpl extends UserDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            DaoFactory factory = DaoFactory.getInstance();
-            connection = factory.getConnectionPool().getConnection();
+            connection = pool.getConnection();
             if (findUserId(connection, registrationUser.getEmail()) != null) {
                 throw new SQLException("User with this email already exist!");
             }

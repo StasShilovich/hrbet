@@ -1,7 +1,6 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.beans.RoleHolder;
-import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.RolePermissionsDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
@@ -12,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class RolePermissionsDaoImpl implements RolePermissionsDao {
+public class RolePermissionsDaoImpl extends RolePermissionsDao {
     private MySqlConnectionPool pool = new MySqlConnectionPoolImpl();
 
     private static final String ROLE_PERMISSIONS_SQL =

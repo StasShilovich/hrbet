@@ -14,8 +14,7 @@ public class RaceServiceImpl implements RaceService {
     public List<Race> showAll() throws ServiceException {
         // TODO: 30.09.2020 Some logic
         try {
-            DaoFactory daoFactory = DaoFactory.getInstance();
-            RaceDao raceDao = daoFactory.getRaceDao();
+            RaceDao raceDao = (RaceDao) DaoFactory.getInstance().getClass(RaceDao.class);
             List<Race> races = raceDao.showAll();
             return races;
         } catch (DaoException e) {
