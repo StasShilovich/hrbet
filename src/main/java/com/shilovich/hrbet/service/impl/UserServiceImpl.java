@@ -9,7 +9,7 @@ import com.shilovich.hrbet.dao.exception.DaoException;
 import com.shilovich.hrbet.service.UserService;
 import com.shilovich.hrbet.service.exception.ServiceException;
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends UserService {
     @Override
     public UserAuthorized authorization(UserLogIn logInUser) throws ServiceException {
         try {

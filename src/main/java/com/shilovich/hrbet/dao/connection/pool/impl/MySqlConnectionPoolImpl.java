@@ -13,12 +13,10 @@ import static com.shilovich.hrbet.dao.connection.property.impl.PropertyManagerIm
 
 public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
     private static CustomConnectionPool connectionPool;
-    private static PropertyManager manager = new PropertyManagerImpl();
-
+    private static final PropertyManager manager = new PropertyManagerImpl();
 
     static {
         try {
-            System.out.println("|||||||||||||||||||||||||||||||||||||||||||");
             Class.forName(manager.getProperty(DRIVER_CLASS_NAME));
             String url = manager.getProperty(URL);
             String user = manager.getProperty(USERNAME);

@@ -1,5 +1,6 @@
 package com.shilovich.hrbet.controller;
 
+import com.shilovich.hrbet.controller.command.ServletForward;
 import com.shilovich.hrbet.controller.command.impl.LogInCommandImpl;
 import com.shilovich.hrbet.controller.command.impl.LogOutCommandImpl;
 import com.shilovich.hrbet.controller.command.impl.RacesPageCommandImpl;
@@ -29,14 +30,19 @@ public class DispatcherServlet extends HttpServlet {
         // TODO: 03.10.2020 check if command is null
         Command commandAction = commands.get(CommandEnum.getCommand(command));
         if (commandAction != null) {
-            String page = null;
+            ServletForward forward = null;
             try {
-                page = commandAction.execute(req, resp);
+                forward = commandAction.execute(req, resp);
             } catch (ServiceException e) {
                 // TODO: 03.10.2020
             }
-            if (page != null) {
-                getServletContext().getRequestDispatcher(page).forward(req, resp);
+            if (forward == null) {
+                // TODO: 12.10.2020 error page
+            }
+            if (!forward.getRedirect()) {
+                getServletContext().getRequestDispatcher(forward.getPage()).forward(req, resp);
+            } else {
+                resp.sendRedirect(forward.getPage());
             }
         }
     }

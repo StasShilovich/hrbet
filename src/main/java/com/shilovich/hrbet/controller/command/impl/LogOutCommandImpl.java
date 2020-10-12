@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.controller.command.impl;
 
 import com.shilovich.hrbet.controller.Command;
+import com.shilovich.hrbet.controller.command.ServletForward;
 import com.shilovich.hrbet.service.exception.ServiceException;
 
 import javax.servlet.ServletException;
@@ -11,11 +12,11 @@ import java.io.IOException;
 
 public class LogOutCommandImpl implements Command {
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, ServiceException {
+    public ServletForward execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, ServiceException {
         HttpSession session = req.getSession();
         if(session!=null){
             session.invalidate();
         }
-        return "/index.jsp";
+        return new ServletForward("/index.jsp", false);
     }
 }

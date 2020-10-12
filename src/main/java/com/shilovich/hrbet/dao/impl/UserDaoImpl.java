@@ -2,8 +2,6 @@ package com.shilovich.hrbet.dao.impl;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.shilovich.hrbet.beans.*;
-import com.shilovich.hrbet.constant.CommonConstant;
-import com.shilovich.hrbet.dao.DaoCRUD;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.RolePermissionsDao;
 import com.shilovich.hrbet.dao.UserDao;
@@ -23,15 +21,14 @@ import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_PASSWORD;
 import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_ROLE_ID;
 import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_ROLE_NAME;
 import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_SURNAME;
-import static com.shilovich.hrbet.constant.CommonConstant.ID;
 
 public class UserDaoImpl extends UserDao {
     private MySqlConnectionPool pool = new MySqlConnectionPoolImpl();
 
     private static final String ADD_USER_SQL =
-            "INSERT INTO users (name,surname,password,email,role_id,deleted) VALUES (?,?,?,?,2,0)";
+            "INSERT INTO users u (u.name,u.surname,u.password,u.email,u.role_id,u.deleted) VALUES (?,?,?,?,2,0)";
     private static final String USER_PASSWORD_SQL =
-            "SELECT id FROM users WHERE email=?";
+            "SELECT u.id FROM users u WHERE u.email=?";
     private static final String USER_AUTHORIZED_SQL =
             "SELECT u.id,u.name, u.surname,u.password,r.id, r.name FROM users u " +
                     "INNER JOIN roles r ON u.role_id=r.id WHERE u.id=?";
@@ -105,12 +102,47 @@ public class UserDaoImpl extends UserDao {
         }
     }
 
+    @Override
+    public User create(User user) throws DaoException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = pool.getConnection();
+            if (findUserId(connection, user.getEmail()) != null) {
+                return null;
+            }
+            statement = connection.prepareStatement(ADD_USER_SQL);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getSurname());
+            // TODO: 12.10.2020 hash in service
+//            String password = user.getPassword();
+//            String hashPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+            statement.setString(3, user.getPassword());
+            statement.setString(4, user.getEmail());
+            int rows = statement.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("Register user. No rows affected");
+            }
+            return user;
+        } catch (SQLException e) {
+            throw new DaoException("User registration failed!", e);
+        } finally {
+            close(statement);
+            close(connection);
+        }
+    }
+
+    @Override
+    public User read(Long id) throws DaoException {
+        return null;
+    }
+
     private Long findUserId(Connection connection, String email) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(USER_PASSWORD_SQL);
         statement.setString(1, email);
         ResultSet set = statement.executeQuery();
         while (set.next()) {
-            return set.getLong(ID);
+            return set.getLong(ALIAS_ID);
         }
         return null;
     }

@@ -9,7 +9,7 @@ import com.shilovich.hrbet.service.exception.ServiceException;
 
 import java.util.List;
 
-public class RaceServiceImpl implements RaceService {
+public class RaceServiceImpl extends RaceService {
     @Override
     public List<Race> showAll() throws ServiceException {
         // TODO: 30.09.2020 Some logic
