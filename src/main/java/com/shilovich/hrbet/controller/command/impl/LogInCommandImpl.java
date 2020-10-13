@@ -16,24 +16,19 @@ import java.io.IOException;
 
 public class LogInCommandImpl implements Command {
     @Override
-    public ServletForward execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public ServletForward execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, ServiceException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        try {
-            if (email.isEmpty() || password.isEmpty()) {
-                req.setAttribute("emptyParams", "There should be no empty fields!");
-                return new ServletForward("/index.jsp", false);
-            }
-            ServiceFactory factory = ServiceFactory.getInstance();
-            UserService userService = (UserService) factory.getClass(UserService.class);
-            UserAuthorized userAuthorized = userService.authorization(new UserLogIn(email, password));
-            if (userAuthorized != null) {
-                HttpSession session = req.getSession();
-                session.setAttribute("userAuth", userAuthorized);
-            }
-        } catch (ServiceException e) {
-            // TODO: 05.10.2020 logger
-            System.out.println(e.getMessage());
+        if (email.isEmpty() || password.isEmpty()) {
+            req.setAttribute("emptyParams", "There should be no empty fields!");
+            return new ServletForward("/index.jsp", false);
+        }
+        ServiceFactory factory = ServiceFactory.getInstance();
+        UserService userService = (UserService) factory.getClass(UserService.class);
+        UserAuthorized userAuthorized = userService.authorization(new UserLogIn(email, password));
+        if (userAuthorized != null) {
+            HttpSession session = req.getSession();
+            session.setAttribute("userAuth", userAuthorized);
         }
         return new ServletForward("/index.jsp", false);
     }

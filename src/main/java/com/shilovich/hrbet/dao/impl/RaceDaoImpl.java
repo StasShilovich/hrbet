@@ -5,6 +5,8 @@ import com.shilovich.hrbet.dao.RaceDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
 import com.shilovich.hrbet.dao.exception.DaoException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,11 +16,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.shilovich.hrbet.constant.CommonConstant.RACE_BANK_DOLLARS;
+import static com.shilovich.hrbet.constant.CommonConstant.RACE_ID;
+import static com.shilovich.hrbet.constant.CommonConstant.RACE_LOCATION;
+import static com.shilovich.hrbet.constant.CommonConstant.RACE_TIME;
+
 public class RaceDaoImpl extends RaceDao {
-    // TODO: 11.10.2020 todo
-    private MySqlConnectionPool pool = new MySqlConnectionPoolImpl();
+    private static final Logger logger = LogManager.getLogger(RaceDaoImpl.class);
+
+    private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();
     private static final String SHOW_ALL_RACES_SQL =
-            "SELECT id,location,time,bank_dollars FROM races;";
+            "SELECT r.id,r.location,r.time,r.bank_dollars FROM races r;";
 
     @Override
     public List<Race> showAll() throws DaoException {
@@ -32,19 +40,18 @@ public class RaceDaoImpl extends RaceDao {
             set = statement.executeQuery(SHOW_ALL_RACES_SQL);
             while (set.next()) {
                 Race race = new Race();
-                // TODO: 30.09.2020 Make constants class for column names
-                race.setId(set.getLong("id"));
-                race.setLocation(set.getString("location"));
-                Date date = new Date(set.getTimestamp("time").getTime());
+                race.setId(set.getLong(RACE_ID));
+                race.setLocation(set.getString(RACE_LOCATION));
+                Date date = new Date(set.getTimestamp(RACE_TIME).getTime());
                 race.setDate(date);
-                race.setBank(set.getLong("bank_dollars"));
+                race.setBank(set.getLong(RACE_BANK_DOLLARS));
                 races.add(race);
             }
             return races;
         } catch (SQLException e) {
+            logger.debug("Show all races exception!");
             throw new DaoException("Show all races exception!", e);
         } finally {
-
             close(set);
             close(statement);
             close(connection);

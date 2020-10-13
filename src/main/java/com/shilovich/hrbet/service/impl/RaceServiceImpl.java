@@ -6,10 +6,14 @@ import com.shilovich.hrbet.dao.RaceDao;
 import com.shilovich.hrbet.dao.exception.DaoException;
 import com.shilovich.hrbet.service.RaceService;
 import com.shilovich.hrbet.service.exception.ServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class RaceServiceImpl extends RaceService {
+    private static final Logger logger = LogManager.getLogger(RaceServiceImpl.class);
+
     @Override
     public List<Race> showAll() throws ServiceException {
         // TODO: 30.09.2020 Some logic
@@ -18,6 +22,7 @@ public class RaceServiceImpl extends RaceService {
             List<Race> races = raceDao.showAll();
             return races;
         } catch (DaoException e) {
+            logger.debug("Show all races exception!");
             throw new ServiceException("Show all races service exception!", e);
         }
     }

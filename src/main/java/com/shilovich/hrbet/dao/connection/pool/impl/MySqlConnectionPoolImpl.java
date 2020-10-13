@@ -5,6 +5,8 @@ import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.property.PropertyManager;
 import com.shilovich.hrbet.dao.connection.property.impl.PropertyManagerImpl;
 import com.shilovich.hrbet.dao.exception.DaoException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,6 +14,8 @@ import java.sql.SQLException;
 import static com.shilovich.hrbet.dao.connection.property.impl.PropertyManagerImpl.*;
 
 public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
+    private static final Logger logger = LogManager.getLogger(MySqlConnectionPoolImpl.class);
+    private static final MySqlConnectionPoolImpl instance = new MySqlConnectionPoolImpl();
     private static CustomConnectionPool connectionPool;
     private static final PropertyManager manager = new PropertyManagerImpl();
 
@@ -28,7 +32,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
                     .create(url, user, password, initialPoolSize, maxPoolSize, maxTimeout);
         } catch (Exception e) {
             // TODO: 28.09.2020 logger maybe runtime when pool will be
-            System.out.println("Exception due sql connection");
+            logger.debug("Exception due sql connection");
         }
     }
 
@@ -37,6 +41,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
         try {
             return connectionPool.getConnection();
         } catch (SQLException e) {
+            logger.debug("Connection Exception");
             throw new DaoException("Connection Exception", e);
         }
     }
@@ -46,7 +51,12 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
         try {
             connectionPool.shutdown();
         } catch (SQLException e) {
+            logger.debug("Connection pool shutdown fail!");
             throw new DaoException("Connection pool shutdown fail!", e);
         }
+    }
+
+    public static MySqlConnectionPoolImpl getInstance() {
+        return instance;
     }
 }

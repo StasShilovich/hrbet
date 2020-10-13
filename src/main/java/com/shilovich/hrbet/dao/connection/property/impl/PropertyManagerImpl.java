@@ -2,6 +2,8 @@ package com.shilovich.hrbet.dao.connection.property.impl;
 
 import com.shilovich.hrbet.dao.connection.property.PropertyManager;
 import com.shilovich.hrbet.dao.exception.DaoException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -9,6 +11,8 @@ import java.util.ResourceBundle;
 import static java.util.ResourceBundle.getBundle;
 
 public class PropertyManagerImpl implements PropertyManager {
+    private static final Logger logger = LogManager.getLogger(PropertyManagerImpl.class);
+
     private static final String BUNDLE_NAME = "project";
     public static final String URL = "database.url";
     public static final String USERNAME = "database.username";
@@ -24,7 +28,8 @@ public class PropertyManagerImpl implements PropertyManager {
             ResourceBundle resourceBundle = getBundle(BUNDLE_NAME);
             return resourceBundle.getString(key);
         } catch (MissingResourceException | IllegalArgumentException e) {
-            throw new DaoException(e);
+            logger.debug("Property with name" + key + " does not find!");
+            throw new DaoException("Not find dat property", e);
         }
     }
 }

@@ -8,6 +8,8 @@ import com.shilovich.hrbet.dao.UserDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
 import com.shilovich.hrbet.dao.exception.DaoException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,16 +17,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_ID;
-import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_NAME;
-import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_PASSWORD;
-import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_ROLE_ID;
-import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_ROLE_NAME;
-import static com.shilovich.hrbet.constant.CommonConstant.ALIAS_SURNAME;
+import static com.shilovich.hrbet.constant.CommonConstant.USER_ID;
+import static com.shilovich.hrbet.constant.CommonConstant.USER_NAME;
+import static com.shilovich.hrbet.constant.CommonConstant.USER_PASSWORD;
+import static com.shilovich.hrbet.constant.CommonConstant.ROLE_ID;
+import static com.shilovich.hrbet.constant.CommonConstant.ROLE_NAME;
+import static com.shilovich.hrbet.constant.CommonConstant.USER_SURNAME;
 
 public class UserDaoImpl extends UserDao {
-    private MySqlConnectionPool pool = new MySqlConnectionPoolImpl();
+    private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
 
+    private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();
     private static final String ADD_USER_SQL =
             "INSERT INTO users u (u.name,u.surname,u.password,u.email,u.role_id,u.deleted) VALUES (?,?,?,?,2,0)";
     private static final String USER_PASSWORD_SQL =
@@ -49,16 +52,16 @@ public class UserDaoImpl extends UserDao {
             statement.setString(1, userId.toString());
             set = statement.executeQuery();
             while (set.next()) {
-                Long id = set.getLong(ALIAS_ID);
-                String userName = set.getString(ALIAS_NAME);
-                String surname = set.getString(ALIAS_SURNAME);
-                String password = set.getString(ALIAS_PASSWORD);
+                Long id = set.getLong(USER_ID);
+                String userName = set.getString(USER_NAME);
+                String surname = set.getString(USER_SURNAME);
+                String password = set.getString(USER_PASSWORD);
                 BCrypt.Result verify = BCrypt.verifyer().verify(logInUser.getPassword().toCharArray(), password);
                 if (!verify.verified) {
                     return null;
                 }
-                Long roleId = set.getLong(ALIAS_ROLE_ID);
-                String roleName = set.getString(ALIAS_ROLE_NAME);
+                Long roleId = set.getLong(ROLE_ID);
+                String roleName = set.getString(ROLE_NAME);
                 RolePermissionsDao rolePermissionsDao = (RolePermissionsDao) DaoFactory.getInstance().getClass(RolePermissionsDao.class);
                 Set<Permission> permissions = rolePermissionsDao.findAll().getRoles().get(roleId);
                 userAuthorized = new UserAuthorized(id, userName, surname,
@@ -66,6 +69,7 @@ public class UserDaoImpl extends UserDao {
             }
             return userAuthorized;
         } catch (SQLException e) {
+            logger.debug("User authorization failed!");
             throw new DaoException("User authorization failed!", e);
         } finally {
             close(set);
@@ -81,6 +85,7 @@ public class UserDaoImpl extends UserDao {
         try {
             connection = pool.getConnection();
             if (findUserId(connection, registrationUser.getEmail()) != null) {
+                logger.debug("User with email" + registrationUser.getEmail() + "already exist!");
                 throw new SQLException("User with this email already exist!");
             }
             statement = connection.prepareStatement(ADD_USER_SQL);
@@ -92,9 +97,11 @@ public class UserDaoImpl extends UserDao {
             statement.setString(4, registrationUser.getEmail());
             int rows = statement.executeUpdate();
             if (rows == 0) {
+                logger.debug("Registration method. Rows do not affected!");
                 throw new SQLException("Register user. No rows affected");
             }
         } catch (SQLException e) {
+            logger.debug("User registration failed!");
             throw new DaoException("User registration failed!", e);
         } finally {
             close(statement);
@@ -121,10 +128,12 @@ public class UserDaoImpl extends UserDao {
             statement.setString(4, user.getEmail());
             int rows = statement.executeUpdate();
             if (rows == 0) {
+                logger.debug("Registration method. Rows do not affected!");
                 throw new SQLException("Register user. No rows affected");
             }
             return user;
         } catch (SQLException e) {
+            logger.debug("User registration failed!");
             throw new DaoException("User registration failed!", e);
         } finally {
             close(statement);
@@ -142,7 +151,7 @@ public class UserDaoImpl extends UserDao {
         statement.setString(1, email);
         ResultSet set = statement.executeQuery();
         while (set.next()) {
-            return set.getLong(ALIAS_ID);
+            return set.getLong(USER_ID);
         }
         return null;
     }

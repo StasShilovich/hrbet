@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
       xmlns:c="http://www.w3.org/1999/html">
@@ -13,6 +15,12 @@
         </div>
     </c:if>
 </div>
+<div>
+    <a href="" scope="session">Русская версия</a>
+    <fmt:setLocale value="ru_RU"/>
+    <a href="" scope="session">English version</a>
+    <fmt:setLocale value="en_US"/>
+</div>
 <c:if test="${empty  sessionScope.userAuth}">
     <div class="row">
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
@@ -20,7 +28,9 @@
                 <form class="form-horizontal" action="/hrbets/dispatcher?command=login"
                       method="post">
                     <div class="form-group">
-                        <label for="email">Email</label>:
+                        <label for="email">
+                            <fmt:message key="label.header.email"/>
+                        </label>:
                         <input type="email"
                                id="email"
                                name="email"
@@ -30,7 +40,9 @@
                                value="${email}">
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>:
+                        <label for="password">
+                            <fmt:message key="label.header.password"/>
+                        </label>:
                         <input type="password"
                                id="password"
                                name="password"

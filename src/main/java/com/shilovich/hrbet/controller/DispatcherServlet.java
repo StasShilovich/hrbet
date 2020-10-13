@@ -6,6 +6,8 @@ import com.shilovich.hrbet.controller.command.impl.LogOutCommandImpl;
 import com.shilovich.hrbet.controller.command.impl.RacesPageCommandImpl;
 import com.shilovich.hrbet.controller.command.model.CommandEnum;
 import com.shilovich.hrbet.service.exception.ServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DispatcherServlet extends HttpServlet {
+    private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
+
+    // TODO: 13.10.2020 enumMap
     private static final Map<CommandEnum, Command> commands = new HashMap<>();
     private static final String COMMAND_PARAMETER = "command";
 
@@ -34,9 +39,11 @@ public class DispatcherServlet extends HttpServlet {
             try {
                 forward = commandAction.execute(req, resp);
             } catch (ServiceException e) {
-                // TODO: 03.10.2020
+                logger.debug(e.getMessage());
+                // TODO: 13.10.2020 error page
             }
             if (forward == null) {
+                logger.debug("Null servlet forward");
                 // TODO: 12.10.2020 error page
             }
             if (!forward.getRedirect()) {
