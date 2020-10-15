@@ -1,33 +1,35 @@
 package com.shilovich.hrbet.dao;
 
-import com.shilovich.hrbet.beans.RoleHolder;
+import com.shilovich.hrbet.beans.Bet;
 import com.shilovich.hrbet.dao.exception.DaoException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
-public abstract class RolePermissionsDao implements DaoCRUD<RoleHolder, Long> {
-    public abstract RoleHolder findAll() throws DaoException;
+public abstract class AbstractBetDao implements DaoCRUD<Bet, Long> {
+
+    public abstract List<Bet> showByUser(Long userId) throws DaoException;
 
     @Override
-    public final RoleHolder create(RoleHolder roleHolder) throws UnsupportedOperationException {
+    public final Bet create(Bet bet) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final RoleHolder read(Long id) throws UnsupportedOperationException {
+    public final Bet read(Long id) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final RoleHolder update(RoleHolder roleHolder) throws UnsupportedOperationException {
+    public final Bet update(Bet bet) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final boolean delete(RoleHolder roleHolder) throws UnsupportedOperationException {
+    public final boolean delete(Bet bet) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 

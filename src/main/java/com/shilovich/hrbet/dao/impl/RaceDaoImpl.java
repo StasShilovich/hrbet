@@ -1,7 +1,7 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.beans.Race;
-import com.shilovich.hrbet.dao.RaceDao;
+import com.shilovich.hrbet.dao.AbstractRaceDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
 import com.shilovich.hrbet.dao.exception.DaoException;
@@ -21,7 +21,7 @@ import static com.shilovich.hrbet.constant.CommonConstant.RACE_ID;
 import static com.shilovich.hrbet.constant.CommonConstant.RACE_LOCATION;
 import static com.shilovich.hrbet.constant.CommonConstant.RACE_TIME;
 
-public class RaceDaoImpl extends RaceDao {
+public class RaceDaoImpl extends AbstractRaceDao {
     private static final Logger logger = LogManager.getLogger(RaceDaoImpl.class);
 
     private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();
@@ -56,5 +56,10 @@ public class RaceDaoImpl extends RaceDao {
             close(statement);
             close(connection);
         }
+    }
+
+    @Override
+    public Race read(Long id) throws DaoException {
+        return null;
     }
 }

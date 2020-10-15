@@ -1,8 +1,6 @@
 package com.shilovich.hrbet.dao;
 
-import com.shilovich.hrbet.dao.impl.RaceDaoImpl;
-import com.shilovich.hrbet.dao.impl.RolePermissionsDaoImpl;
-import com.shilovich.hrbet.dao.impl.UserDaoImpl;
+import com.shilovich.hrbet.dao.impl.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +10,11 @@ public class DaoFactory {
     private static final Map<Class<? extends DaoCRUD<?, ?>>, DaoCRUD<?, ?>> factory = new HashMap<>();
 
     static {
-        factory.put(UserDao.class, new UserDaoImpl());
-        factory.put(RaceDao.class, new RaceDaoImpl());
-        factory.put(RolePermissionsDao.class, new RolePermissionsDaoImpl());
+        factory.put(AbstractUserDao.class, new UserDaoImpl());
+        factory.put(AbstractRaceDao.class, new RaceDaoImpl());
+        factory.put(AbstractRolePermissionsDao.class, new RolePermissionsDaoImpl());
+        factory.put(AbstractBetDao.class, new BetDaoImpl());
+        factory.put(AbstractHorseDao.class, new HorseDaoImpl());
     }
 
     private DaoFactory() {

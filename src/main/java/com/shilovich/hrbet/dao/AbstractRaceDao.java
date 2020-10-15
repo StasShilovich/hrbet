@@ -9,18 +9,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public abstract class RaceDao implements DaoCRUD<Race, Long> {
+public abstract class AbstractRaceDao implements DaoCRUD<Race, Long> {
     public abstract List<Race> showAll() throws DaoException;
 
     @Override
     public final Race create(Race race) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supportedin");
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public final Race read(Long id) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
+    public abstract Race read(Long id) throws DaoException;
 
     @Override
     public final Race update(Race race) throws UnsupportedOperationException {

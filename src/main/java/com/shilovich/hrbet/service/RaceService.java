@@ -5,6 +5,6 @@ import com.shilovich.hrbet.service.exception.ServiceException;
 
 import java.util.List;
 
-public abstract class RaceService implements Service {
-    public abstract List<Race> showAll() throws ServiceException;
+public interface RaceService extends Service {
+    List<Race> showAll() throws ServiceException;
 }

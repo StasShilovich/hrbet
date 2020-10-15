@@ -6,7 +6,7 @@
     <c:if test="${not empty sessionScope}">
         <td>
             <fmt:message key="label.footer.hello"/>
-            <c:out value="${sessionScope.userAuth.userName}"/>
+            <c:out value="${sessionScope.userAuth.name}"/>
         </td>
     </c:if>
 </div>

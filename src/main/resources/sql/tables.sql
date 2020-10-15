@@ -66,6 +66,9 @@ CREATE TABLE `hrbet`.`race_archive` (
   `first_horse` INT NOT NULL,
   `second_horse` INT NOT NULL,
   `third_horse` INT NOT NULL,
+  `fourth_horse` INT NOT NULL,
+  `fifth_horse` INT NOT NULL,
+  `sixth_horse` INT NOT NULL,
   PRIMARY KEY (`id`));
 
 CREATE TABLE `hrbet`.`horse_participatings` (
@@ -84,6 +87,20 @@ ADD CONSTRAINT `fk_users_role`
   REFERENCES `hrbet`.`roles` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+  ALTER TABLE `hrbet`.`users`
+  ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE;
+  ;
+
+  ALTER TABLE `hrbet`.`users`
+  DROP FOREIGN KEY `fk_users_role`;
+  ALTER TABLE `hrbet`.`users`
+  CHANGE COLUMN `role_id` `role_id` INT(11) NOT NULL DEFAULT 2 ;
+  ALTER TABLE `hrbet`.`users`
+  ADD CONSTRAINT `fk_users_role`
+    FOREIGN KEY (`role_id`)
+    REFERENCES `hrbet`.`roles` (`id`);
+
 
 ALTER TABLE `hrbet`.`role_permissions`
 ADD INDEX `fk_rolepermissions_permission_idx` (`permission_id` ASC) VISIBLE;
@@ -132,8 +149,11 @@ ALTER TABLE `hrbet`.`race_archive`
 ADD INDEX `fk_race_archive_race_idx` (`race_id` ASC) VISIBLE,
 ADD INDEX `fk_race_archive_first_horce_idx` (`first_horse` ASC) VISIBLE,
 ADD INDEX `fk_race_archive_second_horse_idx` (`second_horse` ASC) VISIBLE,
-ADD INDEX `fk_race_archive_third_horse_idx` (`third_horse` ASC) VISIBLE;
-;
+ADD INDEX `fk_race_archive_third_horse_idx` (`third_horse` ASC) VISIBLE,
+ADD INDEX `fk_race_archive_fourth_horse_idx` (`fourth_horse` ASC) VISIBLE,
+ADD INDEX `fk_race_archive_fifth_horse_idx` (`fifth_horse` ASC) VISIBLE,
+ADD INDEX `fk_race_archive_sixth_horse_idx` (`sixth_horse` ASC) VISIBLE;
+
 ALTER TABLE `hrbet`.`race_archive`
 ADD CONSTRAINT `fk_race_archive_race`
   FOREIGN KEY (`race_id`)
@@ -255,3 +275,15 @@ INSERT INTO `hrbet`.`bet_types` (`name`) VALUES ('win');
 INSERT INTO `hrbet`.`bet_types` (`name`) VALUES ('show');
 
 INSERT INTO `hrbet`.`bets` (`status`, `user_id`, `time`, `race_id`, `cash_dollars`, `type_id`, `bet_horse_id`) VALUES ('1', '1', '2019-10-22 09:49:43', '2', '100', '1', '17');
+
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('1', '3', '6', '17', '5', '8', '15');
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('2', '17', '11', '9', '14', '7', '2');
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('3', '6', '8', '3', '5', '10', '14');
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('61', '17', '2', '5', '6', '14', '9');
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('62', '8', '3', '2', '16', '14', '1');
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('63', '2', '17', '14', '4', '2', '7');
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('64', '12', '14', '11', '9', '5', '3');
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('65', '5', '8', '15', '4', '2', '11');
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('66', '8', '2', '5', '7', '3', '13');
+INSERT INTO `hrbet`.`race_archive` (`race_id`, `first_horse`, `second_horse`, `third_horse`, `fourth_horse`, `fifth_horse`, `sixth_horse`) VALUES ('67', '16', '13', '8', '2', '4', '5');
+

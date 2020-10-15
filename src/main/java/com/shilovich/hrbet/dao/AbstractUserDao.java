@@ -1,9 +1,6 @@
 package com.shilovich.hrbet.dao;
 
 import com.shilovich.hrbet.beans.User;
-import com.shilovich.hrbet.beans.UserAuthorized;
-import com.shilovich.hrbet.beans.UserLogIn;
-import com.shilovich.hrbet.beans.UserRegistration;
 import com.shilovich.hrbet.dao.exception.DaoException;
 
 import java.sql.Connection;
@@ -11,10 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class UserDao implements DaoCRUD<User, Long> {
-    public abstract UserAuthorized authorization(UserLogIn logInUser) throws DaoException;
-
-    public abstract void registration(UserRegistration registrationUser) throws DaoException;
+public abstract class AbstractUserDao implements DaoCRUD<User, Long> {
+    public abstract User authorization(User user) throws DaoException;
 
     @Override
     public abstract User create(User user) throws DaoException;

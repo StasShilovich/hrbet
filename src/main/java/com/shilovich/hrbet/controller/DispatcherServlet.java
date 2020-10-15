@@ -1,10 +1,8 @@
 package com.shilovich.hrbet.controller;
 
-import com.shilovich.hrbet.controller.command.ServletForward;
-import com.shilovich.hrbet.controller.command.impl.LogInCommandImpl;
-import com.shilovich.hrbet.controller.command.impl.LogOutCommandImpl;
-import com.shilovich.hrbet.controller.command.impl.RacesPageCommandImpl;
-import com.shilovich.hrbet.controller.command.model.CommandEnum;
+import com.shilovich.hrbet.controller.exception.CommandException;
+import com.shilovich.hrbet.controller.model.CommandEnum;
+import com.shilovich.hrbet.controller.model.ServletForward;
 import com.shilovich.hrbet.service.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,14 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+
+import static com.shilovich.hrbet.constant.CommonConstant.PAGE_INDEX;
 
 public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
 
-    // TODO: 13.10.2020 enumMap
-    private static final Map<CommandEnum, Command> commands = new HashMap<>();
+    private static final ControllerFactory factory = ControllerFactory.getInstance();
     private static final String COMMAND_PARAMETER = "command";
 
     @Override
@@ -32,37 +29,29 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String command = req.getParameter(COMMAND_PARAMETER);
-        // TODO: 03.10.2020 check if command is null
-        Command commandAction = commands.get(CommandEnum.getCommand(command));
+        if (command.isEmpty() || !CommandEnum.isContains(command)) {
+            resp.sendRedirect(PAGE_INDEX);
+        }
+        Command commandAction = factory.getCommand(CommandEnum.getCommand(command));
         if (commandAction != null) {
             ServletForward forward = null;
             try {
-                forward = commandAction.execute(req, resp);
-            } catch (ServiceException e) {
+                forward = commandAction.execute(req);
+            } catch (CommandException e) {
                 logger.debug(e.getMessage());
-                // TODO: 13.10.2020 error page
+                // TODO: 13.10.2020 command exception
             }
             if (forward == null) {
                 logger.debug("Null servlet forward");
                 // TODO: 12.10.2020 error page
             }
             if (!forward.getRedirect()) {
+                logger.debug("Forward: " + forward.getPage());
                 getServletContext().getRequestDispatcher(forward.getPage()).forward(req, resp);
             } else {
+                logger.debug("Redirect: " + forward.getPage());
                 resp.sendRedirect(forward.getPage());
             }
         }
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-    }
-
-    @Override
-    public void init() throws ServletException {
-        commands.put(CommandEnum.RACES, new RacesPageCommandImpl());
-        commands.put(CommandEnum.LOGIN, new LogInCommandImpl());
-        commands.put(CommandEnum.LOGOUT, new LogOutCommandImpl());
     }
 }

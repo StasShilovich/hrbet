@@ -1,4 +1,4 @@
-package com.shilovich.hrbet.controller.command;
+package com.shilovich.hrbet.controller.model;
 
 public class ServletForward {
 

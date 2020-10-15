@@ -1,0 +1,21 @@
+package com.shilovich.hrbet.controller.model;
+
+public enum CommandEnum {
+    RACES,
+    LOGIN,
+    LOGOUT,
+    REGISTRATION;
+
+    public static boolean isContains(String name) {
+        for (CommandEnum value : CommandEnum.values()) {
+            if (value.name().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static CommandEnum getCommand(String command) {
+        return CommandEnum.valueOf(command.toUpperCase());
+    }
+}

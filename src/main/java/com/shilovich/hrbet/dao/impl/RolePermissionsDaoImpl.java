@@ -1,7 +1,7 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.beans.RoleHolder;
-import com.shilovich.hrbet.dao.RolePermissionsDao;
+import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
 import com.shilovich.hrbet.dao.exception.DaoException;
@@ -17,7 +17,7 @@ import static com.shilovich.hrbet.constant.CommonConstant.P_ID;
 import static com.shilovich.hrbet.constant.CommonConstant.P_NAME;
 import static com.shilovich.hrbet.constant.CommonConstant.RP_ROLE_ID;
 
-public class RolePermissionsDaoImpl extends RolePermissionsDao {
+public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
     private static final Logger logger = LogManager.getLogger(RolePermissionsDaoImpl.class);
 
     private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();

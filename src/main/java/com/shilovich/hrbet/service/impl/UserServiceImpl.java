@@ -1,25 +1,37 @@
 package com.shilovich.hrbet.service.impl;
 
-import com.shilovich.hrbet.beans.UserAuthorized;
-import com.shilovich.hrbet.beans.UserLogIn;
-import com.shilovich.hrbet.beans.UserRegistration;
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.shilovich.hrbet.beans.User;
 import com.shilovich.hrbet.dao.DaoFactory;
-import com.shilovich.hrbet.dao.UserDao;
+import com.shilovich.hrbet.dao.AbstractUserDao;
 import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.service.ServiceFactory;
 import com.shilovich.hrbet.service.UserService;
 import com.shilovich.hrbet.service.exception.ServiceException;
+import com.shilovich.hrbet.service.validation.ValidationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class UserServiceImpl extends UserService {
+public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     @Override
-    public UserAuthorized authorization(UserLogIn logInUser) throws ServiceException {
+    public User authorization(User user) throws ServiceException {
         try {
-            UserDao userDao = (UserDao) DaoFactory.getInstance().getClass(UserDao.class);
-            UserAuthorized authorization = userDao.authorization(logInUser);
-            return authorization;
+            ValidationService validation = (ValidationService) ServiceFactory.getInstance().getClass(ValidationService.class);
+            if (!validation.isValidUser(user)) {
+                return null;
+            }
+            AbstractUserDao userDao = (AbstractUserDao) DaoFactory.getInstance().getClass(AbstractUserDao.class);
+            User userAuthorized = userDao.authorization(user);
+            if (userAuthorized == null) {
+                return null;
+            }
+            BCrypt.Result verify = BCrypt.verifyer().verify(user.getPassword().toCharArray(), userAuthorized.getPassword());
+            if (!verify.verified) {
+                return null;
+            }
+            return userAuthorized;
         } catch (DaoException e) {
             logger.debug("Authorization exception!");
             throw new ServiceException("Authorization exception!", e);
@@ -27,10 +39,18 @@ public class UserServiceImpl extends UserService {
     }
 
     @Override
-    public void registration(UserRegistration registrationUser) throws ServiceException {
+    public User registration(User user) throws ServiceException {
         try {
-            UserDao userDao = (UserDao) DaoFactory.getInstance().getClass(UserDao.class);
-            userDao.registration(registrationUser);
+            ValidationService validation = (ValidationService) ServiceFactory.getInstance().getClass(ValidationService.class);
+            if (!validation.isValidUser(user)) {
+                return null;
+            }
+            String password = user.getPassword();
+            String hashPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+            user.setPassword(hashPassword);
+            AbstractUserDao userDao = (AbstractUserDao) DaoFactory.getInstance().getClass(AbstractUserDao.class);
+            User userReg = userDao.create(user);
+            return userReg;
         } catch (DaoException e) {
             logger.debug("Registration exception!");
             throw new ServiceException("Registration exception!", e);

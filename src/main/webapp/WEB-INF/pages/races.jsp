@@ -5,6 +5,7 @@
 <html>
 <head>
     <%@include file="/WEB-INF/fragments/header.jsp" %>
+    <%@include file="/WEB-INF/fragments/login.jsp" %>
     <title>
         <fmt:message key="label.title"/>
     </title>
