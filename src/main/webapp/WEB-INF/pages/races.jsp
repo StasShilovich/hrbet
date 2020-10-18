@@ -3,12 +3,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <%@include file="/WEB-INF/fragments/header.jsp" %>
+    <%@include file="/WEB-INF/jstl/localization.jsp" %>
+    <%@include file="/WEB-INF/jstl/bootstrap.jsp" %>
     <title>
-        <fmt:message key="label.title"/>
+        <fmt:message key="label.title.races"/>
     </title>
 </head>
 <body>
+<%@include file="/WEB-INF/jstl/header.jsp" %>
+
 <div class="col-md-10">
     <div class="ml-auto">
         <table class="table" border="4">
@@ -41,6 +44,6 @@
         </table>
     </div>
 </div>
-<%@include file="/WEB-INF/fragments/footer.jsp" %>
+<%@include file="/WEB-INF/jstl/footer.jsp" %>
 </body>
 </html>

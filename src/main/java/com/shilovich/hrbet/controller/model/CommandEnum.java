@@ -6,7 +6,9 @@ public enum CommandEnum {
     LOGOUT,
     REGISTRATION,
     FORWARD_REGISTRATION,
-    RACE;
+    RACE,
+    PROFILE,
+    COOKIE;
 
     public static boolean isContains(String name) {
         for (CommandEnum value : CommandEnum.values()) {

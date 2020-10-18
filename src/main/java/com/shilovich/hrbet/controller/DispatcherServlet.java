@@ -35,23 +35,8 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        Cookie[] cookies = req.getCookies();
-//        String value = null;
-//        String language = null;
-//        for (Cookie cookie : cookies) {
-//            value = cookie.getValue();
-//            break;
-//        }
-//        if (value != null && value.equalsIgnoreCase("ru")) {
-//            language = new Locale("ru", "RU").getLanguage();
-//        } else {
-//            language = new Locale("en", "US").getLanguage();
-//        }
-//        Cookie locale = new Cookie("locale", language);
-//        resp.addCookie(locale);
-
-
         String command = req.getParameter(COMMAND_PARAMETER);
+        logger.info(command);
         if (command.isEmpty() || !CommandEnum.isContains(command)) {
             resp.sendRedirect(PAGE_INDEX);
         }
@@ -59,7 +44,7 @@ public class DispatcherServlet extends HttpServlet {
         if (commandAction != null) {
             ServletForward forward = null;
             try {
-                forward = commandAction.execute(req);
+                forward = commandAction.execute(req, resp);
             } catch (CommandException e) {
                 logger.error(e.getMessage());
                 // TODO: 13.10.2020 command exception

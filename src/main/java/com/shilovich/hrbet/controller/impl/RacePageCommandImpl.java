@@ -10,6 +10,7 @@ import com.shilovich.hrbet.service.exception.ServiceException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import static com.shilovich.hrbet.constant.CommonConstant.*;
 
 public class RacePageCommandImpl implements Command {
     @Override
-    public ServletForward execute(HttpServletRequest req) throws ServletException, IOException, CommandException {
+    public ServletForward execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, CommandException {
         try {
             String id = req.getParameter(PARAM_RACE_ID);
             Long raceId = Long.parseLong(id);

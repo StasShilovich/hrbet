@@ -70,4 +70,5 @@ public final class CommonConstant {
     public static final String PAGE_RACES = "/WEB-INF/pages/races.jsp";
     public static final String PAGE_REGISTRATION = "/WEB-INF/pages/registration.jsp";
     public static final String PAGE_RACE = "/WEB-INF/pages/race.jsp";
+    public static final String PAGE_PROFILE = "/WEB-INF/pages/profile.jsp";
 }

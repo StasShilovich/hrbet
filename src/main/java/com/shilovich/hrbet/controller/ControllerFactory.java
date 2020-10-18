@@ -20,6 +20,8 @@ public class ControllerFactory {
         commands.put(CommandEnum.REGISTRATION, new RegistrationCommandImpl());
         commands.put(CommandEnum.FORWARD_REGISTRATION, new ForwardRegistrationCommandImpl());
         commands.put(CommandEnum.RACE, new RacePageCommandImpl());
+        commands.put(CommandEnum.PROFILE, new ProfileCommandImpl());
+        commands.put(CommandEnum.COOKIE, new CookieCommandImpl());
     }
 
     public Command getCommand(CommandEnum commandEnum) {

@@ -10,6 +10,7 @@ import com.shilovich.hrbet.service.exception.ServiceException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -17,7 +18,7 @@ import static com.shilovich.hrbet.constant.CommonConstant.*;
 
 public class LogInCommandImpl implements Command {
     @Override
-    public ServletForward execute(HttpServletRequest req) throws ServletException, IOException, CommandException {
+    public ServletForward execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, CommandException {
         try {
             String email = req.getParameter(PARAM_EMAIL);
             String password = req.getParameter(PARAM_PASSWORD);

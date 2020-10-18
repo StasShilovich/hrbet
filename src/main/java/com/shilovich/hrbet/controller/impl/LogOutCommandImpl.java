@@ -7,6 +7,7 @@ import com.shilovich.hrbet.service.exception.ServiceException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -14,7 +15,7 @@ import static com.shilovich.hrbet.constant.CommonConstant.PAGE_INDEX;
 
 public class LogOutCommandImpl implements Command {
     @Override
-    public ServletForward execute(HttpServletRequest req) throws ServletException, IOException, CommandException {
+    public ServletForward execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, CommandException {
         HttpSession session = req.getSession();
         if (session != null) {
             session.invalidate();
