@@ -1,6 +1,6 @@
 package com.shilovich.hrbet.controller.impl;
 
-import com.shilovich.hrbet.beans.Race;
+import com.shilovich.hrbet.beans.Horse;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.controller.exception.CommandException;
 import com.shilovich.hrbet.controller.model.ServletForward;
@@ -11,21 +11,20 @@ import com.shilovich.hrbet.service.exception.ServiceException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
-import static com.shilovich.hrbet.constant.CommonConstant.PAGE_RACES;
-import static com.shilovich.hrbet.constant.CommonConstant.PARAM_RACES_LIST;
+import static com.shilovich.hrbet.constant.CommonConstant.*;
 
-public class RacesPageCommandImpl implements Command {
-
+public class RacePageCommandImpl implements Command {
     @Override
     public ServletForward execute(HttpServletRequest req) throws ServletException, IOException, CommandException {
         try {
-            ServiceFactory factory = ServiceFactory.getInstance();
-            RaceService raceService = (RaceService) factory.getClass(RaceService.class);
-            List<Race> races = raceService.showAll();
-            req.setAttribute(PARAM_RACES_LIST, races);
-            return new ServletForward(PAGE_RACES, false);
+            String id = req.getParameter(PARAM_RACE_ID);
+            Long raceId = Long.parseLong(id);
+            RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
+            Set<Horse> horses = raceService.showByRace(raceId);
+            req.setAttribute(ATTR_RACE_SET, horses);
+            return new ServletForward(PAGE_RACE, false);
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage(), e);
         }

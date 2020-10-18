@@ -2,8 +2,6 @@ package com.shilovich.hrbet.service;
 
 import com.shilovich.hrbet.service.impl.RaceServiceImpl;
 import com.shilovich.hrbet.service.impl.UserServiceImpl;
-import com.shilovich.hrbet.service.validation.ValidationService;
-import com.shilovich.hrbet.service.validation.impl.ValidationServiceImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +13,6 @@ public class ServiceFactory {
     static {
         factory.put(UserService.class, new UserServiceImpl());
         factory.put(RaceService.class, new RaceServiceImpl());
-        factory.put(ValidationService.class, new ValidationServiceImpl());
     }
 
     private ServiceFactory() {

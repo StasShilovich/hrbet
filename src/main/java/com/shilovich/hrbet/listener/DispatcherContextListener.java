@@ -15,8 +15,8 @@ public class DispatcherContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        logger.debug("Connection Pool started!");
         pool = MySqlConnectionPoolImpl.getInstance();
+        logger.info("Connection Pool started!");
     }
 
     @Override
@@ -24,11 +24,11 @@ public class DispatcherContextListener implements ServletContextListener {
         try {
             if (pool != null) {
                 pool.shutdown();
-                logger.debug("Connection Pool shutdown!");
+                logger.info("Connection Pool shutdown!");
             }
         } catch (DaoException e) {
-            logger.debug("Failed while pool shutdown");
-            logger.debug(e.getMessage());
+            logger.error("Failed while pool shutdown");
+            logger.error(e.getMessage());
         }
     }
 }

@@ -28,7 +28,7 @@ public class PropertyManagerImpl implements PropertyManager {
             ResourceBundle resourceBundle = getBundle(BUNDLE_NAME);
             return resourceBundle.getString(key);
         } catch (MissingResourceException | IllegalArgumentException e) {
-            logger.debug("Property with name" + key + " does not find!");
+            logger.error("Property with name" + key + " does not find!");
             throw new DaoException("Not find dat property", e);
         }
     }

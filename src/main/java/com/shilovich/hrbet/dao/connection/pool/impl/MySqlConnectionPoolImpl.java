@@ -32,7 +32,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
                     .create(url, user, password, initialPoolSize, maxPoolSize, maxTimeout);
         } catch (Exception e) {
             // TODO: 28.09.2020 logger maybe runtime when pool will be
-            logger.debug("Exception due sql connection");
+            logger.fatal("Exception due sql connection");
         }
     }
 
@@ -41,7 +41,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
         try {
             return connectionPool.getConnection();
         } catch (SQLException e) {
-            logger.debug("Connection Exception");
+            logger.error("Connection Exception");
             throw new DaoException("Connection Exception", e);
         }
     }
@@ -51,7 +51,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
         try {
             connectionPool.shutdown();
         } catch (SQLException e) {
-            logger.debug("Connection pool shutdown fail!");
+            logger.fatal("Connection pool shutdown fail!");
             throw new DaoException("Connection pool shutdown fail!", e);
         }
     }

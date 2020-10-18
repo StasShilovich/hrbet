@@ -1,8 +1,10 @@
 package com.shilovich.hrbet.service.validation;
 
 import com.shilovich.hrbet.beans.User;
-import com.shilovich.hrbet.service.Service;
 
-public interface ValidationService extends Service {
-    boolean isValidUser(User user);
+public class ValidationService {
+    public static boolean isValidUser(User user) {
+        // TODO: 15.10.2020
+        return true;
+    }
 }

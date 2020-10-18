@@ -43,7 +43,7 @@ public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
             }
             return roleHolder;
         } catch (SQLException e) {
-            logger.debug("Role permissions dao fail!");
+            logger.error("Role permissions dao fail!");
             throw new DaoException("Role permissions dao fail!", e);
 
         } finally {

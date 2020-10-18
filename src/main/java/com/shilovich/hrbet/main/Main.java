@@ -8,7 +8,9 @@ import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.exception.DaoException;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,6 +26,5 @@ public class Main {
         } catch (DaoException e) {
             e.printStackTrace();
         }
-
     }
 }

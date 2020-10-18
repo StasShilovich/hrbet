@@ -63,7 +63,7 @@ public class BetDaoImpl extends AbstractBetDao {
             }
             return bets;
         } catch (SQLException e) {
-            logger.debug("Show all races exception!");
+            logger.error("Show all races exception!");
             throw new DaoException("Show all races exception!", e);
         } finally {
             close(set);

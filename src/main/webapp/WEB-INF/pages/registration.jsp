@@ -1,34 +1,35 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setBundle basename="international\message"/>
 <html>
 <head>
-    <%@include file="/WEB-INF/fragments/header.jsp" %>
+    <%@include file="/WEB-INF/fragments/bootstrap.jsp" %>
+    <%@include file="/WEB-INF/fragments/localization.jsp" %>
     <title>
-        Registration
+        <fmt:message key="label.registration.title"/>
     </title>
 </head>
 <body>
-<form action="/hrbets/dispatcher?command=registration" method="post">
+<form action="${pageContext.request.contextPath}/dispatcher" method="post">
+    <input type="hidden" name="command" value="registration">
     <table style="with: 50%">
         <tr>
-            <td>Name</td>
+            <td><fmt:message key="label.registration.name"/></td>
             <td><input type="text" name="name"/></td>
         </tr>
         <tr>
-            <td>Surname</td>
+            <td><fmt:message key="label.registration.surname"/></td>
             <td><input type="text" name="surname"/></td>
         </tr>
         <tr>
-            <td>Email</td>
+            <td><fmt:message key="label.header.email"/></td>
             <td><input type="text" name="email"/></td>
         </tr>
         <tr>
-            <td>Password</td>
+            <td><fmt:message key="label.header.password"/></td>
             <td><input type="password" name="password"/></td>
         </tr>
     </table>
-    <input type="submit" value="Submit"/></form>
+    <input class="button-login" type="submit" value="Register"/></form>
 </body>
 </html>

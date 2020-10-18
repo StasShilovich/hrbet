@@ -53,15 +53,21 @@ public final class CommonConstant {
     public static final String PARAM_SURNAME = "surname";
     public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_EMAIL = "email";
+    public static final String PARAM_RACE_ID = "raceId";
     public static final String ATTR_USER_AUTH = "userAuth";
+    public static final String ATTR_RACE_SET = "horseSet";
     public static final String ATTR_EMPTY_PARAM = "emptyParams";
+    public static final String ATTR_INCORRECT_DATA = "incorrectData";
     public static final String ATTR_EMPTY_MESSAGE = "There should be no empty fields!";
+    public static final String ATTR_INCORRECT_MESSAGE = "Incorrect email or password! Try again.";
     public static final String PARAM_RACES_LIST = "races";
 
     /**
      * PAGES
      */
     public static final String PAGE_INDEX = "/index.jsp";
-    public static final String PAGE_RACE = "/WEB-INF/pages/races.jsp";
+    public static final String PAGE_REDIRECT_INDEX = "/hrbets";
+    public static final String PAGE_RACES = "/WEB-INF/pages/races.jsp";
     public static final String PAGE_REGISTRATION = "/WEB-INF/pages/registration.jsp";
+    public static final String PAGE_RACE = "/WEB-INF/pages/race.jsp";
 }

@@ -2,28 +2,30 @@ package com.shilovich.hrbet.dao.connection.pool.impl;
 
 import com.shilovich.hrbet.dao.connection.pool.CustomConnectionPool;
 import com.shilovich.hrbet.dao.exception.PoolOverflowException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class CustomConnectionPoolImpl implements CustomConnectionPool {
+    private static final Logger logger = LogManager.getLogger(CustomConnectionPoolImpl.class);
+
     private String url;
     private String user;
     private String password;
     private int initialPoolSize;
     private int maxPoolSize;
     private int maxTimeout;
-    private List<Connection> connectionPool;
-    private List<Connection> usedConnections = new ArrayList<>();
-
+    private LinkedBlockingDeque<Connection> connectionPool;
+    private LinkedBlockingDeque<Connection> usedConnections = new LinkedBlockingDeque<>();
 
     public static CustomConnectionPoolImpl create(
             String url, String user, String password,
             int initialPoolSize, int maxPoolSize, int maxTimeout) throws SQLException {
-        List<Connection> pool = new ArrayList<>(initialPoolSize);
+        LinkedBlockingDeque<Connection> pool = new LinkedBlockingDeque<>(initialPoolSize);
         for (int i = 0; i < initialPoolSize; i++) {
             pool.add(createConnection(url, user, password));
         }
@@ -34,7 +36,7 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
         return DriverManager.getConnection(url, user, password);
     }
 
-    public CustomConnectionPoolImpl(String url, String user, String password, int initialPoolSize, int maxPoolSize, int maxTimeout, List<Connection> connectionPool) {
+    public CustomConnectionPoolImpl(String url, String user, String password, int initialPoolSize, int maxPoolSize, int maxTimeout, LinkedBlockingDeque<Connection> connectionPool) {
         this.url = url;
         this.user = user;
         this.password = password;
@@ -50,11 +52,11 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
             if (usedConnections.size() < maxPoolSize) {
                 connectionPool.add(createConnection(url, user, password));
             } else {
+                logger.fatal("Maximum pool size reached, no available connections!");
                 throw new PoolOverflowException("Maximum pool size reached, no available connections!");
             }
         }
-        Connection connection = connectionPool
-                .remove(connectionPool.size() - 1);
+        Connection connection = connectionPool.removeLast();
         if (!connection.isValid(maxTimeout)) {
             connection = createConnection(url, user, password);
         }

@@ -4,9 +4,7 @@
 <html>
 <head>
     <%@include file="/WEB-INF/fragments/header.jsp" %>
-    <title>
-        <fmt:message key="label.title"/>
-    </title>
+    <title>Race</title>
 </head>
 <body>
 <div class="col-md-10">
@@ -16,31 +14,30 @@
             <tr>
                 <th scope="col">№</th>
                 <th scope="col">
-                    <fmt:message key="label.location"/>
+                    <fmt:message key="label.race.name"/>
                 </th>
                 <th scope="col">
-                    <fmt:message key="label.date"/>
+                    <fmt:message key="label.race.age"/>
                 </th>
                 <th scope="col">
-                    <fmt:message key="label.bank"/>
+                    <fmt:message key="label.race.jockey"/>
                 </th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="race" items="${races}" varStatus="count">
+            <c:forEach var="horse" items="${horseSet}" varStatus="count">
                 <tr>
                     <td>${count.index+1} </td>
-                    <td>
-                        <a href="${pageContext.request.contextPath}/dispatcher?command=race&raceId=${race.id}">${race.location}</a>
-                    </td>
-                    <td>${race.date}</td>
-                    <td>${race.bank}</td>
+                    <td> ${horse.name} </td>
+                    <td>${horse.age}</td>
+                    <td>${horse.jockey}</td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
     </div>
 </div>
+
 <%@include file="/WEB-INF/fragments/footer.jsp" %>
 </body>
 </html>

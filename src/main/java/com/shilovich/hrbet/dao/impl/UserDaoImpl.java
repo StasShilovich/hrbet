@@ -1,6 +1,5 @@
 package com.shilovich.hrbet.dao.impl;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.shilovich.hrbet.beans.*;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
@@ -11,6 +10,7 @@ import com.shilovich.hrbet.dao.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.ejb.DuplicateKeyException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,7 +29,7 @@ public class UserDaoImpl extends AbstractUserDao {
 
     private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();
     private static final String USER_ADD_SQL =
-            "INSERT INTO users u (u.name,u.surname,u.password,u.email) VALUES (?,?,?,?)";
+            "INSERT INTO users (name,surname,password,email) VALUES (?,?,?,?)";
     private static final String USER_AUTHORIZED_SQL =
             "SELECT u.id,u.name, u.surname,u.password,r.id, r.name FROM users u " +
                     "INNER JOIN roles r ON u.role_id=r.id WHERE u.email=?";
@@ -61,7 +61,7 @@ public class UserDaoImpl extends AbstractUserDao {
             }
             return userDao;
         } catch (SQLException e) {
-            logger.debug("User authorization failed!");
+            logger.error("User authorization failed!");
             throw new DaoException("User authorization failed!", e);
         } finally {
             close(set);
@@ -81,14 +81,14 @@ public class UserDaoImpl extends AbstractUserDao {
             statement.setString(2, user.getSurname());
             statement.setString(3, user.getPassword());
             statement.setString(4, user.getEmail());
-            int rows = statement.executeUpdate();
-            if (rows == 0) {
-                logger.debug("Registration method. Rows do not affected!");
-                throw new SQLException("Register user. No rows affected");
-            }
             return user;
         } catch (SQLException e) {
-            logger.debug("User registration failed!");
+            // TODO: 18.10.2020 ???
+            if (e.getErrorCode() == 1062) {
+                logger.info("User is already exist!");
+                return null;
+            }
+            logger.error("User registration failed!");
             throw new DaoException("User registration failed!", e);
         } finally {
             close(statement);

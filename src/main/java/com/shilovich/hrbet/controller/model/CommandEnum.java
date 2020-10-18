@@ -4,7 +4,9 @@ public enum CommandEnum {
     RACES,
     LOGIN,
     LOGOUT,
-    REGISTRATION;
+    REGISTRATION,
+    FORWARD_REGISTRATION,
+    RACE;
 
     public static boolean isContains(String name) {
         for (CommandEnum value : CommandEnum.values()) {

@@ -1,9 +1,6 @@
 package com.shilovich.hrbet.controller;
 
-import com.shilovich.hrbet.controller.impl.LogInCommandImpl;
-import com.shilovich.hrbet.controller.impl.LogOutCommandImpl;
-import com.shilovich.hrbet.controller.impl.RacesPageCommandImpl;
-import com.shilovich.hrbet.controller.impl.RegistrationCommandImpl;
+import com.shilovich.hrbet.controller.impl.*;
 import com.shilovich.hrbet.controller.model.CommandEnum;
 
 import java.util.EnumMap;
@@ -21,6 +18,8 @@ public class ControllerFactory {
         commands.put(CommandEnum.LOGIN, new LogInCommandImpl());
         commands.put(CommandEnum.LOGOUT, new LogOutCommandImpl());
         commands.put(CommandEnum.REGISTRATION, new RegistrationCommandImpl());
+        commands.put(CommandEnum.FORWARD_REGISTRATION, new ForwardRegistrationCommandImpl());
+        commands.put(CommandEnum.RACE, new RacePageCommandImpl());
     }
 
     public Command getCommand(CommandEnum commandEnum) {

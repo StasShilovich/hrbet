@@ -44,7 +44,7 @@ public class HorseDaoImpl extends AbstractHorseDao {
             }
             return horses;
         } catch (SQLException e) {
-            logger.debug("Show horses by race fail!");
+            logger.error("Show horses by race fail!");
             throw new DaoException("Show horses by race fail!", e);
         } finally {
             close(set);
