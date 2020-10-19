@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 import static com.shilovich.hrbet.constant.CommonConstant.*;
 
@@ -26,10 +27,11 @@ public class RegistrationCommandImpl implements Command {
             if (!name.isEmpty() && !surname.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
                 ServiceFactory factory = ServiceFactory.getInstance();
                 UserService userService = (UserService) factory.getClass(UserService.class);
-                User user = userService.registration(new User(name, surname, password, email));
-                if (user != null) {
+                Map<String, String> userMap = userService.registration(new User(name, surname, password, email));
+                if (userMap == null) {
                     return new ServletForward(PAGE_REDIRECT_INDEX, true);
                 }
+                req.setAttribute(ATTR_USER_MAP, userMap);
             }
             return new ServletForward(PAGE_REGISTRATION, false);
         } catch (ServiceException e) {

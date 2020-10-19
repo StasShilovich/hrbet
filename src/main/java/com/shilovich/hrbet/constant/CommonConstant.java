@@ -50,11 +50,16 @@ public final class CommonConstant {
      * User parameters and attribute
      */
     public static final String PARAM_NAME = "name";
+    public static final String PARAM_ERROR_NAME = "incorrectName";
     public static final String PARAM_SURNAME = "surname";
+    public static final String PARAM_ERROR_SURNAME = "incorrectSurname";
     public static final String PARAM_PASSWORD = "password";
+    public static final String PARAM_ERROR_PASSWORD = "incorrectPassword";
     public static final String PARAM_EMAIL = "email";
+    public static final String PARAM_ERROR_EMAIL = "incorrectEmail";
     public static final String PARAM_RACE_ID = "raceId";
     public static final String ATTR_USER_AUTH = "userAuth";
+    public static final String ATTR_USER_MAP = "userMap";
     public static final String ATTR_RACE_SET = "horseSet";
     public static final String ATTR_EMPTY_PARAM = "emptyParams";
     public static final String ATTR_INCORRECT_DATA = "incorrectData";

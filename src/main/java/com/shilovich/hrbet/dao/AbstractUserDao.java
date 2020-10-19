@@ -7,18 +7,19 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 
-public abstract class AbstractUserDao implements DaoCRUD<User, Long> {
+public abstract class AbstractUserDao implements DaoCRUD<User, String> {
     public abstract User authorization(User user) throws DaoException;
 
     @Override
-    public abstract User create(User user) throws DaoException;
+    public abstract Optional<User>  create(User user) throws DaoException;
 
     @Override
-    public abstract User read(Long id) throws DaoException;
+    public abstract Optional<User> read(String email) throws DaoException;
 
     @Override
-    public final User update(User user) throws UnsupportedOperationException {
+    public final Optional<User> update(User user) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 

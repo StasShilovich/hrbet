@@ -10,11 +10,11 @@ import com.shilovich.hrbet.dao.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.ejb.DuplicateKeyException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.shilovich.hrbet.constant.CommonConstant.USER_ID;
@@ -26,7 +26,8 @@ import static com.shilovich.hrbet.constant.CommonConstant.USER_SURNAME;
 
 public class UserDaoImpl extends AbstractUserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
-
+    private static final String USER_EXIST_SQL =
+            "SELECT 1 FROM users WHERE email=?";
     private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();
     private static final String USER_ADD_SQL =
             "INSERT INTO users (name,surname,password,email) VALUES (?,?,?,?)";
@@ -71,7 +72,7 @@ public class UserDaoImpl extends AbstractUserDao {
     }
 
     @Override
-    public User create(User user) throws DaoException {
+    public Optional<User> create(User user) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -81,13 +82,8 @@ public class UserDaoImpl extends AbstractUserDao {
             statement.setString(2, user.getSurname());
             statement.setString(3, user.getPassword());
             statement.setString(4, user.getEmail());
-            return user;
+            return Optional.of(user);
         } catch (SQLException e) {
-            // TODO: 18.10.2020 ???
-            if (e.getErrorCode() == 1062) {
-                logger.info("User is already exist!");
-                return null;
-            }
             logger.error("User registration failed!");
             throw new DaoException("User registration failed!", e);
         } finally {
@@ -97,7 +93,27 @@ public class UserDaoImpl extends AbstractUserDao {
     }
 
     @Override
-    public User read(Long id) throws DaoException {
-        return null;
+    public Optional<User> read(String email) throws DaoException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet set = null;
+        try {
+            connection = pool.getConnection();
+            statement = connection.prepareStatement(USER_EXIST_SQL);
+            statement.setString(1, email);
+            set = statement.executeQuery();
+            if (set.next()) {
+                return Optional.of(new User());
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            logger.error("User registration failed!");
+            throw new DaoException("User registration failed!", e);
+        } finally {
+            close(set);
+            close(statement);
+            close(connection);
+        }
     }
 }

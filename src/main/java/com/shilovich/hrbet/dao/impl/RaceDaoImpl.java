@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.beans.Race;
+import com.shilovich.hrbet.beans.User;
 import com.shilovich.hrbet.dao.AbstractRaceDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
@@ -15,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static com.shilovich.hrbet.constant.CommonConstant.RACE_BANK_DOLLARS;
 import static com.shilovich.hrbet.constant.CommonConstant.RACE_ID;
@@ -59,7 +61,7 @@ public class RaceDaoImpl extends AbstractRaceDao {
     }
 
     @Override
-    public Race read(Long id) throws DaoException {
-        return null;
+    public Optional<Race> read(Long id) throws DaoException {
+        return Optional.empty();
     }
 }

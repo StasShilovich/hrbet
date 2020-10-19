@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.dao;
 
 import com.shilovich.hrbet.beans.Bet;
+import com.shilovich.hrbet.beans.Horse;
 import com.shilovich.hrbet.dao.exception.DaoException;
 
 import java.sql.Connection;
@@ -8,23 +9,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractBetDao implements DaoCRUD<Bet, Long> {
 
     public abstract List<Bet> showByUser(Long userId) throws DaoException;
 
     @Override
-    public final Bet create(Bet bet) throws UnsupportedOperationException {
+    public final Optional<Bet>  create(Bet bet) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final Bet read(Long id) throws UnsupportedOperationException {
+    public final Optional<Bet> read(Long id) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final Bet update(Bet bet) throws UnsupportedOperationException {
+    public final Optional<Bet> update(Bet bet) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
