@@ -11,22 +11,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
+import static com.shilovich.hrbet.constant.CommonConstant.*;
+
 public class CookieCommandImpl implements Command {
     @Override
     public ServletForward execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, CommandException {
-        String locale = req.getParameter("locale");
+        String locale = req.getParameter(PARAM_COOKIE_LOCALE);
         String language = null;
-        if (locale != null && locale.equalsIgnoreCase("ru")) {
-            language = new Locale("ru", "RU").toString();
+        if (locale != null && locale.equalsIgnoreCase(LOCALE_LANGUAGE_RU)) {
+            language = new Locale(LOCALE_LANGUAGE_RU, LOCALE_COUNTRY_RU).toString();
         } else {
-            language = new Locale("en", "US").toString();
+            language = new Locale(LOCALE_LANGUAGE_EN, LOCALE_COUNTRY_US).toString();
         }
-        System.out.println(language);
-        Cookie cookie = new Cookie("locale", language);
-        resp.addCookie(cookie);
-        // TODO: 18.10.2020 refactor
-        String[] split = req.getHeader("referer").split("8080");
-        System.out.println(split[1]);
-        return new ServletForward(split[1], true);
+        resp.addCookie(new Cookie(PARAM_COOKIE_LOCALE, language));
+        String url = req.getHeader(URL_REFERER);
+        String forward = url.replaceAll(PAGE_START, BLANK);
+        return new ServletForward(forward, true);
     }
 }

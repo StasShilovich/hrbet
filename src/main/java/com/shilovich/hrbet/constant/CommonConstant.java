@@ -29,23 +29,23 @@ public final class CommonConstant {
     /**
      * BETS
      */
-    public static final String BET_ID="b.id";
-    public static final String BET_STATUS="b.status";
-    public static final String BET_TIME="b.time";
-    public static final String BET_RACE_ID="b.race_id";
-    public static final String BET_DOLLARS="b.cash_dollars";
-    public static final String BET_CENTS="b.cash_cents";
-    public static final String BET_TYPE_ID="b.type_id";
-    public static final String BET_TYPE_NAME="t.name";
-    public static final String BET_HORSE_ID="b.bet_horse_id";
-    public static final String BET_HORSE_NAME="h.name";
+    public static final String BET_ID = "b.id";
+    public static final String BET_STATUS = "b.status";
+    public static final String BET_TIME = "b.time";
+    public static final String BET_RACE_ID = "b.race_id";
+    public static final String BET_DOLLARS = "b.cash_dollars";
+    public static final String BET_CENTS = "b.cash_cents";
+    public static final String BET_TYPE_ID = "b.type_id";
+    public static final String BET_TYPE_NAME = "t.name";
+    public static final String BET_HORSE_ID = "b.bet_horse_id";
+    public static final String BET_HORSE_NAME = "h.name";
     /**
      * HORSE
      */
-    public static final String HORSE_ID="h.id";
-    public static final String HORSE_NAME="h.name";
-    public static final String HORSE_AGE="h.age";
-    public static final String HORSE_JOCKEY="h.jockey";
+    public static final String HORSE_ID = "h.id";
+    public static final String HORSE_NAME = "h.name";
+    public static final String HORSE_AGE = "h.age";
+    public static final String HORSE_JOCKEY = "h.jockey";
     /**
      * User parameters and attribute
      */
@@ -61,7 +61,12 @@ public final class CommonConstant {
     public static final String ATTR_EMPTY_MESSAGE = "There should be no empty fields!";
     public static final String ATTR_INCORRECT_MESSAGE = "Incorrect email or password! Try again.";
     public static final String PARAM_RACES_LIST = "races";
-
+    public static final String PARAM_COOKIE_LOCALE = "locale";
+    public static final String LOCALE_LANGUAGE_RU = "ru";
+    public static final String LOCALE_LANGUAGE_EN = "en";
+    public static final String LOCALE_COUNTRY_RU = "RU";
+    public static final String LOCALE_COUNTRY_US = "US";
+    public static final String URL_REFERER = "referer";
     /**
      * PAGES
      */
@@ -71,4 +76,9 @@ public final class CommonConstant {
     public static final String PAGE_REGISTRATION = "/WEB-INF/pages/registration.jsp";
     public static final String PAGE_RACE = "/WEB-INF/pages/race.jsp";
     public static final String PAGE_PROFILE = "/WEB-INF/pages/profile.jsp";
+    public static final String PAGE_START = "http://localhost:8888/hrbets";
+    /**
+     * OTHERS
+     */
+    public static final String BLANK = "";
 }

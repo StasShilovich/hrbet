@@ -24,7 +24,6 @@ public class LogInCommandImpl implements Command {
             String password = req.getParameter(PARAM_PASSWORD);
             if (email.isEmpty() || password.isEmpty()) {
                 req.setAttribute(ATTR_EMPTY_PARAM, ATTR_EMPTY_MESSAGE);
-                System.out.println("||||||||||||||||||||||||");
                 return new ServletForward(PAGE_INDEX, false);
             }
             User user = new User();
@@ -37,7 +36,6 @@ public class LogInCommandImpl implements Command {
                 session.setAttribute(ATTR_USER_AUTH, userAuthorized);
             }else {
                 req.setAttribute(ATTR_INCORRECT_DATA, ATTR_INCORRECT_MESSAGE);
-                System.out.println("||||||||||||||||||||||||");
                 return new ServletForward(PAGE_INDEX, false);
             }
             return new ServletForward(PAGE_INDEX, false);
