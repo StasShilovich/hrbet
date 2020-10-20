@@ -16,23 +16,59 @@
         <table class="table table-striped">
             <tr>
                 <td><fmt:message key="label.registration.name"/></td>
-                <td><input type="text" name="name"/></td>
-                <td><c:out value="${userMap['name']}"/></td>
+                <td>
+                    <input id="nameCol" type="text" name="name"/>
+                    <script>
+                        document.getElementById("nameCol").value = "<c:out value="${userMap['name']}"/>";
+                    </script>
+                    <c:if test="${not empty  userMap &&empty userMap['name']}">
+                        <div class="alert alert-danger" role="alert">
+                            <fmt:message key="label.registration.incorrect.name"/>
+                        </div>
+                    </c:if>
+                </td>
             </tr>
             <tr>
                 <td><fmt:message key="label.registration.surname"/></td>
-                <td><input type="text" name="surname"/></td>
-                <td><c:out value="${userMap['surname']}"/></td>
+                <td>
+                    <input id="surnameCol" type="text" name="surname"/>
+                    <script>
+                        document.getElementById("surnameCol").value = "<c:out value="${userMap['surname']}"/>";
+                    </script>
+                    <c:if test="${not empty  userMap &&empty userMap['surname']}">
+                        <div class="alert alert-danger" role="alert">
+                            <fmt:message key="label.registration.incorrect.surname"/>
+                        </div>
+                    </c:if>
+                </td>
             </tr>
             <tr>
                 <td><fmt:message key="label.header.email"/></td>
-                <td><input type="text" name="email"/></td>
-                <td><c:out value="${userMap['email']}"/></td>
+                <td>
+                    <input id="emailCol" type="text" name="email"/>
+                    <script>
+                        document.getElementById("emailCol").value = "<c:out value="${userMap['email']}"/>";
+                    </script>
+                    <c:if test="${not empty  userMap &&empty userMap['email']}">
+                        <div class="alert alert-danger" role="alert">
+                            <fmt:message key="label.registration.incorrect.email"/>
+                        </div>
+                    </c:if>
+                </td>
             </tr>
             <tr>
                 <td><fmt:message key="label.header.password"/></td>
-                <td><input type="password" name="password"/></td>
-                <td><c:out value="${userMap['password']}"/></td>
+                <td>
+                    <input id="passwordCol" type="password" name="password"/>
+                    <script>
+                        document.getElementById("passwordCol").value = "<c:out value="${userMap['password']}"/>";
+                    </script>
+                    <c:if test="${not empty  userMap &&empty userMap['password']}">
+                        <div class="alert alert-danger" role="alert">
+                            <fmt:message key="label.registration.incorrect.password"/>
+                        </div>
+                    </c:if>
+                </td>
             </tr>
         </table>
         <input class="btn btn-primary btn-lg active" type="submit" value="Register"/></form>

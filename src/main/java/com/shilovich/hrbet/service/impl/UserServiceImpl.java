@@ -47,28 +47,45 @@ public class UserServiceImpl implements UserService {
         try {
             Map<String, String> userMAP = new HashMap<>();
             boolean invalidUser = false;
-            if (!ValidationService.isValidUserName(userUI.getName())) {
+            if (ValidationService.isValidUserName(userUI.getName())) {
+                userMAP.put(PARAM_NAME, userUI.getName());
+            } else {
                 invalidUser = true;
-                userMAP.put(PARAM_NAME, PARAM_ERROR_NAME);
+                userMAP.put(PARAM_NAME, BLANK);
             }
-            if (!ValidationService.isValidUserSurname(userUI.getSurname())) {
+            if (ValidationService.isValidUserSurname(userUI.getSurname())) {
+                userMAP.put(PARAM_SURNAME, userUI.getSurname());
+            } else {
                 invalidUser = true;
-                userMAP.put(PARAM_SURNAME, PARAM_ERROR_SURNAME);
+                userMAP.put(PARAM_SURNAME, BLANK);
             }
-            if (!ValidationService.isValidUserPassword(userUI.getPassword())) {
+            if (ValidationService.isValidUserPassword(userUI.getPassword())) {
+                userMAP.put(PARAM_PASSWORD, userUI.getPassword());
+            } else {
                 invalidUser = true;
-                userMAP.put(PARAM_PASSWORD, PARAM_ERROR_PASSWORD);
+                userMAP.put(PARAM_PASSWORD, BLANK);
             }
             AbstractUserDao userDao = (AbstractUserDao) DaoFactory.getInstance().getClass(AbstractUserDao.class);
-            Optional<User> user = userDao.read(userUI.getEmail());
-            if (user.isPresent()) {
-                userMAP.put(PARAM_EMAIL, PARAM_ERROR_EMAIL);
-            } else if (ValidationService.isValidUserEmail(userUI.getEmail()) && !invalidUser) {
+            if (ValidationService.isValidUserEmail(userUI.getEmail())) {
+                Optional<User> user = userDao.read(userUI.getEmail());
+                if (user.isPresent())
+                    userMAP.put(PARAM_PASSWORD, userUI.getEmail());
+                else {
+                    invalidUser = true;
+                    userMAP.put(PARAM_EMAIL, BLANK);
+                }
+                // TODO: 20.10.2020 duplicate else
+            } else {
+                invalidUser = true;
+                userMAP.put(PARAM_EMAIL, BLANK);
+            }
+            if (!invalidUser) {
                 String password = userUI.getPassword();
                 String hashPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
                 userUI.setPassword(hashPassword);
                 userDao.create(userUI);
                 return null;
+
             }
             return userMAP;
         } catch (DaoException e) {
