@@ -8,7 +8,9 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class CustomConnectionPoolImpl implements CustomConnectionPool {
     private static final Logger logger = LogManager.getLogger(CustomConnectionPoolImpl.class);
@@ -19,8 +21,8 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
     private int initialPoolSize;
     private int maxPoolSize;
     private int maxTimeout;
-    private LinkedBlockingDeque<Connection> connectionPool;
-    private LinkedBlockingDeque<Connection> usedConnections = new LinkedBlockingDeque<>();
+    private BlockingQueue<Connection> connectionPool;
+    private BlockingQueue<Connection> usedConnections = new LinkedBlockingQueue<>();
 
     public static CustomConnectionPoolImpl create(
             String url, String user, String password,
@@ -56,7 +58,8 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
                 throw new PoolOverflowException("Maximum pool size reached, no available connections!");
             }
         }
-        Connection connection = connectionPool.removeLast();
+        // TODO: 20.10.2020  
+        Connection connection = connectionPool.remove();
         if (!connection.isValid(maxTimeout)) {
             connection = createConnection(url, user, password);
         }

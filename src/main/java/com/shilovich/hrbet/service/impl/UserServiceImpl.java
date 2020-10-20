@@ -66,15 +66,9 @@ public class UserServiceImpl implements UserService {
                 userMAP.put(PARAM_PASSWORD, BLANK);
             }
             AbstractUserDao userDao = (AbstractUserDao) DaoFactory.getInstance().getClass(AbstractUserDao.class);
-            if (ValidationService.isValidUserEmail(userUI.getEmail())) {
-                Optional<User> user = userDao.read(userUI.getEmail());
-                if (user.isPresent())
-                    userMAP.put(PARAM_PASSWORD, userUI.getEmail());
-                else {
-                    invalidUser = true;
-                    userMAP.put(PARAM_EMAIL, BLANK);
-                }
-                // TODO: 20.10.2020 duplicate else
+            Optional<User> user = userDao.read(userUI.getEmail());
+            if (ValidationService.isValidUserEmail(userUI.getEmail()) && !user.isPresent()) {
+                userMAP.put(PARAM_EMAIL, userUI.getEmail());
             } else {
                 invalidUser = true;
                 userMAP.put(PARAM_EMAIL, BLANK);
