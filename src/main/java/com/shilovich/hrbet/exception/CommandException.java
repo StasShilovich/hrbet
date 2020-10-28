@@ -1,4 +1,4 @@
-package com.shilovich.hrbet.controller.exception;
+package com.shilovich.hrbet.exception;
 
 public class CommandException extends Exception {
     public CommandException() {

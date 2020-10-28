@@ -6,7 +6,7 @@ import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
 import com.shilovich.hrbet.dao.AbstractUserDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,12 +17,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.shilovich.hrbet.constant.CommonConstant.USER_ID;
-import static com.shilovich.hrbet.constant.CommonConstant.USER_NAME;
-import static com.shilovich.hrbet.constant.CommonConstant.USER_PASSWORD;
-import static com.shilovich.hrbet.constant.CommonConstant.ROLE_ID;
-import static com.shilovich.hrbet.constant.CommonConstant.ROLE_NAME;
-import static com.shilovich.hrbet.constant.CommonConstant.USER_SURNAME;
+import static com.shilovich.hrbet.constant.DaoConstant.*;
 
 public class UserDaoImpl extends AbstractUserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
@@ -82,6 +77,7 @@ public class UserDaoImpl extends AbstractUserDao {
             statement.setString(2, user.getSurname());
             statement.setString(3, user.getPassword());
             statement.setString(4, user.getEmail());
+            statement.executeUpdate();
             return Optional.of(user);
         } catch (SQLException e) {
             logger.error("User registration failed!");

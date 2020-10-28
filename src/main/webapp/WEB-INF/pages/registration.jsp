@@ -71,7 +71,14 @@
                 </td>
             </tr>
         </table>
+        <c:if test="${not empty emptyParams}">
+            <div class="alert alert-dismissible alert-primary">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    ${emptyParams}
+            </div>
+        </c:if>
         <input class="btn btn-primary btn-lg active" type="submit" value="Register"/></form>
 </div>
+<%@include file="/WEB-INF/jstl/footer.jsp" %>
 </body>
 </html>

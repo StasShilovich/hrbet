@@ -46,14 +46,12 @@
 </a>
 
 <c:if test="${not empty emptyParams}">
-    <div class="alert alert-dismissible alert-primary">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div class="alert alert-danger" role="alert">
             ${emptyParams}
     </div>
 </c:if>
 <c:if test="${not empty incorrectData}">
-    <div class="alert alert-dismissible alert-primary">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div class="alert alert-danger" role="alert">
             ${incorrectData}
     </div>
 </c:if>

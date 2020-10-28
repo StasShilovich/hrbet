@@ -7,7 +7,7 @@ import com.shilovich.hrbet.beans.Race;
 import com.shilovich.hrbet.dao.AbstractBetDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.shilovich.hrbet.constant.CommonConstant.*;
+import static com.shilovich.hrbet.constant.DaoConstant.*;
 
 public class BetDaoImpl extends AbstractBetDao {
     private static final Logger logger = LogManager.getLogger(BetDaoImpl.class);

@@ -7,14 +7,15 @@ import java.util.Map;
 
 public class DaoFactory {
     private static final DaoFactory instance = new DaoFactory();
-    private static final Map<Class<? extends DaoCRUD<?, ?>>, DaoCRUD<?, ?>> factory = new HashMap<>();
+    private static final Map<Class<? extends DaoCRUD<?, ?>>, DaoCRUD<?, ?>> factory;
 
     static {
-        factory.put(AbstractUserDao.class, new UserDaoImpl());
-        factory.put(AbstractRaceDao.class, new RaceDaoImpl());
-        factory.put(AbstractRolePermissionsDao.class, new RolePermissionsDaoImpl());
-        factory.put(AbstractBetDao.class, new BetDaoImpl());
-        factory.put(AbstractHorseDao.class, new HorseDaoImpl());
+        factory = Map.of(
+                AbstractUserDao.class, new UserDaoImpl(),
+                AbstractRaceDao.class, new RaceDaoImpl(),
+                AbstractRolePermissionsDao.class, new RolePermissionsDaoImpl(),
+                AbstractBetDao.class, new BetDaoImpl(),
+                AbstractHorseDao.class, new HorseDaoImpl());
     }
 
     private DaoFactory() {

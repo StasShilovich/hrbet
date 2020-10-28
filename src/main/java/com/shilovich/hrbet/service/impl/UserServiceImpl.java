@@ -1,12 +1,12 @@
 package com.shilovich.hrbet.service.impl;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.shilovich.hrbet.beans.User;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.AbstractUserDao;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 import com.shilovich.hrbet.service.UserService;
-import com.shilovich.hrbet.service.exception.ServiceException;
+import com.shilovich.hrbet.exception.ServiceException;
+import com.shilovich.hrbet.service.bcrypt.BCryptService;
 import com.shilovich.hrbet.service.validation.ValidationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.shilovich.hrbet.constant.CommonConstant.*;
+import static com.shilovich.hrbet.constant.CommandConstant.*;
+import static com.shilovich.hrbet.constant.UtilConstant.BLANK;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
@@ -31,8 +32,7 @@ public class UserServiceImpl implements UserService {
             if (userAuthorized == null) {
                 return null;
             }
-            BCrypt.Result verify = BCrypt.verifyer().verify(user.getPassword().toCharArray(), userAuthorized.getPassword());
-            if (!verify.verified) {
+            if (BCryptService.verifyPassword(userAuthorized.getPassword(), user.getPassword())) {
                 return null;
             }
             return userAuthorized;
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
             }
             AbstractUserDao userDao = (AbstractUserDao) DaoFactory.getInstance().getClass(AbstractUserDao.class);
             Optional<User> user = userDao.read(userUI.getEmail());
-            if (ValidationService.isValidUserEmail(userUI.getEmail()) && !user.isPresent()) {
+            if (ValidationService.isValidUserEmail(userUI.getEmail()) && user.isEmpty()) {
                 userMAP.put(PARAM_EMAIL, userUI.getEmail());
             } else {
                 invalidUser = true;
@@ -75,8 +75,7 @@ public class UserServiceImpl implements UserService {
             }
             if (!invalidUser) {
                 String password = userUI.getPassword();
-                String hashPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-                userUI.setPassword(hashPassword);
+                userUI.setPassword(BCryptService.hashPassword(password));
                 userDao.create(userUI);
                 return null;
 

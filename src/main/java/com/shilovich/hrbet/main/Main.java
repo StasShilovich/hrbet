@@ -1,20 +1,8 @@
 package com.shilovich.hrbet.main;
 
-import com.shilovich.hrbet.beans.Bet;
-import com.shilovich.hrbet.beans.Horse;
-import com.shilovich.hrbet.dao.AbstractBetDao;
-import com.shilovich.hrbet.dao.AbstractHorseDao;
-import com.shilovich.hrbet.dao.DaoFactory;
-import com.shilovich.hrbet.dao.exception.DaoException;
-
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.LinkedBlockingDeque;
 
 public class Main {
     public static void main(String[] args) throws MalformedURLException, URISyntaxException {

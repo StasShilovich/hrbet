@@ -8,7 +8,8 @@ public enum CommandEnum {
     FORWARD_REGISTRATION,
     RACE,
     PROFILE,
-    COOKIE;
+    COOKIE,
+    SHOW_USER_BETS;
 
     public static boolean isContains(String name) {
         for (CommandEnum value : CommandEnum.values()) {

@@ -2,11 +2,11 @@ package com.shilovich.hrbet.controller.impl;
 
 import com.shilovich.hrbet.beans.User;
 import com.shilovich.hrbet.controller.Command;
-import com.shilovich.hrbet.controller.exception.CommandException;
+import com.shilovich.hrbet.exception.CommandException;
 import com.shilovich.hrbet.controller.model.ServletForward;
 import com.shilovich.hrbet.service.ServiceFactory;
 import com.shilovich.hrbet.service.UserService;
-import com.shilovich.hrbet.service.exception.ServiceException;
+import com.shilovich.hrbet.exception.ServiceException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.shilovich.hrbet.constant.CommonConstant.*;
+import static com.shilovich.hrbet.constant.CommandConstant.*;
 
 public class RegistrationCommandImpl implements Command {
     @Override
@@ -29,11 +29,14 @@ public class RegistrationCommandImpl implements Command {
                 UserService userService = (UserService) factory.getClass(UserService.class);
                 Map<String, String> userMap = userService.registration(new User(name, surname, password, email));
                 if (userMap == null) {
-                    return new ServletForward(PAGE_REDIRECT_INDEX, true);
+                    ServletForward servletForward = new ServletForward(PAGE_REDIRECT_INDEX);
+                    servletForward.redirect();
+                    return servletForward;
                 }
                 req.setAttribute(ATTR_USER_MAP, userMap);
             }
-            return new ServletForward(PAGE_REGISTRATION, false);
+            req.setAttribute(ATTR_EMPTY_PARAM, ATTR_EMPTY_MESSAGE);
+            return new ServletForward(PAGE_REGISTRATION);
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage(), e);
         }

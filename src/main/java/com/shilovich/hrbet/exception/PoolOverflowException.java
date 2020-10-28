@@ -1,4 +1,4 @@
-package com.shilovich.hrbet.dao.exception;
+package com.shilovich.hrbet.exception;
 
 public class PoolOverflowException extends RuntimeException {
     public PoolOverflowException() {

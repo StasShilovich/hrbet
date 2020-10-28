@@ -1,11 +1,10 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.beans.Race;
-import com.shilovich.hrbet.beans.User;
 import com.shilovich.hrbet.dao.AbstractRaceDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,10 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.shilovich.hrbet.constant.CommonConstant.RACE_BANK_DOLLARS;
-import static com.shilovich.hrbet.constant.CommonConstant.RACE_ID;
-import static com.shilovich.hrbet.constant.CommonConstant.RACE_LOCATION;
-import static com.shilovich.hrbet.constant.CommonConstant.RACE_TIME;
+import static com.shilovich.hrbet.constant.DaoConstant.*;
 
 public class RaceDaoImpl extends AbstractRaceDao {
     private static final Logger logger = LogManager.getLogger(RaceDaoImpl.class);

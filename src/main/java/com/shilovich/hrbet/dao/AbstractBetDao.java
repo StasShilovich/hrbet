@@ -1,8 +1,7 @@
 package com.shilovich.hrbet.dao;
 
 import com.shilovich.hrbet.beans.Bet;
-import com.shilovich.hrbet.beans.Horse;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

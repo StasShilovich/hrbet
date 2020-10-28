@@ -1,7 +1,7 @@
 package com.shilovich.hrbet.dao.connection.property.impl;
 
 import com.shilovich.hrbet.dao.connection.property.PropertyManager;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -4,7 +4,7 @@ import com.shilovich.hrbet.beans.RoleHolder;
 import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,9 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.shilovich.hrbet.constant.CommonConstant.P_ID;
-import static com.shilovich.hrbet.constant.CommonConstant.P_NAME;
-import static com.shilovich.hrbet.constant.CommonConstant.RP_ROLE_ID;
+import static com.shilovich.hrbet.constant.DaoConstant.*;
 
 public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
     private static final Logger logger = LogManager.getLogger(RolePermissionsDaoImpl.class);

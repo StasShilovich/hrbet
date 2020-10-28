@@ -3,18 +3,21 @@ package com.shilovich.hrbet.controller.model;
 public class ServletForward {
 
     private String page;
-    private Boolean isRedirect;
+    private boolean isRedirect = false;
 
-    public ServletForward(String page, Boolean isRedirect) {
+    public ServletForward(String page) {
         this.page = page;
-        this.isRedirect = isRedirect;
     }
 
     public String getPage() {
         return page;
     }
 
-    public Boolean getRedirect() {
+    public boolean isRedirect() {
         return isRedirect;
+    }
+
+    public void redirect() {
+        this.isRedirect = true;
     }
 }

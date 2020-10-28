@@ -1,22 +1,19 @@
 package com.shilovich.hrbet.controller;
 
-import com.shilovich.hrbet.controller.exception.CommandException;
+import com.shilovich.hrbet.exception.CommandException;
 import com.shilovich.hrbet.controller.model.CommandEnum;
 import com.shilovich.hrbet.controller.model.ServletForward;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.faces.event.ScopeContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Locale;
 
-import static com.shilovich.hrbet.constant.CommonConstant.PAGE_INDEX;
-import static com.shilovich.hrbet.constant.CommonConstant.PAGE_REDIRECT_INDEX;
+import static com.shilovich.hrbet.constant.CommandConstant.PAGE_INDEX;
+
 
 public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
@@ -51,9 +48,9 @@ public class DispatcherServlet extends HttpServlet {
             }
             if (forward == null) {
                 logger.error("Null servlet forward");
-                // TODO: 12.10.2020 error page
+                new ServletForward(PAGE_INDEX);
             }
-            if (forward.getRedirect()) {
+            if (forward.isRedirect()) {
                 logger.info("Redirect: " + forward.getPage());
                 resp.sendRedirect(forward.getPage());
             } else {

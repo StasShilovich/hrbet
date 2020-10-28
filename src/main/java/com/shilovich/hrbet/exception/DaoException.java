@@ -1,4 +1,4 @@
-package com.shilovich.hrbet.dao.exception;
+package com.shilovich.hrbet.exception;
 
 public class DaoException extends Exception {
     public DaoException() {

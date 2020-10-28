@@ -1,5 +1,5 @@
 package com.shilovich.hrbet.dao;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 
 import java.io.Serializable;
 import java.util.Optional;

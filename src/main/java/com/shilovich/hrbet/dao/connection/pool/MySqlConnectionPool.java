@@ -1,6 +1,6 @@
 package com.shilovich.hrbet.dao.connection.pool;
 
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 
 import java.sql.Connection;
 

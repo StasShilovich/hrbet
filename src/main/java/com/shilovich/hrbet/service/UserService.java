@@ -1,7 +1,7 @@
 package com.shilovich.hrbet.service;
 
 import com.shilovich.hrbet.beans.User;
-import com.shilovich.hrbet.service.exception.ServiceException;
+import com.shilovich.hrbet.exception.ServiceException;
 
 import java.util.Map;
 

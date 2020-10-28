@@ -1,7 +1,7 @@
 package com.shilovich.hrbet.controller.impl;
 
 import com.shilovich.hrbet.controller.Command;
-import com.shilovich.hrbet.controller.exception.CommandException;
+import com.shilovich.hrbet.exception.CommandException;
 import com.shilovich.hrbet.controller.model.ServletForward;
 
 import javax.servlet.ServletException;
@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-import static com.shilovich.hrbet.constant.CommonConstant.*;
+import static com.shilovich.hrbet.constant.CommandConstant.*;
+import static com.shilovich.hrbet.constant.UtilConstant.BLANK;
 
 public class CookieCommandImpl implements Command {
     @Override
@@ -26,6 +27,8 @@ public class CookieCommandImpl implements Command {
         resp.addCookie(new Cookie(PARAM_COOKIE_LOCALE, language));
         String url = req.getHeader(URL_REFERER);
         String forward = url.replaceAll(PAGE_START, BLANK);
-        return new ServletForward(forward, true);
+        ServletForward servletForward = new ServletForward(forward);
+        servletForward.redirect();
+        return servletForward;
     }
 }

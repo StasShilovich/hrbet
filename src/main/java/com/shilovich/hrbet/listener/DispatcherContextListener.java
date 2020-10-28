@@ -2,7 +2,7 @@ package com.shilovich.hrbet.listener;
 
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

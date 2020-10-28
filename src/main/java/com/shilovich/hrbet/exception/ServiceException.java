@@ -1,4 +1,4 @@
-package com.shilovich.hrbet.service.exception;
+package com.shilovich.hrbet.exception;
 
 public class ServiceException extends Exception{
     public ServiceException() {

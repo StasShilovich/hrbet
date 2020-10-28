@@ -4,7 +4,7 @@ import com.shilovich.hrbet.dao.connection.pool.CustomConnectionPool;
 import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
 import com.shilovich.hrbet.dao.connection.property.PropertyManager;
 import com.shilovich.hrbet.dao.connection.property.impl.PropertyManagerImpl;
-import com.shilovich.hrbet.dao.exception.DaoException;
+import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

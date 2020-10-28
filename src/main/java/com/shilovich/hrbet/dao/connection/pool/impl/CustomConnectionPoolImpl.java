@@ -1,7 +1,7 @@
 package com.shilovich.hrbet.dao.connection.pool.impl;
 
 import com.shilovich.hrbet.dao.connection.pool.CustomConnectionPool;
-import com.shilovich.hrbet.dao.exception.PoolOverflowException;
+import com.shilovich.hrbet.exception.PoolOverflowException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CustomConnectionPoolImpl implements CustomConnectionPool {
@@ -27,7 +26,7 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
     public static CustomConnectionPoolImpl create(
             String url, String user, String password,
             int initialPoolSize, int maxPoolSize, int maxTimeout) throws SQLException {
-        LinkedBlockingDeque<Connection> pool = new LinkedBlockingDeque<>(initialPoolSize);
+        BlockingQueue<Connection> pool = new LinkedBlockingQueue<>(initialPoolSize);
         for (int i = 0; i < initialPoolSize; i++) {
             pool.add(createConnection(url, user, password));
         }
@@ -38,7 +37,7 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
         return DriverManager.getConnection(url, user, password);
     }
 
-    public CustomConnectionPoolImpl(String url, String user, String password, int initialPoolSize, int maxPoolSize, int maxTimeout, LinkedBlockingDeque<Connection> connectionPool) {
+    public CustomConnectionPoolImpl(String url, String user, String password, int initialPoolSize, int maxPoolSize, int maxTimeout, BlockingQueue<Connection> connectionPool) {
         this.url = url;
         this.user = user;
         this.password = password;
@@ -58,7 +57,6 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
                 throw new PoolOverflowException("Maximum pool size reached, no available connections!");
             }
         }
-        // TODO: 20.10.2020  
         Connection connection = connectionPool.remove();
         if (!connection.isValid(maxTimeout)) {
             connection = createConnection(url, user, password);

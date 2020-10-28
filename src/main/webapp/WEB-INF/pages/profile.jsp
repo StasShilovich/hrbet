@@ -33,5 +33,16 @@
         </div>
     </div>
 </div>
+<a class="form-horizontal"
+   href="${pageContext.request.contextPath}/dispatcher?command=show_user_bets">
+    <div class="form-group">
+        <input type="submit"
+               name="logout-submit"
+               id="registration"
+               class="btn btn-primary btn-lg active"
+               value="<fmt:message key="label.registration.bets"/>">
+    </div>
+</a>
+<%@include file="/WEB-INF/jstl/footer.jsp" %>
 </body>
 </html>
