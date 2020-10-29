@@ -1,6 +1,6 @@
-package com.shilovich.hrbet.constant;
+package com.shilovich.hrbet.controller;
 
-public class CommandConstant {
+public class CommandParameter {
     /**
      * Parameters
      */

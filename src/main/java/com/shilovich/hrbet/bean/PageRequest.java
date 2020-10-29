@@ -1,4 +1,4 @@
-package com.shilovich.hrbet.beans;
+package com.shilovich.hrbet.bean;
 
 public class PageRequest {
     private Integer page;

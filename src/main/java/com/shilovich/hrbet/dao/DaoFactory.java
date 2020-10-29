@@ -2,12 +2,13 @@ package com.shilovich.hrbet.dao;
 
 import com.shilovich.hrbet.dao.impl.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class DaoFactory {
     private static final DaoFactory instance = new DaoFactory();
-    private static final Map<Class<? extends DaoCRUD<?, ?>>, DaoCRUD<?, ?>> factory;
+    private static final Map<Class<? extends Dao<?, ?>>, Dao<?, ?>> factory;
 
     static {
         factory = Map.of(
@@ -25,7 +26,7 @@ public class DaoFactory {
         return instance;
     }
 
-    public DaoCRUD<?, ?> getClass(Class<?> clazz) {
+    public Dao<?, ?> getClass(Class<?> clazz) {
         return factory.get(clazz);
     }
 }

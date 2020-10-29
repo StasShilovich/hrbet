@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.shilovich.hrbet.constant.CommandConstant.PAGE_REGISTRATION;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_REGISTRATION;
 
 public class ForwardRegistrationCommandImpl implements Command {
     @Override

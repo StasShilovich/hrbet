@@ -11,10 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-import static com.shilovich.hrbet.constant.CommandConstant.*;
-import static com.shilovich.hrbet.constant.UtilConstant.BLANK;
+import static com.shilovich.hrbet.controller.CommandParameter.*;
 
 public class CookieCommandImpl implements Command {
+    public static final String BLANK = "";
+
     @Override
     public ServletForward execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, CommandException {
         String locale = req.getParameter(PARAM_COOKIE_LOCALE);

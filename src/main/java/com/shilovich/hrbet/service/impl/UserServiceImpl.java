@@ -1,13 +1,13 @@
 package com.shilovich.hrbet.service.impl;
 
-import com.shilovich.hrbet.beans.User;
+import com.shilovich.hrbet.bean.User;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.AbstractUserDao;
 import com.shilovich.hrbet.exception.DaoException;
 import com.shilovich.hrbet.service.UserService;
 import com.shilovich.hrbet.exception.ServiceException;
-import com.shilovich.hrbet.service.bcrypt.BCryptService;
-import com.shilovich.hrbet.service.validation.ValidationService;
+import com.shilovich.hrbet.bcrypt.BCryptService;
+import com.shilovich.hrbet.validation.ValidationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,11 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.shilovich.hrbet.constant.CommandConstant.*;
-import static com.shilovich.hrbet.constant.UtilConstant.BLANK;
+import static com.shilovich.hrbet.controller.CommandParameter.*;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+    public static final String BLANK = "";
 
     @Override
     public User authorization(User user) throws ServiceException {

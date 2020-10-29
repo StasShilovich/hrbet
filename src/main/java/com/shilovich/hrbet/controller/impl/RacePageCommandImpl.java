@@ -1,6 +1,6 @@
 package com.shilovich.hrbet.controller.impl;
 
-import com.shilovich.hrbet.beans.Horse;
+import com.shilovich.hrbet.bean.Horse;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.exception.CommandException;
 import com.shilovich.hrbet.controller.model.ServletForward;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
 
-import static com.shilovich.hrbet.constant.CommandConstant.*;
+import static com.shilovich.hrbet.controller.CommandParameter.*;
 
 public class RacePageCommandImpl implements Command {
     @Override

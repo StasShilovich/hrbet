@@ -1,7 +1,7 @@
 package com.shilovich.hrbet.controller.impl;
 
-import com.shilovich.hrbet.beans.Bet;
-import com.shilovich.hrbet.beans.User;
+import com.shilovich.hrbet.bean.Bet;
+import com.shilovich.hrbet.bean.User;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.controller.model.ServletForward;
 import com.shilovich.hrbet.exception.CommandException;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-import static com.shilovich.hrbet.constant.CommandConstant.*;
+import static com.shilovich.hrbet.controller.CommandParameter.*;
 
 public class ShowUserBetsCommandImpl implements Command {
     @Override

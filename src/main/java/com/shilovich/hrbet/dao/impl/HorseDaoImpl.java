@@ -1,9 +1,8 @@
 package com.shilovich.hrbet.dao.impl;
 
-import com.shilovich.hrbet.beans.Horse;
+import com.shilovich.hrbet.bean.Horse;
 import com.shilovich.hrbet.dao.AbstractHorseDao;
-import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
-import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
+import com.shilovich.hrbet.dao.connection.ConnectionManager;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,12 +14,12 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.shilovich.hrbet.constant.DaoConstant.*;
+import static com.shilovich.hrbet.dao.DaoTableField.*;
 
 public class HorseDaoImpl extends AbstractHorseDao {
     private static final Logger logger = LogManager.getLogger(HorseDaoImpl.class);
+    private final ConnectionManager manager = ConnectionManager.getInstance();
 
-    private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();
     private static final String HORSE_SHOW_BY_RACE_SQL = "SELECT h.id,h.name,h.age,h.jockey FROM horse_participatings hp " +
             "INNER JOIN horses h ON hp.horse_id=h.id WHERE hp.races_id=?";
 
@@ -29,12 +28,11 @@ public class HorseDaoImpl extends AbstractHorseDao {
         Set<Horse> horses = new HashSet<>();
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet set = null;
         try {
-            connection = pool.getConnection();
+            connection = manager.getConnection();
             statement = connection.prepareStatement(HORSE_SHOW_BY_RACE_SQL);
             statement.setString(1, raceId.toString());
-            set = statement.executeQuery();
+            ResultSet set = statement.executeQuery();
             while (set.next()) {
                 Long id = set.getLong(HORSE_ID);
                 String name = set.getString(HORSE_NAME);
@@ -47,7 +45,6 @@ public class HorseDaoImpl extends AbstractHorseDao {
             logger.error("Show horses by race fail!");
             throw new DaoException("Show horses by race fail!", e);
         } finally {
-            close(set);
             close(statement);
             close(connection);
         }

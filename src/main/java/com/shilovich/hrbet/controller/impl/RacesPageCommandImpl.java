@@ -1,6 +1,6 @@
 package com.shilovich.hrbet.controller.impl;
 
-import com.shilovich.hrbet.beans.Race;
+import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.exception.CommandException;
 import com.shilovich.hrbet.controller.model.ServletForward;
@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.shilovich.hrbet.constant.CommandConstant.PAGE_RACES;
-import static com.shilovich.hrbet.constant.CommandConstant.PARAM_RACES_LIST;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_RACES;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_RACES_LIST;
 
 public class RacesPageCommandImpl implements Command {
 

@@ -1,6 +1,5 @@
-package com.shilovich.hrbet.dao.connection.pool.impl;
+package com.shilovich.hrbet.dao.connection;
 
-import com.shilovich.hrbet.dao.connection.pool.CustomConnectionPool;
 import com.shilovich.hrbet.exception.PoolOverflowException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,33 +10,35 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class CustomConnectionPoolImpl implements CustomConnectionPool {
-    private static final Logger logger = LogManager.getLogger(CustomConnectionPoolImpl.class);
+class ConnectionPool {
+    private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
 
-    private String url;
-    private String user;
-    private String password;
-    private int initialPoolSize;
-    private int maxPoolSize;
-    private int maxTimeout;
-    private BlockingQueue<Connection> connectionPool;
-    private BlockingQueue<Connection> usedConnections = new LinkedBlockingQueue<>();
+    private final String url;
+    private final String user;
+    private final String password;
+    private final int initialPoolSize;
+    private final int maxPoolSize;
+    private final int maxTimeout;
+    private BlockingQueue<ProxyConnection> connectionPool;
+    private BlockingQueue<ProxyConnection> usedConnections = new LinkedBlockingQueue<>();
 
-    public static CustomConnectionPoolImpl create(
+    public static ConnectionPool create(
             String url, String user, String password,
             int initialPoolSize, int maxPoolSize, int maxTimeout) throws SQLException {
-        BlockingQueue<Connection> pool = new LinkedBlockingQueue<>(initialPoolSize);
+        BlockingQueue<ProxyConnection> pool = new LinkedBlockingQueue<>(initialPoolSize);
         for (int i = 0; i < initialPoolSize; i++) {
             pool.add(createConnection(url, user, password));
         }
-        return new CustomConnectionPoolImpl(url, user, password, initialPoolSize, maxPoolSize, maxTimeout, pool);
+        return new ConnectionPool(url, user, password, initialPoolSize, maxPoolSize, maxTimeout, pool);
     }
 
-    private static Connection createConnection(String url, String user, String password) throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+    private static ProxyConnection createConnection(String url, String user, String password) throws SQLException {
+        return new ProxyConnection(DriverManager.getConnection(url, user, password));
     }
 
-    public CustomConnectionPoolImpl(String url, String user, String password, int initialPoolSize, int maxPoolSize, int maxTimeout, BlockingQueue<Connection> connectionPool) {
+    public ConnectionPool(
+            String url, String user, String password, int initialPoolSize, int maxPoolSize,
+            int maxTimeout, BlockingQueue<ProxyConnection> connectionPool) {
         this.url = url;
         this.user = user;
         this.password = password;
@@ -47,8 +48,7 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
         this.connectionPool = connectionPool;
     }
 
-    @Override
-    public Connection getConnection() throws SQLException {
+    public ProxyConnection getConnection() throws SQLException {
         if (connectionPool.isEmpty()) {
             if (usedConnections.size() < maxPoolSize) {
                 connectionPool.add(createConnection(url, user, password));
@@ -57,7 +57,7 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
                 throw new PoolOverflowException("Maximum pool size reached, no available connections!");
             }
         }
-        Connection connection = connectionPool.remove();
+        ProxyConnection connection = connectionPool.remove();
         if (!connection.isValid(maxTimeout)) {
             connection = createConnection(url, user, password);
         }
@@ -65,22 +65,16 @@ public class CustomConnectionPoolImpl implements CustomConnectionPool {
         return connection;
     }
 
-    @Override
-    public boolean releaseConnection(Connection connection) {
+    public boolean releaseConnection(ProxyConnection connection) {
         connectionPool.add(connection);
         return usedConnections.remove(connection);
     }
 
-    @Override
     public void shutdown() throws SQLException {
         usedConnections.forEach(this::releaseConnection);
         for (Connection connection : connectionPool) {
             connection.close();
         }
         connectionPool.clear();
-    }
-
-    public int getSize() {
-        return connectionPool.size() + usedConnections.size();
     }
 }

@@ -1,12 +1,11 @@
 package com.shilovich.hrbet.dao.impl;
 
-import com.shilovich.hrbet.beans.Bet;
-import com.shilovich.hrbet.beans.BetType;
-import com.shilovich.hrbet.beans.Horse;
-import com.shilovich.hrbet.beans.Race;
+import com.shilovich.hrbet.bean.Bet;
+import com.shilovich.hrbet.bean.BetType;
+import com.shilovich.hrbet.bean.Horse;
+import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.dao.AbstractBetDao;
-import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
-import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
+import com.shilovich.hrbet.dao.connection.ConnectionManager;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,12 +18,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.shilovich.hrbet.constant.DaoConstant.*;
+import static com.shilovich.hrbet.dao.DaoTableField.*;
 
 public class BetDaoImpl extends AbstractBetDao {
     private static final Logger logger = LogManager.getLogger(BetDaoImpl.class);
+    private final ConnectionManager manager = ConnectionManager.getInstance();
 
-    private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();
     private static final String SHOW_BET_BY_USER_SQL =
             "SELECT b.id, b.status, b.time, b.race_id, r.location, b.cash_dollars, b.cash_cents, b.type_id, t.name," +
                     " b.bet_horse_id, h.name FROM bets b " +
@@ -38,12 +37,11 @@ public class BetDaoImpl extends AbstractBetDao {
         List<Bet> bets = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet set = null;
         try {
-            connection = pool.getConnection();
+            connection = manager.getConnection();
             statement = connection.prepareStatement(SHOW_BET_BY_USER_SQL);
             statement.setString(1, userId.toString());
-            set = statement.executeQuery();
+            ResultSet set = statement.executeQuery();
             while (set.next()) {
                 Long id = set.getLong(BET_ID);
                 Boolean status = set.getBoolean(BET_STATUS);
@@ -66,7 +64,6 @@ public class BetDaoImpl extends AbstractBetDao {
             logger.error("Show all races exception!");
             throw new DaoException("Show all races exception!", e);
         } finally {
-            close(set);
             close(statement);
             close(connection);
         }

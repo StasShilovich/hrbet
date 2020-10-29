@@ -1,6 +1,6 @@
 package com.shilovich.hrbet.service;
 
-import com.shilovich.hrbet.beans.Bet;
+import com.shilovich.hrbet.bean.Bet;
 import com.shilovich.hrbet.exception.ServiceException;
 
 import java.util.List;

@@ -1,6 +1,5 @@
-package com.shilovich.hrbet.dao.connection.property.impl;
+package com.shilovich.hrbet.dao.connection;
 
-import com.shilovich.hrbet.dao.connection.property.PropertyManager;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,8 +9,8 @@ import java.util.ResourceBundle;
 
 import static java.util.ResourceBundle.getBundle;
 
-public class PropertyManagerImpl implements PropertyManager {
-    private static final Logger logger = LogManager.getLogger(PropertyManagerImpl.class);
+class PropertyManager {
+    private static final Logger logger = LogManager.getLogger(PropertyManager.class);
 
     private static final String BUNDLE_NAME = "project";
     public static final String URL = "database.url";
@@ -22,7 +21,6 @@ public class PropertyManagerImpl implements PropertyManager {
     public static final String MAX_OPEN_STATEMENTS = "database.maxOpenStatements";
     public static final String DRIVER_CLASS_NAME = "database.driverClassName";
 
-    @Override
     public String getProperty(String key) throws DaoException {
         try {
             ResourceBundle resourceBundle = getBundle(BUNDLE_NAME);

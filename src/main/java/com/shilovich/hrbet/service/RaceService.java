@@ -1,7 +1,7 @@
 package com.shilovich.hrbet.service;
 
-import com.shilovich.hrbet.beans.Horse;
-import com.shilovich.hrbet.beans.Race;
+import com.shilovich.hrbet.bean.Horse;
+import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.exception.ServiceException;
 
 import java.util.List;

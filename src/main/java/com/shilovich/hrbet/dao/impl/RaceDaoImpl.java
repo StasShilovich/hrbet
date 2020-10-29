@@ -1,9 +1,8 @@
 package com.shilovich.hrbet.dao.impl;
 
-import com.shilovich.hrbet.beans.Race;
+import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.dao.AbstractRaceDao;
-import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
-import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
+import com.shilovich.hrbet.dao.connection.ConnectionManager;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,12 +16,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.shilovich.hrbet.constant.DaoConstant.*;
+import static com.shilovich.hrbet.dao.DaoTableField.*;
 
 public class RaceDaoImpl extends AbstractRaceDao {
     private static final Logger logger = LogManager.getLogger(RaceDaoImpl.class);
+    private final ConnectionManager manager = ConnectionManager.getInstance();
 
-    private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();
     private static final String SHOW_ALL_RACES_SQL =
             "SELECT r.id,r.location,r.time,r.bank_dollars FROM races r;";
 
@@ -31,11 +30,10 @@ public class RaceDaoImpl extends AbstractRaceDao {
         List<Race> races = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
-        ResultSet set = null;
         try {
-            connection = pool.getConnection();
+            connection = manager.getConnection();
             statement = connection.createStatement();
-            set = statement.executeQuery(SHOW_ALL_RACES_SQL);
+            ResultSet set = statement.executeQuery(SHOW_ALL_RACES_SQL);
             while (set.next()) {
                 Race race = new Race();
                 race.setId(set.getLong(RACE_ID));
@@ -50,7 +48,6 @@ public class RaceDaoImpl extends AbstractRaceDao {
             logger.error("Show all races exception!");
             throw new DaoException("Show all races exception!", e);
         } finally {
-            close(set);
             close(statement);
             close(connection);
         }

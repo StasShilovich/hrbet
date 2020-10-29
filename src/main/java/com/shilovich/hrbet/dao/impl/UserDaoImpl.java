@@ -1,11 +1,10 @@
 package com.shilovich.hrbet.dao.impl;
 
-import com.shilovich.hrbet.beans.*;
+import com.shilovich.hrbet.bean.*;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
 import com.shilovich.hrbet.dao.AbstractUserDao;
-import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
-import com.shilovich.hrbet.dao.connection.pool.impl.MySqlConnectionPoolImpl;
+import com.shilovich.hrbet.dao.connection.ConnectionManager;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,13 +16,14 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.shilovich.hrbet.constant.DaoConstant.*;
+import static com.shilovich.hrbet.dao.DaoTableField.*;
 
 public class UserDaoImpl extends AbstractUserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
+    private final ConnectionManager manager = ConnectionManager.getInstance();
+
     private static final String USER_EXIST_SQL =
             "SELECT 1 FROM users WHERE email=?";
-    private final MySqlConnectionPool pool = MySqlConnectionPoolImpl.getInstance();
     private static final String USER_ADD_SQL =
             "INSERT INTO users (name,surname,password,email) VALUES (?,?,?,?)";
     private static final String USER_AUTHORIZED_SQL =
@@ -35,12 +35,11 @@ public class UserDaoImpl extends AbstractUserDao {
         User userDao = null;
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet set = null;
         try {
-            connection = pool.getConnection();
+            connection = manager.getConnection();
             statement = connection.prepareStatement(USER_AUTHORIZED_SQL);
             statement.setString(1, user.getEmail());
-            set = statement.executeQuery();
+            ResultSet set = statement.executeQuery();
             while (set.next()) {
                 Long id = set.getLong(USER_ID);
                 String name = set.getString(USER_NAME);
@@ -60,7 +59,6 @@ public class UserDaoImpl extends AbstractUserDao {
             logger.error("User authorization failed!");
             throw new DaoException("User authorization failed!", e);
         } finally {
-            close(set);
             close(statement);
             close(connection);
         }
@@ -71,7 +69,7 @@ public class UserDaoImpl extends AbstractUserDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = pool.getConnection();
+            connection = manager.getConnection();
             statement = connection.prepareStatement(USER_ADD_SQL);
             statement.setString(1, user.getName());
             statement.setString(2, user.getSurname());
@@ -92,12 +90,11 @@ public class UserDaoImpl extends AbstractUserDao {
     public Optional<User> read(String email) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet set = null;
         try {
-            connection = pool.getConnection();
+            connection = manager.getConnection();
             statement = connection.prepareStatement(USER_EXIST_SQL);
             statement.setString(1, email);
-            set = statement.executeQuery();
+            ResultSet set = statement.executeQuery();
             if (set.next()) {
                 return Optional.of(new User());
             } else {
@@ -107,7 +104,6 @@ public class UserDaoImpl extends AbstractUserDao {
             logger.error("User registration failed!");
             throw new DaoException("User registration failed!", e);
         } finally {
-            close(set);
             close(statement);
             close(connection);
         }

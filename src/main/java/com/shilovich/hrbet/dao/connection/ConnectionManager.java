@@ -1,23 +1,18 @@
-package com.shilovich.hrbet.dao.connection.pool.impl;
+package com.shilovich.hrbet.dao.connection;
 
-import com.shilovich.hrbet.dao.connection.pool.CustomConnectionPool;
-import com.shilovich.hrbet.dao.connection.pool.MySqlConnectionPool;
-import com.shilovich.hrbet.dao.connection.property.PropertyManager;
-import com.shilovich.hrbet.dao.connection.property.impl.PropertyManagerImpl;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
-import static com.shilovich.hrbet.dao.connection.property.impl.PropertyManagerImpl.*;
+import static com.shilovich.hrbet.dao.connection.PropertyManager.*;
 
-public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
-    private static final Logger logger = LogManager.getLogger(MySqlConnectionPoolImpl.class);
-    private static final MySqlConnectionPoolImpl instance = new MySqlConnectionPoolImpl();
-    private static CustomConnectionPool connectionPool;
-    private static final PropertyManager manager = new PropertyManagerImpl();
+public class ConnectionManager {
+    private static final Logger logger = LogManager.getLogger(ConnectionManager.class);
+    private static final ConnectionManager instance = new ConnectionManager();
+    private static ConnectionPool connectionPool;
+    private static final PropertyManager manager = new PropertyManager();
 
     static {
         try {
@@ -28,7 +23,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
             int initialPoolSize = Integer.parseInt(manager.getProperty(INITIAL_POOL_SIZE));
             int maxPoolSize = Integer.parseInt(manager.getProperty(MAX_OPEN_STATEMENTS));
             int maxTimeout = Integer.parseInt(manager.getProperty(MAX_TIMEOUT));
-            connectionPool = CustomConnectionPoolImpl
+            connectionPool = ConnectionPool
                     .create(url, user, password, initialPoolSize, maxPoolSize, maxTimeout);
         } catch (Exception e) {
             // TODO: 28.09.2020 logger maybe runtime when pool will be
@@ -36,8 +31,7 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
         }
     }
 
-    @Override
-    public Connection getConnection() throws DaoException {
+    public ProxyConnection getConnection() throws DaoException {
         try {
             return connectionPool.getConnection();
         } catch (SQLException e) {
@@ -46,7 +40,6 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
         }
     }
 
-    @Override
     public void shutdown() throws DaoException {
         try {
             connectionPool.shutdown();
@@ -56,7 +49,14 @@ public class MySqlConnectionPoolImpl implements MySqlConnectionPool {
         }
     }
 
-    public static MySqlConnectionPoolImpl getInstance() {
+    public void close(ProxyConnection connection) {
+        if (!connectionPool.releaseConnection(connection)) {
+            logger.fatal("Connection close fail!");
+        }
+    }
+
+
+    public static ConnectionManager getInstance() {
         return instance;
     }
 }

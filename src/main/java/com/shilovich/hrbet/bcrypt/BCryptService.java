@@ -1,4 +1,4 @@
-package com.shilovich.hrbet.service.bcrypt;
+package com.shilovich.hrbet.bcrypt;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 

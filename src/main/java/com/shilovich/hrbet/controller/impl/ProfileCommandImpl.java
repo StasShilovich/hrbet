@@ -1,6 +1,6 @@
 package com.shilovich.hrbet.controller.impl;
 
-import com.shilovich.hrbet.beans.User;
+import com.shilovich.hrbet.bean.User;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.exception.CommandException;
 import com.shilovich.hrbet.controller.model.ServletForward;
@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.shilovich.hrbet.constant.CommandConstant.ATTR_USER_AUTH;
-import static com.shilovich.hrbet.constant.CommandConstant.PAGE_PROFILE;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_USER_AUTH;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_PROFILE;
 
 public class ProfileCommandImpl implements Command {
     @Override

@@ -1,6 +1,6 @@
 package com.shilovich.hrbet.controller.impl;
 
-import com.shilovich.hrbet.beans.User;
+import com.shilovich.hrbet.bean.User;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.exception.CommandException;
 import com.shilovich.hrbet.controller.model.ServletForward;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.shilovich.hrbet.constant.CommandConstant.*;
+import static com.shilovich.hrbet.controller.CommandParameter.*;
 
 public class RegistrationCommandImpl implements Command {
     @Override

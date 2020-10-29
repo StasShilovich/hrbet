@@ -1,6 +1,6 @@
 package com.shilovich.hrbet.service.impl;
 
-import com.shilovich.hrbet.beans.Bet;
+import com.shilovich.hrbet.bean.Bet;
 import com.shilovich.hrbet.dao.AbstractBetDao;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.exception.DaoException;

@@ -1,22 +1,19 @@
-package com.shilovich.hrbet.beans;
+package com.shilovich.hrbet.bean;
 
 import java.io.Serializable;
-import java.util.Set;
 
-public class Role implements Serializable {
-    private static final long serialVersionUID = 4404594163784224613L;
+public class Permission implements Serializable {
+    private static final long serialVersionUID = -3266311567007614575L;
 
     private Long id;
     private String name;
-    private Set<Permission> permissions;
 
-    public Role() {
+    public Permission() {
     }
 
-    public Role(Long id, String name, Set<Permission> permissions) {
+    public Permission(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.permissions = permissions;
     }
 
     public Long getId() {
@@ -35,20 +32,11 @@ public class Role implements Serializable {
         this.name = name;
     }
 
-    public Set<Permission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
-
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder("Role{");
+        final StringBuilder builder = new StringBuilder("Permission{");
         builder.append("id=").append(id);
         builder.append(", name='").append(name).append('\'');
-        builder.append(", permissions=").append(permissions);
         builder.append('}');
         return builder.toString();
     }
@@ -61,21 +49,17 @@ public class Role implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Role role = (Role) o;
-        if (!id.equals(role.id)) {
+        Permission that = (Permission) o;
+        if (!id.equals(that.id)) {
             return false;
         }
-        if (!name.equals(role.name)) {
-            return false;
-        }
-        return permissions.equals(role.permissions);
+        return name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
         int result = id.hashCode();
         result = 31 * result + name.hashCode();
-        result = 31 * result + permissions.hashCode();
         return result;
     }
 }

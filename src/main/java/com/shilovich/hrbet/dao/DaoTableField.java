@@ -1,6 +1,6 @@
-package com.shilovich.hrbet.constant;
+package com.shilovich.hrbet.dao;
 
-public class DaoConstant {
+public class DaoTableField {
     /**
      * USER
      */

@@ -1,8 +1,17 @@
 package com.shilovich.hrbet.main;
 
+import com.shilovich.hrbet.dao.AbstractBetDao;
+import com.shilovich.hrbet.dao.impl.BetDaoImpl;
+import com.shilovich.hrbet.dao.impl.RaceDaoImpl;
+import com.shilovich.hrbet.dao.impl.UserDaoImpl;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Main {
     public static void main(String[] args) throws MalformedURLException, URISyntaxException {
@@ -18,9 +27,11 @@ public class Main {
 //        } catch (DaoException e) {
 //            e.printStackTrace();
 //        }
-        String s = "http://localhost:8888/hrbets/dispatcher?command=races";
-        URI uri = URI.create(s);
-        String all = s.replaceAll("http://localhost:8888/hrbets", "");
-
+        BlockingQueue<String> test=new LinkedBlockingQueue<>();
+        for (int i = 0; i < 3; i++) {
+            test.add("Value "+(i+1));
+        }
+        String remove = test.remove();
+        System.out.println(remove);
     }
 }

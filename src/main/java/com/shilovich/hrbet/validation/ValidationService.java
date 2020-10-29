@@ -1,4 +1,4 @@
-package com.shilovich.hrbet.service.validation;
+package com.shilovich.hrbet.validation;
 
 public class ValidationService {
     public static boolean isValidUserName(String userName) {

@@ -1,4 +1,4 @@
-package com.shilovich.hrbet.beans;
+package com.shilovich.hrbet.bean;
 
 import java.io.Serializable;
 
