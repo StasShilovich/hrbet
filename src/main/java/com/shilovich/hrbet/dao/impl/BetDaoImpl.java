@@ -37,11 +37,12 @@ public class BetDaoImpl extends AbstractBetDao {
         List<Bet> bets = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
+        ResultSet set = null;
         try {
             connection = manager.getConnection();
             statement = connection.prepareStatement(SHOW_BET_BY_USER_SQL);
             statement.setString(1, userId.toString());
-            ResultSet set = statement.executeQuery();
+            set = statement.executeQuery();
             while (set.next()) {
                 Long id = set.getLong(BET_ID);
                 Boolean status = set.getBoolean(BET_STATUS);
@@ -64,6 +65,7 @@ public class BetDaoImpl extends AbstractBetDao {
             logger.error("Show all races exception!");
             throw new DaoException("Show all races exception!", e);
         } finally {
+            close(set);
             close(statement);
             close(connection);
         }

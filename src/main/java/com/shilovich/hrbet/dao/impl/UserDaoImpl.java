@@ -1,8 +1,6 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.bean.*;
-import com.shilovich.hrbet.cache.CacheFactory;
-import com.shilovich.hrbet.cache.CacheType;
 import com.shilovich.hrbet.dao.AbstractUserDao;
 import com.shilovich.hrbet.dao.connection.ConnectionManager;
 import com.shilovich.hrbet.exception.DaoException;
@@ -13,7 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
@@ -35,11 +32,12 @@ public class UserDaoImpl extends AbstractUserDao {
         User userDao = null;
         Connection connection = null;
         PreparedStatement statement = null;
+        ResultSet set = null;
         try {
             connection = manager.getConnection();
             statement = connection.prepareStatement(USER_AUTHORIZED_SQL);
             statement.setString(1, user.getEmail());
-            ResultSet set = statement.executeQuery();
+            set = statement.executeQuery();
             while (set.next()) {
                 Long id = set.getLong(USER_ID);
                 String name = set.getString(USER_NAME);
@@ -53,6 +51,7 @@ public class UserDaoImpl extends AbstractUserDao {
             logger.error("User authorization failed!");
             throw new DaoException("User authorization failed!", e);
         } finally {
+            close(set);
             close(statement);
             close(connection);
         }
@@ -84,11 +83,12 @@ public class UserDaoImpl extends AbstractUserDao {
     public Optional<User> read(String email) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
+        ResultSet set = null;
         try {
             connection = manager.getConnection();
             statement = connection.prepareStatement(USER_EXIST_SQL);
             statement.setString(1, email);
-            ResultSet set = statement.executeQuery();
+            set = statement.executeQuery();
             if (set.next()) {
                 return Optional.of(new User());
             } else {
@@ -98,6 +98,7 @@ public class UserDaoImpl extends AbstractUserDao {
             logger.error("User registration failed!");
             throw new DaoException("User registration failed!", e);
         } finally {
+            close(set);
             close(statement);
             close(connection);
         }

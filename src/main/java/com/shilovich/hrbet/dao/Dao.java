@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
@@ -36,6 +37,15 @@ public interface Dao<A, T extends Serializable> {
                 statement.close();
             } catch (SQLException e) {
                 logger.error("Statement close fail!");
+            }
+        }
+    }
+    default void close(ResultSet set) {
+        if (set != null) {
+            try {
+                set.close();
+            } catch (SQLException e) {
+                logger.error("Set close fail!");
             }
         }
     }

@@ -1,128 +1,148 @@
-CREATE SCHEMA `hrbet` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ;
+CREATE SCHEMA `hrbet` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 
-CREATE TABLE `hrbet`.`users` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(20) NOT NULL,
-  `surname` VARCHAR(40) NOT NULL,
-  `password` VARCHAR(60) NOT NULL,
-  `cash_dollars` BIGINT NOT NULL DEFAULT 0,
-  `cash_cents` INT NOT NULL DEFAULT 0,
-  `email` VARCHAR(50) NOT NULL,
-  `role_id` INT NOT NULL,
-  `deleted` TINYINT NULL DEFAULT 0,
-  PRIMARY KEY (`id`));
+CREATE TABLE `hrbet`.`users`
+(
+    `id`       INT            NOT NULL AUTO_INCREMENT,
+    `name`     VARCHAR(20)    NOT NULL,
+    `surname`  VARCHAR(40)    NOT NULL,
+    `password` VARCHAR(60)    NOT NULL,
+    `cash`     DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    `email`    VARCHAR(50)    NOT NULL,
+    `role_id`  INT            NOT NULL DEFAULT 2,
+    `deleted`  TINYINT        NULL     DEFAULT 0,
+    PRIMARY KEY (`id`)
+);
 
-CREATE TABLE `hrbet`.`roles` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(25) NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE `hrbet`.`roles`
+(
+    `id`   INT         NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(25) NOT NULL,
+    PRIMARY KEY (`id`)
+);
 
-CREATE TABLE `hrbet`.`bets` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `status` TINYINT NULL DEFAULT 1,
-  `user_id` INT NOT NULL,
-  `time` TIMESTAMP NOT NULL,
-  `race_id` INT NOT NULL,
-  `cash_dollars` BIGINT NOT NULL DEFAULT 0,
-  `cash_cents` INT NOT NULL DEFAULT 0,
-  `type_id` INT NOT NULL,
-  `bet_horse_id` INT NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE `hrbet`.`bets`
+(
+    `id`           INT            NOT NULL AUTO_INCREMENT,
+    `user_id`      INT            NOT NULL,
+    `time`         TIMESTAMP      NOT NULL,
+    `race_id`      INT            NOT NULL,
+    `cash`         DECIMAL(10, 2) NOT NULL,
+    `ratio`        DECIMAL(7, 3)  NOT NULL,
+    `type_id`      INT            NOT NULL,
+    `bet_horse_id` INT            NOT NULL,
+    `is_win`       TINYINT        NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`)
+);
 
-CREATE TABLE `hrbet`.`bet_types` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(40) NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE `hrbet`.`bet_types`
+(
+    `id`   INT         NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(40) NOT NULL,
+    PRIMARY KEY (`id`)
+);
 
-CREATE TABLE `hrbet`.`races` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `location` VARCHAR(50) NOT NULL,
-  `time` TIMESTAMP NOT NULL,
-  `bank_dollars` BIGINT NOT NULL DEFAULT 0,
-  `bank_cents` INT NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`));
 
-CREATE TABLE `hrbet`.`horses` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(50) NOT NULL,
-  `jockey` VARCHAR(50) NOT NULL,
-  `age` INT NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE `hrbet`.`horses`
+(
+    `id`     INT         NOT NULL AUTO_INCREMENT,
+    `name`   VARCHAR(50) NOT NULL,
+    `jockey` VARCHAR(50) NOT NULL,
+    `age`    INT         NOT NULL,
+    PRIMARY KEY (`id`)
+);
 
-CREATE TABLE `hrbet`.`permission` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE);
+CREATE TABLE `hrbet`.`permission`
+(
+    `id`   INT         NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(20) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE
+);
 
-CREATE TABLE `hrbet`.`role_permissions` (
-  `role_id` INT NOT NULL,
-  `permission_id` INT NOT NULL,
-  PRIMARY KEY (`role_id`, `permission_id`));
+CREATE TABLE `hrbet`.`role_permissions`
+(
+    `role_id`       INT NOT NULL,
+    `permission_id` INT NOT NULL,
+    PRIMARY KEY (`role_id`, `permission_id`)
+);
 
-CREATE TABLE `hrbet`.`race_archive` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `race_id` INT NOT NULL,
-  `first_horse` INT NOT NULL,
-  `second_horse` INT NOT NULL,
-  `third_horse` INT NOT NULL,
-  `fourth_horse` INT NOT NULL,
-  `fifth_horse` INT NOT NULL,
-  `sixth_horse` INT NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE `hrbet`.`horse_participatings`
+(
+    `races_id` INT NOT NULL,
+    `horse_id` INT NOT NULL,
+    PRIMARY KEY (`races_id`, `horse_id`)
+);
 
-CREATE TABLE `hrbet`.`horse_participatings` (
-  `races_id` INT NOT NULL,
-  `horse_id` INT NOT NULL,
-  PRIMARY KEY (`races_id`, `horse_id`));
+CREATE TABLE `hrbet`.`races`
+(
+    `id`           INT         NOT NULL AUTO_INCREMENT,
+    `location`     VARCHAR(50) NOT NULL,
+    `time`         TIMESTAMP   NOT NULL,
+    PRIMARY KEY (`id`)
+);
 
-||||||||||||||||||||||||||||||||||||||||||||||
+CREATE TABLE `hrbet`.`ratio`
+(
+    `race_id`  INT           NOT NULL,
+    `horse_id` INT           NOT NULL,
+    `type_id`  INT           NOT NULL,
+    `ratio`    DECIMAL(7, 3) NOT NULL,
+    PRIMARY KEY (`race_id`, `horse_id`, `type_id`)
+);
+
+
+CREATE TABLE `hrbet`.`race_result`
+(
+    `id`           INT NOT NULL AUTO_INCREMENT,
+    `race_id`      INT NOT NULL,
+    `first_horse`  INT NOT NULL,
+    `second_horse` INT NOT NULL,
+    `third_horse`  INT NOT NULL,
+    `fourth_horse` INT NOT NULL,
+    `fifth_horse`  INT NOT NULL,
+    `sixth_horse`  INT NOT NULL,
+    PRIMARY KEY (`id`)
+);
+/**
+  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ */
+
+# ALTER TABLE `hrbet`.`users`
+#     ADD INDEX `fk_users_role_idx` (`role_id` ASC) VISIBLE;
+# ;
 
 ALTER TABLE `hrbet`.`users`
-ADD INDEX `fk_users_role_idx` (`role_id` ASC) VISIBLE;
+    ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE;
 ;
+
 ALTER TABLE `hrbet`.`users`
-ADD CONSTRAINT `fk_users_role`
-  FOREIGN KEY (`role_id`)
-  REFERENCES `hrbet`.`roles` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+    ADD CONSTRAINT `fk_users_role`
+        FOREIGN KEY (`role_id`)
+            REFERENCES `hrbet`.`roles` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION;
 
-  ALTER TABLE `hrbet`.`users`
-  ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE;
-  ;
-
-  ALTER TABLE `hrbet`.`users`
-  DROP FOREIGN KEY `fk_users_role`;
-  ALTER TABLE `hrbet`.`users`
-  CHANGE COLUMN `role_id` `role_id` INT(11) NOT NULL DEFAULT 2 ;
-  ALTER TABLE `hrbet`.`users`
-  ADD CONSTRAINT `fk_users_role`
-    FOREIGN KEY (`role_id`)
-    REFERENCES `hrbet`.`roles` (`id`);
-
-
+# ALTER TABLE `hrbet`.`role_permissions`
+#     ADD INDEX `fk_rolepermissions_permission_idx` (`permission_id` ASC) VISIBLE;
+# ;
 ALTER TABLE `hrbet`.`role_permissions`
-ADD INDEX `fk_rolepermissions_permission_idx` (`permission_id` ASC) VISIBLE;
-;
-ALTER TABLE `hrbet`.`role_permissions`
-ADD CONSTRAINT `fk_rolepermissions_role`
-  FOREIGN KEY (`role_id`)
-  REFERENCES `hrbet`.`roles` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_rolepermissions_permission`
-  FOREIGN KEY (`permission_id`)
-  REFERENCES `hrbet`.`permission` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+    ADD CONSTRAINT `fk_rolepermissions_role`
+        FOREIGN KEY (`role_id`)
+            REFERENCES `hrbet`.`roles` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_rolepermissions_permission`
+        FOREIGN KEY (`permission_id`)
+            REFERENCES `hrbet`.`permission` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION;
 
-ALTER TABLE `hrbet`.`bets`
-ADD INDEX `fk_bets_user_idx` (`user_id` ASC) VISIBLE,
-ADD INDEX `fk_bets_race_idx` (`race_id` ASC) VISIBLE,
-ADD INDEX `fk_bets_type_idx` (`type_id` ASC) VISIBLE,
-ADD INDEX `fk_bets_win_horse_idx` (`bet_horse_id` ASC) VISIBLE;
-;
+# ALTER TABLE `hrbet`.`bets`
+# ADD INDEX `fk_bets_user_idx` (`user_id` ASC) VISIBLE,
+# ADD INDEX `fk_bets_race_idx` (`race_id` ASC) VISIBLE,
+# ADD INDEX `fk_bets_type_idx` (`type_id` ASC) VISIBLE,
+# ADD INDEX `fk_bets_win_horse_idx` (`bet_horse_id` ASC) VISIBLE;
+# ;
 ALTER TABLE `hrbet`.`bets`
 ADD CONSTRAINT `fk_bets_user`
   FOREIGN KEY (`user_id`)
@@ -145,40 +165,76 @@ ADD CONSTRAINT `fk_bets_win_horse`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
-ALTER TABLE `hrbet`.`race_archive`
-ADD INDEX `fk_race_archive_race_idx` (`race_id` ASC) VISIBLE,
-ADD INDEX `fk_race_archive_first_horce_idx` (`first_horse` ASC) VISIBLE,
-ADD INDEX `fk_race_archive_second_horse_idx` (`second_horse` ASC) VISIBLE,
-ADD INDEX `fk_race_archive_third_horse_idx` (`third_horse` ASC) VISIBLE,
-ADD INDEX `fk_race_archive_fourth_horse_idx` (`fourth_horse` ASC) VISIBLE,
-ADD INDEX `fk_race_archive_fifth_horse_idx` (`fifth_horse` ASC) VISIBLE,
-ADD INDEX `fk_race_archive_sixth_horse_idx` (`sixth_horse` ASC) VISIBLE;
+# ALTER TABLE `hrbet`.`race_result`
+#     ADD INDEX `fk_race_result_race_id_idx` (`race_id` ASC) VISIBLE,
+#     ADD INDEX `fk_race_result_first_idx` (`first_horse` ASC) VISIBLE,
+#     ADD INDEX `fk_race_result_second_idx` (`second_horse` ASC) VISIBLE,
+#     ADD INDEX `fk_race_result_third_idx` (`third_horse` ASC) VISIBLE,
+#     ADD INDEX `fk_race_result_fourth_idx` (`fourth_horse` ASC) VISIBLE,
+#     ADD INDEX `fk_race_result_fifth_idx` (`fifth_horse` ASC) VISIBLE,
+#     ADD INDEX `fk_race_result_six_idx` (`sixth_horse` ASC) VISIBLE;
+# ;
+ALTER TABLE `hrbet`.`race_result`
+    ADD CONSTRAINT `fk_race_result_race_id`
+        FOREIGN KEY (`race_id`)
+            REFERENCES `hrbet`.`races` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_race_result_first`
+        FOREIGN KEY (`first_horse`)
+            REFERENCES `hrbet`.`horses` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_race_result_second`
+        FOREIGN KEY (`second_horse`)
+            REFERENCES `hrbet`.`horses` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_race_result_third`
+        FOREIGN KEY (`third_horse`)
+            REFERENCES `hrbet`.`horses` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_race_result_fourth`
+        FOREIGN KEY (`fourth_horse`)
+            REFERENCES `hrbet`.`horses` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_race_result_fifth`
+        FOREIGN KEY (`fifth_horse`)
+            REFERENCES `hrbet`.`horses` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_race_result_six`
+        FOREIGN KEY (`sixth_horse`)
+            REFERENCES `hrbet`.`horses` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION;
 
-ALTER TABLE `hrbet`.`race_archive`
-ADD CONSTRAINT `fk_race_archive_race`
-  FOREIGN KEY (`race_id`)
-  REFERENCES `hrbet`.`races` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_race_archive_first_horce`
-  FOREIGN KEY (`first_horse`)
-  REFERENCES `hrbet`.`horses` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_race_archive_second_horse`
-  FOREIGN KEY (`second_horse`)
-  REFERENCES `hrbet`.`horses` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_race_archive_third_horse`
-  FOREIGN KEY (`third_horse`)
-  REFERENCES `hrbet`.`horses` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+# ALTER TABLE `hrbet`.`ratio`
+#     ADD INDEX `fk_ratio_horse_id_idx` (`horse_id` ASC) VISIBLE,
+#     ADD INDEX `fk_ratio_type_id_idx` (`type_id` ASC) VISIBLE;
+# ;
+ALTER TABLE `hrbet`.`ratio`
+    ADD CONSTRAINT `fk_ratio_race_id`
+        FOREIGN KEY (`race_id`)
+            REFERENCES `hrbet`.`races` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_ratio_horse_id`
+        FOREIGN KEY (`horse_id`)
+            REFERENCES `hrbet`.`horses` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_ratio_type_id`
+        FOREIGN KEY (`type_id`)
+            REFERENCES `hrbet`.`bet_types` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION;
 
-  ALTER TABLE `hrbet`.`horse_participatings`
-  ADD INDEX `fk_horse_participatings_horse_idx` (`horse_id` ASC) VISIBLE;
-  ;
+#   ALTER TABLE `hrbet`.`horse_participatings`
+#   ADD INDEX `fk_horse_participatings_horse_idx` (`horse_id` ASC) VISIBLE;
+#   ;
   ALTER TABLE `hrbet`.`horse_participatings`
   ADD CONSTRAINT `fk_horse_participatings_race`
     FOREIGN KEY (`races_id`)

@@ -28,12 +28,13 @@ public class RaceDaoImpl extends AbstractRaceDao {
         List<Race> races = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
+        ResultSet set = null;
         try {
             connection = manager.getConnection();
             statement = connection.prepareStatement(SHOW_RACES_SQL);
             statement.setInt(1, limit);
             statement.setInt(2, offset);
-            ResultSet set = statement.executeQuery();
+            set = statement.executeQuery();
             while (set.next()) {
                 Race race = new Race();
                 race.setId(set.getLong(RACE_ID));
@@ -48,6 +49,7 @@ public class RaceDaoImpl extends AbstractRaceDao {
             logger.error("Show all races exception!");
             throw new DaoException("Show all races exception!", e);
         } finally {
+            close(set);
             close(statement);
             close(connection);
         }
@@ -58,10 +60,11 @@ public class RaceDaoImpl extends AbstractRaceDao {
         long count = -1L;
         Connection connection = null;
         Statement statement = null;
+        ResultSet set = null;
         try {
             connection = manager.getConnection();
             statement = connection.createStatement();
-            ResultSet set = statement.executeQuery(COUNT_RACES_SQL);
+            set = statement.executeQuery(COUNT_RACES_SQL);
             while (set.next()) {
                 count = set.getLong(RACE_COUNT);
             }
@@ -70,6 +73,7 @@ public class RaceDaoImpl extends AbstractRaceDao {
             logger.error("Count races exception!");
             throw new DaoException("Count races exception!", e);
         } finally {
+            close(set);
             close(statement);
             close(connection);
         }

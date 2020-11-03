@@ -32,10 +32,11 @@ public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
         List<Role> roles = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
+        ResultSet set = null;
         try {
             connection = manager.getConnection();
             statement = connection.createStatement();
-            ResultSet set = statement.executeQuery(ROLE_PERMISSIONS_SQL);
+            set = statement.executeQuery(ROLE_PERMISSIONS_SQL);
             while (set.next()) {
                 Long roleId = set.getLong(ROLE_ID);
                 String roleName = set.getString(ROLE_NAME);
@@ -59,8 +60,8 @@ public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
         } catch (SQLException e) {
             logger.error("Role permissions dao fail!");
             throw new DaoException("Role permissions dao fail!", e);
-
         } finally {
+            close(set);
             close(statement);
             close(connection);
         }
@@ -74,5 +75,4 @@ public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
         }
         return -1;
     }
-
 }

@@ -28,11 +28,12 @@ public class HorseDaoImpl extends AbstractHorseDao {
         Set<Horse> horses = new HashSet<>();
         Connection connection = null;
         PreparedStatement statement = null;
+        ResultSet set = null;
         try {
             connection = manager.getConnection();
             statement = connection.prepareStatement(HORSE_SHOW_BY_RACE_SQL);
             statement.setString(1, raceId.toString());
-            ResultSet set = statement.executeQuery();
+            set = statement.executeQuery();
             while (set.next()) {
                 Long id = set.getLong(HORSE_ID);
                 String name = set.getString(HORSE_NAME);
@@ -45,6 +46,7 @@ public class HorseDaoImpl extends AbstractHorseDao {
             logger.error("Show horses by race fail!");
             throw new DaoException("Show horses by race fail!", e);
         } finally {
+            close(set);
             close(statement);
             close(connection);
         }
