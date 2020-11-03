@@ -1,8 +1,8 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.bean.*;
-import com.shilovich.hrbet.dao.DaoFactory;
-import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
+import com.shilovich.hrbet.cache.CacheFactory;
+import com.shilovich.hrbet.cache.CacheType;
 import com.shilovich.hrbet.dao.AbstractUserDao;
 import com.shilovich.hrbet.dao.connection.ConnectionManager;
 import com.shilovich.hrbet.exception.DaoException;
@@ -13,8 +13,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
@@ -27,7 +27,7 @@ public class UserDaoImpl extends AbstractUserDao {
     private static final String USER_ADD_SQL =
             "INSERT INTO users (name,surname,password,email) VALUES (?,?,?,?)";
     private static final String USER_AUTHORIZED_SQL =
-            "SELECT u.id,u.name, u.surname,u.password,r.id, r.name FROM users u " +
+            "SELECT u.id,u.name, u.surname,u.password,r.id FROM users u " +
                     "INNER JOIN roles r ON u.role_id=r.id WHERE u.email=?";
 
     @Override
@@ -46,13 +46,7 @@ public class UserDaoImpl extends AbstractUserDao {
                 String surname = set.getString(USER_SURNAME);
                 String password = set.getString(USER_PASSWORD);
                 Long roleId = set.getLong(ROLE_ID);
-                // TODO: 15.10.2020 role check
-                String roleName = set.getString(ROLE_NAME);
-                AbstractRolePermissionsDao rolePermissionsDao = (AbstractRolePermissionsDao) DaoFactory.getInstance()
-                        .getClass(AbstractRolePermissionsDao.class);
-                Set<Permission> permissions = rolePermissionsDao.findAll().getRoles().get(roleId);
-                userDao = new User(id, name, surname, password, user.getEmail(),
-                        new Role(roleId, roleName, permissions));
+                userDao = new User(id, name, surname, password, user.getEmail(), new Role(roleId));
             }
             return userDao;
         } catch (SQLException e) {

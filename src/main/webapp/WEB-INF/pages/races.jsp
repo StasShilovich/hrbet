@@ -11,7 +11,6 @@
 </head>
 <body>
 <%@include file="/WEB-INF/jstl/header.jsp" %>
-
 <div class="col-md-10">
     <div class="ml-auto">
         <table class="table" border="4">
@@ -44,6 +43,15 @@
         </table>
     </div>
 </div>
+<nav>
+    <ul class="pagination pagination-lg">
+        <c:forEach var="page" begin="1" end="${pageNumber}">
+            <li class="page-item"><a class="page-link"
+                                     href="${pageContext.request.contextPath}/dispatcher?command=races&page=${page}">${page}</a>
+            </li>
+        </c:forEach>
+    </ul>
+</nav>
 <%@include file="/WEB-INF/jstl/footer.jsp" %>
 </body>
 </html>

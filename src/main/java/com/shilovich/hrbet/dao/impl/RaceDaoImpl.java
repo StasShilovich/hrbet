@@ -7,10 +7,7 @@ import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,18 +19,21 @@ public class RaceDaoImpl extends AbstractRaceDao {
     private static final Logger logger = LogManager.getLogger(RaceDaoImpl.class);
     private final ConnectionManager manager = ConnectionManager.getInstance();
 
-    private static final String SHOW_ALL_RACES_SQL =
-            "SELECT r.id,r.location,r.time,r.bank_dollars FROM races r;";
+    private static final String SHOW_RACES_SQL =
+            "SELECT r.id,r.location,r.time,r.bank_dollars FROM races r WHERE r.time > CURRENT_TIMESTAMP order by r.time limit ? offset ?";
+    private static final String COUNT_RACES_SQL = "SELECT count(id) FROM races WHERE time > CURRENT_TIMESTAMP";
 
     @Override
-    public List<Race> showAll() throws DaoException {
+    public List<Race> showAll(int limit, int offset) throws DaoException {
         List<Race> races = new ArrayList<>();
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         try {
             connection = manager.getConnection();
-            statement = connection.createStatement();
-            ResultSet set = statement.executeQuery(SHOW_ALL_RACES_SQL);
+            statement = connection.prepareStatement(SHOW_RACES_SQL);
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
+            ResultSet set = statement.executeQuery();
             while (set.next()) {
                 Race race = new Race();
                 race.setId(set.getLong(RACE_ID));
@@ -47,6 +47,28 @@ public class RaceDaoImpl extends AbstractRaceDao {
         } catch (SQLException e) {
             logger.error("Show all races exception!");
             throw new DaoException("Show all races exception!", e);
+        } finally {
+            close(statement);
+            close(connection);
+        }
+    }
+
+    @Override
+    public long count() throws DaoException {
+        long count = -1L;
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = manager.getConnection();
+            statement = connection.createStatement();
+            ResultSet set = statement.executeQuery(COUNT_RACES_SQL);
+            while (set.next()) {
+                count = set.getLong(RACE_COUNT);
+            }
+            return count;
+        } catch (SQLException e) {
+            logger.error("Count races exception!");
+            throw new DaoException("Count races exception!", e);
         } finally {
             close(statement);
             close(connection);

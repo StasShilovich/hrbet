@@ -20,10 +20,10 @@ public class DaoTableField {
     public static final String RACE_LOCATION = "r.location";
     public static final String RACE_TIME = "r.time";
     public static final String RACE_BANK_DOLLARS = "r.bank_dollars";
+    public static final String RACE_COUNT = "count(id)";
     /**
      * ROLE_PERMISSIONS
      */
-    public static final String RP_ROLE_ID = "rp.role_id";
     public static final String P_ID = "p.id";
     public static final String P_NAME = "p.name";
     /**

@@ -13,10 +13,8 @@ public class Role implements Serializable {
     public Role() {
     }
 
-    public Role(Long id, String name, Set<Permission> permissions) {
+    public Role(Long id) {
         this.id = id;
-        this.name = name;
-        this.permissions = permissions;
     }
 
     public Long getId() {

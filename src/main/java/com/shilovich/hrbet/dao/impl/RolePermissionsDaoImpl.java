@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.dao.impl;
 
-import com.shilovich.hrbet.bean.RoleHolder;
+import com.shilovich.hrbet.bean.Permission;
+import com.shilovich.hrbet.bean.Role;
 import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
 import com.shilovich.hrbet.dao.connection.ConnectionManager;
 import com.shilovich.hrbet.exception.DaoException;
@@ -11,6 +12,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
@@ -19,12 +24,12 @@ public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
     private final ConnectionManager manager = ConnectionManager.getInstance();
 
     private static final String ROLE_PERMISSIONS_SQL =
-            "SELECT rp.role_id,p.id, p.name FROM role_permissions rp " +
-                    "INNER JOIN permission p ON rp.permission_id=p.id";
+            "SELECT r.id, r.name, p.id, p.name from roles r join role_permissions rp on rp.role_id = r.id " +
+                    "join permission p on rp.permission_id = p.id";
 
     @Override
-    public RoleHolder findAll() throws DaoException {
-        RoleHolder roleHolder = new RoleHolder();
+    public List<Role> findAll() throws DaoException {
+        List<Role> roles = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
         try {
@@ -32,12 +37,25 @@ public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
             statement = connection.createStatement();
             ResultSet set = statement.executeQuery(ROLE_PERMISSIONS_SQL);
             while (set.next()) {
-                Long roleId = set.getLong(RP_ROLE_ID);
+                Long roleId = set.getLong(ROLE_ID);
+                String roleName = set.getString(ROLE_NAME);
                 Long permissionId = set.getLong(P_ID);
                 String permissionName = set.getString(P_NAME);
-                roleHolder.add(roleId, permissionId, permissionName);
+                int roleIndex = roleExist(roles, roleId);
+                if (roleIndex < 0) {
+                    Role role = new Role();
+                    role.setId(roleId);
+                    role.setName(roleName);
+                    Set<Permission> permissions = new HashSet<>();
+                    permissions.add(new Permission(permissionId, permissionName));
+                    role.setPermissions(permissions);
+                    roles.add(role);
+                } else {
+                    Role role = roles.get(roleIndex);
+                    role.getPermissions().add(new Permission(permissionId, permissionName));
+                }
             }
-            return roleHolder;
+            return roles;
         } catch (SQLException e) {
             logger.error("Role permissions dao fail!");
             throw new DaoException("Role permissions dao fail!", e);
@@ -47,4 +65,14 @@ public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
             close(connection);
         }
     }
+
+    private int roleExist(List<Role> roles, Long roleId) {
+        for (int i = 0; i < roles.size(); i++) {
+            if (roles.get(i).getId().equals(roleId)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }

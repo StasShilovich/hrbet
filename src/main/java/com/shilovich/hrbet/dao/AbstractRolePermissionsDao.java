@@ -1,34 +1,31 @@
 package com.shilovich.hrbet.dao;
 
-import com.shilovich.hrbet.bean.RoleHolder;
+import com.shilovich.hrbet.bean.Role;
 import com.shilovich.hrbet.exception.DaoException;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractRolePermissionsDao implements Dao<RoleHolder, Long> {
-    public abstract RoleHolder findAll() throws DaoException;
+public abstract class AbstractRolePermissionsDao implements Dao<Role, Long> {
+    public abstract List<Role> findAll() throws DaoException;
 
     @Override
-    public final Optional<RoleHolder>  create(RoleHolder roleHolder) throws DaoException {
+    public final Optional<Role>  create(Role roleHolder) throws DaoException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final Optional<RoleHolder> read(Long id) throws DaoException {
+    public final Optional<Role> read(Long id) throws DaoException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final Optional<RoleHolder> update(RoleHolder roleHolder) throws DaoException {
+    public final Optional<Role> update(Role roleHolder) throws DaoException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final boolean delete(RoleHolder roleHolder) throws DaoException {
+    public final boolean delete(Role roleHolder) throws DaoException {
         throw new UnsupportedOperationException();
     }
 }

@@ -1,6 +1,12 @@
 package com.shilovich.hrbet.service.impl;
 
+import com.shilovich.hrbet.bean.Role;
 import com.shilovich.hrbet.bean.User;
+import com.shilovich.hrbet.cache.Cache;
+import com.shilovich.hrbet.cache.CacheFactory;
+import com.shilovich.hrbet.cache.CacheType;
+import com.shilovich.hrbet.dao.AbstractRaceDao;
+import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.AbstractUserDao;
 import com.shilovich.hrbet.exception.DaoException;
@@ -12,9 +18,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.shilovich.hrbet.cache.CacheVariables.USER_ROLES;
 import static com.shilovich.hrbet.controller.CommandParameter.*;
 
 public class UserServiceImpl implements UserService {
@@ -35,12 +43,25 @@ public class UserServiceImpl implements UserService {
             if (BCryptService.verifyPassword(userAuthorized.getPassword(), user.getPassword())) {
                 return null;
             }
+            Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.ROLES);
+            List<Role> roles = null;
+            if (cache.isEmpty()) {
+                AbstractRolePermissionsDao rolePermissionsDao = (AbstractRolePermissionsDao) DaoFactory.getInstance()
+                        .getClass(AbstractRolePermissionsDao.class);
+                roles = rolePermissionsDao.findAll();
+                cache.addCache(USER_ROLES, roles);
+            } else {
+                roles = (List<Role>) cache.getCache(USER_ROLES);
+            }
+            Role role = findRole(roles, userAuthorized.getRole().getId());
+            userAuthorized.setRole(role);
             return userAuthorized;
         } catch (DaoException e) {
             logger.error("Authorization exception!");
             throw new ServiceException("Authorization exception!", e);
         }
     }
+
 
     @Override
     public Map<String, String> registration(User userUI) throws ServiceException {
@@ -78,12 +99,21 @@ public class UserServiceImpl implements UserService {
                 userUI.setPassword(BCryptService.hashPassword(password));
                 userDao.create(userUI);
                 return null;
-
             }
             return userMAP;
         } catch (DaoException e) {
             logger.error("Registration exception!");
             throw new ServiceException("Registration exception!", e);
         }
+    }
+
+    private Role findRole(List<Role> roles, Long roleId) {
+        Role result = new Role();
+        for (Role role : roles) {
+            if (role.getId().equals(roleId)) {
+                result = role;
+            }
+        }
+        return result;
     }
 }

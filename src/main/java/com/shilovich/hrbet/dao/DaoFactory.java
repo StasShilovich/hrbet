@@ -2,8 +2,6 @@ package com.shilovich.hrbet.dao;
 
 import com.shilovich.hrbet.dao.impl.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class DaoFactory {
