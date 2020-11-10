@@ -4,6 +4,7 @@ import com.shilovich.hrbet.bean.Permission;
 import com.shilovich.hrbet.bean.Role;
 import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
 import com.shilovich.hrbet.dao.connection.ConnectionManager;
+import com.shilovich.hrbet.dao.connection.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +31,7 @@ public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
     @Override
     public List<Role> findAll() throws DaoException {
         List<Role> roles = new ArrayList<>();
-        Connection connection = null;
+        ProxyConnection connection = null;
         Statement statement = null;
         ResultSet set = null;
         try {

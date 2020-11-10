@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractRaceDao implements Dao<Race, Long> {
+    public abstract List<Race> showAllActive(int limit, int offset) throws DaoException;
+
     public abstract List<Race> showAll(int limit, int offset) throws DaoException;
 
     public abstract long count() throws DaoException;

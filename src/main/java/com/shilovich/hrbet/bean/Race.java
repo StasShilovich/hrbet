@@ -1,6 +1,8 @@
 package com.shilovich.hrbet.bean;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Race implements Serializable {
@@ -8,17 +10,15 @@ public class Race implements Serializable {
 
     private Long id;
     private String location;
-    private Date date;
-    private Long bank;
+    private LocalDateTime date;
 
     public Race() {
     }
 
-    public Race(Long id, String location, Date date, Long bank) {
+    public Race(Long id, String location, LocalDateTime date) {
         this.id = id;
         this.location = location;
         this.date = date;
-        this.bank = bank;
     }
 
     public Long getId() {
@@ -37,20 +37,12 @@ public class Race implements Serializable {
         this.location = location;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
-    }
-
-    public Long getBank() {
-        return bank;
-    }
-
-    public void setBank(Long bank) {
-        this.bank = bank;
     }
 
     @Override
@@ -59,38 +51,27 @@ public class Race implements Serializable {
         builder.append("id=").append(id);
         builder.append(", location='").append(location).append('\'');
         builder.append(", date=").append(date);
-        builder.append(", bank=").append(bank);
         builder.append('}');
         return builder.toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Race)) return false;
+
         Race race = (Race) o;
-        if (!id.equals(race.id)){
-            return false;
-        }
-        if (!location.equals(race.location)){
-            return false;
-        }
-        if (!date.equals(race.date)) {
-            return false;
-        }
-        return bank != null ? bank.equals(race.bank) : race.bank == null;
+
+        if (!getId().equals(race.getId())) return false;
+        if (!getLocation().equals(race.getLocation())) return false;
+        return getDate().equals(race.getDate());
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + location.hashCode();
-        result = 31 * result + date.hashCode();
-        result = 31 * result + (bank != null ? bank.hashCode() : 0);
+        int result = getId().hashCode();
+        result = 31 * result + getLocation().hashCode();
+        result = 31 * result + getDate().hashCode();
         return result;
     }
 }

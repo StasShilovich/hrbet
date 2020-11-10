@@ -13,7 +13,7 @@
         <servlet.version>2.5</servlet.version>
         <jstl.version>1.2</jstl.version>
         <mysql.connector.version>8.0.16</mysql.connector.version>
-        <bcrypt.version>0.9.0</bcrypt.version>
+        <bcrypt.version>0.7.0</bcrypt.version>
         <javax.version>8.0.1</javax.version>
         <log4j.version>2.7</log4j.version>
     </properties>

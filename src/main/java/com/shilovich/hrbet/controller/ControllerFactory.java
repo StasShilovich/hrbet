@@ -23,6 +23,9 @@ public class ControllerFactory {
         commands.put(CommandEnum.PROFILE, new ProfileCommandImpl());
         commands.put(CommandEnum.COOKIE, new CookieCommandImpl());
         commands.put(CommandEnum.SHOW_USER_BETS, new ShowUserBetsCommandImpl());
+        commands.put(CommandEnum.SHOW_USERS, new ShowUsersCommandImpl());
+        commands.put(CommandEnum.UPDATE_CASH, new UpdateCashCommandImpl());
+        commands.put(CommandEnum.ADD_RACE, new AddRaceCommandImpl());
     }
 
     public Command getCommand(CommandEnum commandEnum) {

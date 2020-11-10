@@ -1,5 +1,6 @@
 package com.shilovich.hrbet.controller;
 
+import com.shilovich.hrbet.dao.connection.ConnectionManager;
 import com.shilovich.hrbet.exception.CommandException;
 import com.shilovich.hrbet.controller.model.CommandEnum;
 import com.shilovich.hrbet.controller.model.ServletForward;
@@ -11,8 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
-import static com.shilovich.hrbet.controller.CommandParameter.PAGE_INDEX;
+import static com.shilovich.hrbet.controller.CommandParameter.*;
 
 
 public class DispatcherServlet extends HttpServlet {
@@ -20,6 +22,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private static final ControllerFactory factory = ControllerFactory.getInstance();
     private static final String COMMAND_PARAMETER = "command";
+    private ConnectionManager manager;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,7 +38,7 @@ public class DispatcherServlet extends HttpServlet {
         String command = req.getParameter(COMMAND_PARAMETER);
         logger.info(command);
         if (command.isEmpty() || !CommandEnum.isContains(command)) {
-            resp.sendRedirect(PAGE_INDEX);
+            resp.sendRedirect(PAGE_404);
         }
         Command commandAction = factory.getCommand(CommandEnum.getCommand(command));
         if (commandAction != null) {
@@ -44,11 +47,11 @@ public class DispatcherServlet extends HttpServlet {
                 forward = commandAction.execute(req, resp);
             } catch (CommandException e) {
                 logger.error(e.getMessage());
-                // TODO: 13.10.2020 command exception
+                resp.sendRedirect(PAGE_500);
             }
             if (forward == null) {
                 logger.error("Null servlet forward");
-                new ServletForward(PAGE_INDEX);
+                resp.sendRedirect(PAGE_404);
             }
             if (forward.isRedirect()) {
                 logger.info("Redirect: " + forward.getPage());
@@ -57,6 +60,25 @@ public class DispatcherServlet extends HttpServlet {
                 logger.info("Forward: " + forward.getPage());
                 getServletContext().getRequestDispatcher(forward.getPage()).forward(req, resp);
             }
+        }
+    }
+
+    @Override
+    public void init() {
+        manager = ConnectionManager.getInstance();
+        logger.info("Connection Pool started!");
+    }
+
+    @Override
+    public void destroy() {
+        try {
+            if (manager != null) {
+                manager.shutdown();
+                logger.info("Connection Pool shutdown!");
+            }
+        } catch (SQLException e) {
+            logger.error("Failed while pool shutdown");
+            logger.error(e.getMessage());
         }
     }
 }

@@ -8,7 +8,7 @@ public class BCryptService {
     }
 
     public static boolean verifyPassword(String hashPassword, String verifiablePassword) {
-        BCrypt.Result verify = BCrypt.verifyer().verify(hashPassword.toCharArray(), verifiablePassword);
+        BCrypt.Result verify = BCrypt.verifyer().verify(hashPassword.trim().toCharArray(), verifiablePassword.trim());
         return verify.verified;
     }
 }

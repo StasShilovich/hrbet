@@ -9,7 +9,10 @@ public enum CommandEnum {
     RACE,
     PROFILE,
     COOKIE,
-    SHOW_USER_BETS;
+    SHOW_USER_BETS,
+    SHOW_USERS,
+    UPDATE_CASH,
+    ADD_RACE;
 
     public static boolean isContains(String name) {
         for (CommandEnum value : CommandEnum.values()) {

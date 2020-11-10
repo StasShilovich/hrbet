@@ -1,6 +1,5 @@
 package com.shilovich.hrbet.dao.connection;
 
-import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,21 +30,21 @@ public class ConnectionManager {
         }
     }
 
-    public ProxyConnection getConnection() throws DaoException {
+    public ProxyConnection getConnection() throws SQLException {
         try {
             return connectionPool.getConnection();
         } catch (SQLException e) {
             logger.error("Connection Exception");
-            throw new DaoException("Connection Exception", e);
+            throw new SQLException("Connection Exception", e);
         }
     }
 
-    public void shutdown() throws DaoException {
+    public void shutdown() throws SQLException {
         try {
             connectionPool.shutdown();
         } catch (SQLException e) {
             logger.fatal("Connection pool shutdown fail!");
-            throw new DaoException("Connection pool shutdown fail!", e);
+            throw new SQLException("Connection pool shutdown fail!", e);
         }
     }
 

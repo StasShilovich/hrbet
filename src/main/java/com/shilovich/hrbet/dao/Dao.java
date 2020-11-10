@@ -1,5 +1,6 @@
 package com.shilovich.hrbet.dao;
 
+import com.shilovich.hrbet.dao.connection.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +22,7 @@ public interface Dao<A, T extends Serializable> {
 
     boolean delete(A a) throws DaoException;
 
-    default void close(Connection connection) {
+    default void close(ProxyConnection connection) {
         if (connection != null) {
             try {
                 connection.close();

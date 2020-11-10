@@ -14,7 +14,8 @@ public class DaoFactory {
                 AbstractRaceDao.class, new RaceDaoImpl(),
                 AbstractRolePermissionsDao.class, new RolePermissionsDaoImpl(),
                 AbstractBetDao.class, new BetDaoImpl(),
-                AbstractHorseDao.class, new HorseDaoImpl());
+                AbstractHorseDao.class, new HorseDaoImpl(),
+                AbstractRatioDao.class, new RatioDaoImpl());
     }
 
     private DaoFactory() {

@@ -1,11 +1,11 @@
 package com.shilovich.hrbet.service.impl;
 
+import com.shilovich.hrbet.bean.Page;
 import com.shilovich.hrbet.bean.Role;
 import com.shilovich.hrbet.bean.User;
 import com.shilovich.hrbet.cache.Cache;
 import com.shilovich.hrbet.cache.CacheFactory;
 import com.shilovich.hrbet.cache.CacheType;
-import com.shilovich.hrbet.dao.AbstractRaceDao;
 import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.AbstractUserDao;
@@ -17,13 +17,17 @@ import com.shilovich.hrbet.validation.ValidationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
+import static com.shilovich.hrbet.cache.CacheVariables.COUNT;
 import static com.shilovich.hrbet.cache.CacheVariables.USER_ROLES;
 import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static com.shilovich.hrbet.service.ServiceParameter.USERS_ON_PAGE;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
@@ -40,21 +44,10 @@ public class UserServiceImpl implements UserService {
             if (userAuthorized == null) {
                 return null;
             }
-            if (BCryptService.verifyPassword(userAuthorized.getPassword(), user.getPassword())) {
+            if (!BCryptService.verifyPassword(user.getPassword(), userAuthorized.getPassword())) {
                 return null;
             }
-            Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.ROLES);
-            List<Role> roles = null;
-            if (cache.isEmpty()) {
-                AbstractRolePermissionsDao rolePermissionsDao = (AbstractRolePermissionsDao) DaoFactory.getInstance()
-                        .getClass(AbstractRolePermissionsDao.class);
-                roles = rolePermissionsDao.findAll();
-                cache.addCache(USER_ROLES, roles);
-            } else {
-                roles = (List<Role>) cache.getCache(USER_ROLES);
-            }
-            Role role = findRole(roles, userAuthorized.getRole().getId());
-            userAuthorized.setRole(role);
+            setCashRole(userAuthorized);
             return userAuthorized;
         } catch (DaoException e) {
             logger.error("Authorization exception!");
@@ -107,13 +100,68 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private Role findRole(List<Role> roles, Long roleId) {
-        Role result = new Role();
+    @Override
+    public Page<User> findAll(int limit, int offset) throws ServiceException {
+        try {
+            AbstractUserDao userDao = (AbstractUserDao) DaoFactory.getInstance().getClass(AbstractUserDao.class);
+            List<User> users = userDao.findAll(limit, offset);
+            for (User user : users) {
+                setCashRole(user);
+            }
+            int pageNumber = offset / USERS_ON_PAGE;
+            return new Page<>(pageNumber, users);
+        } catch (DaoException e) {
+            logger.error("Show all users exception!");
+            throw new ServiceException("Show all users service exception!", e);
+        }
+    }
+
+    @Override
+    public int getUsersPagesCount() throws ServiceException {
+        try {
+            long count;
+            Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.USER_COUNT);
+            if (cache.isEmpty()) {
+                AbstractUserDao userDao = (AbstractUserDao) DaoFactory.getInstance().getClass(AbstractUserDao.class);
+                count = userDao.count();
+                cache.addCache(COUNT, new AtomicLong(count));
+            } else {
+                AtomicLong aLong = (AtomicLong) cache.getCache(COUNT);
+                count = aLong.get();
+            }
+            return (int) Math.ceil((double) count / USERS_ON_PAGE);
+        } catch (DaoException e) {
+            logger.error("Users count exception!");
+            throw new ServiceException("Users count exception!", e);
+        }
+    }
+
+    @Override
+    public boolean updateCash(BigDecimal cash, Long userId) throws ServiceException {
+        try {
+            AbstractUserDao userDao = (AbstractUserDao) DaoFactory.getInstance().getClass(AbstractUserDao.class);
+            return userDao.updateCash(cash, userId);
+        } catch (DaoException e) {
+            logger.error("Add cash exception!");
+            throw new ServiceException("Add cash exception!", e);
+        }
+    }
+
+    private void setCashRole(User user) throws DaoException {
+        Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.ROLES);
+        List<Role> roles = null;
+        if (cache.isEmpty()) {
+            AbstractRolePermissionsDao rolePermissionsDao = (AbstractRolePermissionsDao) DaoFactory.getInstance()
+                    .getClass(AbstractRolePermissionsDao.class);
+            roles = rolePermissionsDao.findAll();
+            cache.addCache(USER_ROLES, roles);
+        } else {
+            roles = (List<Role>) cache.getCache(USER_ROLES);
+        }
         for (Role role : roles) {
-            if (role.getId().equals(roleId)) {
-                result = role;
+            if (role.getId().equals(user.getRole().getId())) {
+                user.setRole(role);
             }
         }
-        return result;
     }
 }

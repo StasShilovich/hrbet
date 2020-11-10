@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 3775535822048561302L;
@@ -10,6 +11,7 @@ public class User implements Serializable {
     private String surname;
     private String password;
     private String email;
+    private BigDecimal cash;
     private Role role;
 
 
@@ -23,12 +25,13 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public User(Long id, String name, String surname, String password, String email, Role role) {
+    public User(Long id, String name, String surname, String password, String email, BigDecimal cash, Role role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.password = password;
         this.email = email;
+        this.cash = cash;
         this.role = role;
     }
 
@@ -72,6 +75,14 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public BigDecimal getCash() {
+        return cash;
+    }
+
+    public void setCash(BigDecimal cash) {
+        this.cash = cash;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -88,6 +99,7 @@ public class User implements Serializable {
         builder.append(", surname='").append(surname).append('\'');
         builder.append(", password='").append(password).append('\'');
         builder.append(", email='").append(email).append('\'');
+        builder.append(", cash=").append(cash);
         builder.append(", role=").append(role);
         builder.append('}');
         return builder.toString();
@@ -96,26 +108,28 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof User)) return false;
 
         User user = (User) o;
 
-        if (id != null ? !id.equals(user.id) : user.id != null) return false;
-        if (name != null ? !name.equals(user.name) : user.name != null) return false;
-        if (surname != null ? !surname.equals(user.surname) : user.surname != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        return role != null ? role.equals(user.role) : user.role == null;
+        if (getId() != null ? !getId().equals(user.getId()) : user.getId() != null) return false;
+        if (getName() != null ? !getName().equals(user.getName()) : user.getName() != null) return false;
+        if (getSurname() != null ? !getSurname().equals(user.getSurname()) : user.getSurname() != null) return false;
+        if (!getPassword().equals(user.getPassword())) return false;
+        if (!getEmail().equals(user.getEmail())) return false;
+        if (getCash() != null ? !getCash().equals(user.getCash()) : user.getCash() != null) return false;
+        return getRole().equals(user.getRole());
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (surname != null ? surname.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (role != null ? role.hashCode() : 0);
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getSurname() != null ? getSurname().hashCode() : 0);
+        result = 31 * result + getPassword().hashCode();
+        result = 31 * result + getEmail().hashCode();
+        result = 31 * result + (getCash() != null ? getCash().hashCode() : 0);
+        result = 31 * result + getRole().hashCode();
         return result;
     }
 }

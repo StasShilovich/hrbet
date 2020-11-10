@@ -8,6 +8,8 @@ public class DaoTableField {
     public static final String USER_NAME = "u.name";
     public static final String USER_SURNAME = "u.surname";
     public static final String USER_PASSWORD = "u.password";
+    public static final String USER_CASH = "u.cash";
+    public static final String USER_EMAIL = "u.email";
     /**
      * ROLE
      */
@@ -20,7 +22,6 @@ public class DaoTableField {
     public static final String RACE_LOCATION = "r.location";
     public static final String RACE_TIME = "r.time";
     public static final String RACE_BANK_DOLLARS = "r.bank_dollars";
-    public static final String RACE_COUNT = "count(id)";
     /**
      * ROLE_PERMISSIONS
      */
@@ -30,11 +31,11 @@ public class DaoTableField {
      * BETS
      */
     public static final String BET_ID = "b.id";
-    public static final String BET_STATUS = "b.status";
+    public static final String BET_STATUS = "b.is_win";
     public static final String BET_TIME = "b.time";
     public static final String BET_RACE_ID = "b.race_id";
-    public static final String BET_DOLLARS = "b.cash_dollars";
-    public static final String BET_CENTS = "b.cash_cents";
+    public static final String BET_CASH = "b.cash";
+    public static final String BET_RATIO = "b.ratio";
     public static final String BET_TYPE_ID = "b.type_id";
     public static final String BET_TYPE_NAME = "t.name";
     public static final String BET_HORSE_ID = "b.bet_horse_id";
@@ -46,4 +47,16 @@ public class DaoTableField {
     public static final String HORSE_NAME = "h.name";
     public static final String HORSE_AGE = "h.age";
     public static final String HORSE_JOCKEY = "h.jockey";
+    /**
+     * Ratio
+     */
+    public static final String RATIO_HORSE_ID="r.horse_id";
+    public static final String RATIO_TYPE_ID="r.type_id";
+    public static final String RATIO_RATIO="r.ratio";
+
+    /**
+     * Count
+     */
+    public static final String ENTITY_COUNT = "count(id)";
+    private DaoTableField(){}
 }

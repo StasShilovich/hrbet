@@ -15,24 +15,23 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static com.shilovich.hrbet.service.ServiceParameter.ROW_ON_PAGE;
+import static com.shilovich.hrbet.service.ServiceParameter.RACES_ON_PAGE;
 
 public class RacesPageCommandImpl implements Command {
 
     @Override
     public ServletForward execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, CommandException {
         try {
-            ServiceFactory factory = ServiceFactory.getInstance();
-            RaceService raceService = (RaceService) factory.getClass(RaceService.class);
+            RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
             int pagesCount = raceService.getRacesPagesCount();
             req.setAttribute(ATTR_PAGE_NUMBER, pagesCount);
             int page = PAGE_OFFSET;
             String parameter = req.getParameter(PARAM_PAGE);
             if (parameter != null) {
-                page = (Integer.parseInt(parameter) - 1) * ROW_ON_PAGE;
+                page = (Integer.parseInt(parameter) - 1) * RACES_ON_PAGE;
             }
-            List<Race> races = raceService.showAll(ROW_ON_PAGE, page).getList();
-            req.setAttribute(PARAM_RACES_LIST, races);
+            List<Race> races = raceService.showAllActive(RACES_ON_PAGE, page).getList();
+            req.setAttribute(ATTR_RACES_LIST, races);
             return new ServletForward(PAGE_RACES);
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage(), e);

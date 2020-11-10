@@ -7,11 +7,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 public abstract class AbstractHorseDao implements Dao<Horse, Long> {
     public abstract Set<Horse> showByRace(Long raceId) throws DaoException;
+
+    public abstract List<Horse> findAll() throws DaoException;
 
     @Override
     public final Optional<Horse>  create(Horse horse) throws DaoException {

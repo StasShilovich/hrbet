@@ -1,0 +1,36 @@
+package com.shilovich.hrbet.dao;
+
+import com.shilovich.hrbet.bean.Ratio;
+import com.shilovich.hrbet.exception.DaoException;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+public abstract class AbstractRatioDao implements Dao<Ratio, Long> {
+
+    public abstract boolean setRatios(Long raceId, Long typeId, Map<Long, BigDecimal> ratioMap) throws DaoException;
+
+    public abstract List<Ratio> findRatio(Long raceId) throws DaoException;
+
+    @Override
+    public final Optional<Ratio> create(Ratio ratio) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public final Optional<Ratio> read(Long id) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public final Optional<Ratio> update(Ratio ratio) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public final boolean delete(Ratio ratio) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+}

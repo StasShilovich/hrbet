@@ -1,34 +1,36 @@
 package com.shilovich.hrbet.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Bet implements Serializable {
     private static final long serialVersionUID = -7442278899832735176L;
 
     private Long id;
-    private Boolean status;
     private Long userId;
-    private Date date;
+    private LocalDateTime date;
     private Race race;
-    private Long dollars;
-    private Integer cents;
+    private BigDecimal cash;
+    private BigDecimal ratio;
     private BetType type;
     private Horse horse;
+    private Status status;
 
     public Bet() {
     }
 
-    public Bet(Long id, Boolean status, Long userId, Date date, Race race, Long dollars, Integer cents, BetType type, Horse horse) {
+    public Bet(Long id, Long userId, LocalDateTime date, Race race, BigDecimal cash, BigDecimal ratio, BetType type, Horse horse, Status status) {
         this.id = id;
-        this.status = status;
         this.userId = userId;
         this.date = date;
         this.race = race;
-        this.dollars = dollars;
-        this.cents = cents;
+        this.cash = cash;
+        this.ratio = ratio;
         this.type = type;
         this.horse = horse;
+        this.status = status;
     }
 
     public Long getId() {
@@ -39,14 +41,6 @@ public class Bet implements Serializable {
         this.id = id;
     }
 
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -55,11 +49,11 @@ public class Bet implements Serializable {
         this.userId = userId;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -71,20 +65,20 @@ public class Bet implements Serializable {
         this.race = race;
     }
 
-    public Long getDollars() {
-        return dollars;
+    public BigDecimal getCash() {
+        return cash;
     }
 
-    public void setDollars(Long dollars) {
-        this.dollars = dollars;
+    public void setCash(BigDecimal cash) {
+        this.cash = cash;
     }
 
-    public Integer getCents() {
-        return cents;
+    public BigDecimal getRatio() {
+        return ratio;
     }
 
-    public void setCents(Integer cents) {
-        this.cents = cents;
+    public void setRatio(BigDecimal ratio) {
+        this.ratio = ratio;
     }
 
     public BetType getType() {
@@ -103,61 +97,59 @@ public class Bet implements Serializable {
         this.horse = horse;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder("Bet{");
         builder.append("id=").append(id);
-        builder.append(", status=").append(status);
         builder.append(", userId=").append(userId);
         builder.append(", date=").append(date);
         builder.append(", race=").append(race);
-        builder.append(", dollars=").append(dollars);
-        builder.append(", cents=").append(cents);
+        builder.append(", cash=").append(cash);
+        builder.append(", ratio=").append(ratio);
         builder.append(", type=").append(type);
         builder.append(", horse=").append(horse);
+        builder.append(", status=").append(status);
         builder.append('}');
         return builder.toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Bet)) return false;
+
         Bet bet = (Bet) o;
-        if (!id.equals(bet.id)) {
-            return false;
-        }
-        if (!status.equals(bet.status)){
-            return false;
-        }
-        if (!userId.equals(bet.userId)) {
-            return false;
-        }
-        if (!date.equals(bet.date)){
-            return false;
-        }
-        if (!race.equals(bet.race)) return false;
-        if (!dollars.equals(bet.dollars)) return false;
-        if (!cents.equals(bet.cents)) return false;
-        if (!type.equals(bet.type)) return false;
-        return horse.equals(bet.horse);
+
+        if (!getId().equals(bet.getId())) return false;
+        if (!getUserId().equals(bet.getUserId())) return false;
+        if (!getDate().equals(bet.getDate())) return false;
+        if (!getRace().equals(bet.getRace())) return false;
+        if (!getCash().equals(bet.getCash())) return false;
+        if (!getRatio().equals(bet.getRatio())) return false;
+        if (!getType().equals(bet.getType())) return false;
+        if (!getHorse().equals(bet.getHorse())) return false;
+        return getStatus() == bet.getStatus();
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + status.hashCode();
-        result = 31 * result + userId.hashCode();
-        result = 31 * result + date.hashCode();
-        result = 31 * result + race.hashCode();
-        result = 31 * result + dollars.hashCode();
-        result = 31 * result + cents.hashCode();
-        result = 31 * result + type.hashCode();
-        result = 31 * result + horse.hashCode();
+        int result = getId().hashCode();
+        result = 31 * result + getUserId().hashCode();
+        result = 31 * result + getDate().hashCode();
+        result = 31 * result + getRace().hashCode();
+        result = 31 * result + getCash().hashCode();
+        result = 31 * result + getRatio().hashCode();
+        result = 31 * result + getType().hashCode();
+        result = 31 * result + getHorse().hashCode();
+        result = 31 * result + getStatus().hashCode();
         return result;
     }
 }

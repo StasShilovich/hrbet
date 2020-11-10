@@ -1,19 +1,19 @@
 package com.shilovich.hrbet.dao.impl;
 
-import com.shilovich.hrbet.bean.Bet;
-import com.shilovich.hrbet.bean.BetType;
-import com.shilovich.hrbet.bean.Horse;
-import com.shilovich.hrbet.bean.Race;
+import com.shilovich.hrbet.bean.*;
 import com.shilovich.hrbet.dao.AbstractBetDao;
 import com.shilovich.hrbet.dao.connection.ConnectionManager;
+import com.shilovich.hrbet.dao.connection.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,17 +25,17 @@ public class BetDaoImpl extends AbstractBetDao {
     private final ConnectionManager manager = ConnectionManager.getInstance();
 
     private static final String SHOW_BET_BY_USER_SQL =
-            "SELECT b.id, b.status, b.time, b.race_id, r.location, b.cash_dollars, b.cash_cents, b.type_id, t.name," +
-                    " b.bet_horse_id, h.name FROM bets b " +
-                    "INNER JOIN races r ON b.race_id=r.id " +
-                    "INNER JOIN bet_types t ON b.type_id=t.id " +
-                    "INNER JOIN horses h ON  b.bet_horse_id=h.id " +
-                    "WHERE b.user_id=?";
+            "SELECT b.id,b.time,b.race_id,r.location,b.cash,b.ratio,b.type_id,t.name,b.bet_horse_id,h.name,b.is_win " +
+                    " FROM bets b " +
+                    " INNER JOIN races r ON b.race_id = r.id" +
+                    " INNER JOIN bet_types t ON b.type_id = t.id" +
+                    " INNER JOIN horses h ON b.bet_horse_id = h.id" +
+                    " WHERE b.user_id = ?";
 
     @Override
     public List<Bet> showByUser(Long userId) throws DaoException {
         List<Bet> bets = new ArrayList<>();
-        Connection connection = null;
+        ProxyConnection connection = null;
         PreparedStatement statement = null;
         ResultSet set = null;
         try {
@@ -45,20 +45,20 @@ public class BetDaoImpl extends AbstractBetDao {
             set = statement.executeQuery();
             while (set.next()) {
                 Long id = set.getLong(BET_ID);
-                Boolean status = set.getBoolean(BET_STATUS);
-                Date date = new Date(set.getTimestamp(BET_TIME).getTime());
+                LocalDateTime date = set.getTimestamp(BET_TIME).toLocalDateTime();
                 Race race = new Race();
                 race.setId(set.getLong(BET_RACE_ID));
                 race.setLocation(set.getString(RACE_LOCATION));
-                Long dollars = set.getLong(BET_DOLLARS);
-                Integer cents = set.getInt(BET_CENTS);
+                BigDecimal cash = set.getBigDecimal(BET_CASH);
+                BigDecimal ratio = set.getBigDecimal(BET_RATIO);
                 BetType type = new BetType();
                 type.setId(set.getLong(BET_TYPE_ID));
                 type.setType(set.getString(BET_TYPE_NAME));
                 Horse horse = new Horse();
                 horse.setId(set.getLong(BET_HORSE_ID));
                 horse.setName(set.getString(BET_HORSE_NAME));
-                bets.add(new Bet(id, status, userId, date, race, dollars, cents, type, horse));
+                Status status = Status.values()[set.getInt(BET_STATUS)];
+                bets.add(new Bet(id, userId, date, race, cash, ratio, type, horse, status));
             }
             return bets;
         } catch (SQLException e) {

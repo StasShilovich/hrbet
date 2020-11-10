@@ -1,8 +1,6 @@
 package com.shilovich.hrbet.service;
 
-import com.shilovich.hrbet.service.impl.BetServiceImpl;
-import com.shilovich.hrbet.service.impl.RaceServiceImpl;
-import com.shilovich.hrbet.service.impl.UserServiceImpl;
+import com.shilovich.hrbet.service.impl.*;
 
 import java.util.Map;
 
@@ -14,7 +12,9 @@ public class ServiceFactory {
         factory = Map.of(
                 UserService.class, new UserServiceImpl(),
                 RaceService.class, new RaceServiceImpl(),
-                BetService.class, new BetServiceImpl());
+                BetService.class, new BetServiceImpl(),
+                RatioService.class, new RatioServiceImpl(),
+                HorseService.class, new HorseServiceImpl());
     }
 
     private ServiceFactory() {
