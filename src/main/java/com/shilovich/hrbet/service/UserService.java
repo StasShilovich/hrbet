@@ -18,4 +18,6 @@ public interface UserService extends Service {
     int getUsersPagesCount() throws ServiceException;
 
     boolean updateCash(BigDecimal cash, Long userId) throws ServiceException;
+
+    boolean ban(Long id) throws ServiceException;
 }

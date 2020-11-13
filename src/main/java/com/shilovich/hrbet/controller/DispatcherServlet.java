@@ -1,9 +1,7 @@
 package com.shilovich.hrbet.controller;
 
-import com.shilovich.hrbet.dao.connection.ConnectionManager;
+import com.shilovich.hrbet.dao.pool.ConnectionManager;
 import com.shilovich.hrbet.exception.CommandException;
-import com.shilovich.hrbet.controller.model.CommandEnum;
-import com.shilovich.hrbet.controller.model.ServletForward;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +18,7 @@ import static com.shilovich.hrbet.controller.CommandParameter.*;
 public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
 
-    private static final ControllerFactory factory = ControllerFactory.getInstance();
+    private static final CommandMap factory = CommandMap.getInstance();
     private static final String COMMAND_PARAMETER = "command";
     private ConnectionManager manager;
 
@@ -37,28 +35,28 @@ public class DispatcherServlet extends HttpServlet {
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String command = req.getParameter(COMMAND_PARAMETER);
         logger.info(command);
-        if (command.isEmpty() || !CommandEnum.isContains(command)) {
+        if (command.isEmpty() || !CommandType.isContains(command)) {
             resp.sendRedirect(PAGE_404);
         }
-        Command commandAction = factory.getCommand(CommandEnum.getCommand(command));
+        Command commandAction = factory.getCommand(CommandType.getCommand(command));
         if (commandAction != null) {
-            ServletForward forward = null;
+            Router router = null;
             try {
-                forward = commandAction.execute(req, resp);
+                router = commandAction.execute(req, resp);
             } catch (CommandException e) {
-                logger.error(e.getMessage());
+                logger.error(e.getMessage(),e);
                 resp.sendRedirect(PAGE_500);
             }
-            if (forward == null) {
+            if (router == null) {
                 logger.error("Null servlet forward");
                 resp.sendRedirect(PAGE_404);
             }
-            if (forward.isRedirect()) {
-                logger.info("Redirect: " + forward.getPage());
-                resp.sendRedirect(forward.getPage());
+            if (router.isRedirect()) {
+                logger.info("Redirect: " + router.getPage());
+                resp.sendRedirect(router.getPage());
             } else {
-                logger.info("Forward: " + forward.getPage());
-                getServletContext().getRequestDispatcher(forward.getPage()).forward(req, resp);
+                logger.info("Forward: " + router.getPage());
+                getServletContext().getRequestDispatcher(router.getPage()).forward(req, resp);
             }
         }
     }

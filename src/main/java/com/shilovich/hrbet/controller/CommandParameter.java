@@ -11,8 +11,10 @@ public class CommandParameter {
     public static final String PARAM_PAGE = "page";
     public static final String PARAM_LOCATION = "location";
     public static final String PARAM_DATE = "date";
-    public static final String PARAM_HORSE_ID = "horseId";
+    public static final String PARAM_HORSE = "horse";
+    public static final String PARAM_USER_ID = "userId";
     public static final String PARAM_RACE_ID = "raceId";
+    public static final String PARAM_RACE_CHECK = "checkAll";
     public static final String PARAM_ADD_CASH = "addCash";
     public static final String PARAM_COOKIE_LOCALE = "locale";
     /**
@@ -26,6 +28,7 @@ public class CommandParameter {
     public static final String ATTR_HORSE_MAP = "horseMap";
     public static final String ATTR_PAGE_NUMBER = "pageNumber";
     public static final String ATTR_RACES_LIST = "races";
+    public static final String ATTR_RACE_INFO = "raceInfo";
     public static final String ATTR_USERS_LIST = "users";
     public static final String ATTR_USER_BETS = "userBets";
     public static final String ATTR_EMPTY_PARAM = "emptyParams";
@@ -45,6 +48,8 @@ public class CommandParameter {
     public static final String PAGE_RACE = "/WEB-INF/pages/race.jsp";
     public static final String PAGE_PROFILE = "/WEB-INF/pages/profile.jsp";
     public static final String PAGE_PROFILE_BETS = "/WEB-INF/pages/profileBets.jsp";
+    public static final String PAGE_ENTER_RESULT = "/WEB-INF/pages/enterResult.jsp";
+    public static final String PAGE_SET_RATIO = "/WEB-INF/pages/setRatio.jsp";
     public static final String PAGE_404 = "/WEB-INF/pages/error/pages-404.jsp";
     public static final String PAGE_500 = "/WEB-INF/pages/error/pages-500.jsp";
     public static final String PAGE_START = "http://localhost:8888/hrbets";
@@ -64,7 +69,12 @@ public class CommandParameter {
      * OTHERS
      */
     public static final String URL_REFERER = "referer";
+    public static final String BLANK = "";
     public static final int PAGE_OFFSET = 0;
+    public static final int MIN_HORSE_IN_RACE = 3;
+    public static final String CHECKBOX = "on";
+    public static final String WIN = "win";
+    public static final String PRIZE = "prize";
 
     private CommandParameter() {
     }

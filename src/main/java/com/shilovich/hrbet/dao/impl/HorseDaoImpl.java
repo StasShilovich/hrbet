@@ -1,9 +1,9 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.bean.Horse;
-import com.shilovich.hrbet.dao.AbstractHorseDao;
-import com.shilovich.hrbet.dao.connection.ConnectionManager;
-import com.shilovich.hrbet.dao.connection.ProxyConnection;
+import com.shilovich.hrbet.dao.HorseDao;
+import com.shilovich.hrbet.dao.pool.ConnectionManager;
+import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,17 +16,27 @@ import java.util.Set;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
-public class HorseDaoImpl extends AbstractHorseDao {
+public class HorseDaoImpl extends HorseDao {
     private static final Logger logger = LogManager.getLogger(HorseDaoImpl.class);
-    private final ConnectionManager manager = ConnectionManager.getInstance();
 
+    private static HorseDao instance;
     private static final String HORSE_SHOW_BY_RACE_SQL = "SELECT h.id,h.name,h.age,h.jockey FROM horse_participatings hp " +
             "INNER JOIN horses h ON hp.horse_id=h.id WHERE hp.races_id=?";
 
     private static final String FIND_ALL_HORSES_SQL = "SELECT h.id,h.name,h.age,h.jockey FROM horses h";
 
+    private HorseDaoImpl() {
+    }
+
+    public static HorseDao getInstance() {
+        if (instance == null) {
+            instance = new HorseDaoImpl();
+        }
+        return instance;
+    }
+
     @Override
-    public Set<Horse> showByRace(Long raceId) throws DaoException {
+    public Set<Horse> findByRace(Long raceId) throws DaoException {
         Set<Horse> horses = new HashSet<>();
         ProxyConnection connection = null;
         PreparedStatement statement = null;
@@ -41,7 +51,7 @@ public class HorseDaoImpl extends AbstractHorseDao {
             }
             return horses;
         } catch (SQLException e) {
-            logger.error("Show horses by race fail!");
+            logger.error("Show horses by race fail!", e);
             throw new DaoException("Show horses by race fail!", e);
         } finally {
             close(set);
@@ -65,7 +75,7 @@ public class HorseDaoImpl extends AbstractHorseDao {
             }
             return horses;
         } catch (SQLException e) {
-            logger.error("Find all horses fail!");
+            logger.error("Find all horses fail!", e);
             throw new DaoException("Find all horses fail!", e);
         } finally {
             close(set);

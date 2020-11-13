@@ -1,29 +1,26 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.bean.*;
-import com.shilovich.hrbet.dao.AbstractBetDao;
-import com.shilovich.hrbet.dao.connection.ConnectionManager;
-import com.shilovich.hrbet.dao.connection.ProxyConnection;
+import com.shilovich.hrbet.dao.BetDao;
+import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
-public class BetDaoImpl extends AbstractBetDao {
+public class BetDaoImpl extends BetDao {
     private static final Logger logger = LogManager.getLogger(BetDaoImpl.class);
-    private final ConnectionManager manager = ConnectionManager.getInstance();
 
+    private static BetDao instance;
     private static final String SHOW_BET_BY_USER_SQL =
             "SELECT b.id,b.time,b.race_id,r.location,b.cash,b.ratio,b.type_id,t.name,b.bet_horse_id,h.name,b.is_win " +
                     " FROM bets b " +
@@ -32,8 +29,18 @@ public class BetDaoImpl extends AbstractBetDao {
                     " INNER JOIN horses h ON b.bet_horse_id = h.id" +
                     " WHERE b.user_id = ?";
 
+    private BetDaoImpl() {
+    }
+
+    public static BetDao getInstance() {
+        if (instance == null) {
+            instance = new BetDaoImpl();
+        }
+        return instance;
+    }
+
     @Override
-    public List<Bet> showByUser(Long userId) throws DaoException {
+    public List<Bet> findByUser(Long userId) throws DaoException {
         List<Bet> bets = new ArrayList<>();
         ProxyConnection connection = null;
         PreparedStatement statement = null;
@@ -62,7 +69,7 @@ public class BetDaoImpl extends AbstractBetDao {
             }
             return bets;
         } catch (SQLException e) {
-            logger.error("Show all races exception!");
+            logger.error("Show all races exception!", e);
             throw new DaoException("Show all races exception!", e);
         } finally {
             close(set);

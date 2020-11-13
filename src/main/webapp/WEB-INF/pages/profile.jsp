@@ -9,7 +9,7 @@
 </head>
 <body data-topbar="dark" data-layout="horizontal">
 <div id="layout-wrapper">
-    <%@include file="/WEB-INF/pages/header.jsp" %>
+    <%@include file="/WEB-INF/pages/fragments/header.jsp" %>
     <div class="container-fluid  page-content ">
         <div class="col-lg-12 card  ">
             <div class="table-responsive">
@@ -17,54 +17,71 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0">Name</h6></div>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.registration.name"/></h6>
+                            </div>
                             <div class="col-sm-9 text-secondary">${sessionScope.userAuth.name}</div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0">Surname</h6></div>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.registration.surname"/></h6>
+                            </div>
                             <div class="col-sm-9 text-secondary"> ${sessionScope.userAuth.surname}</div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0">Email</h6></div>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.user.email"/></h6></div>
                             <div class="col-sm-9 text-secondary"> ${sessionScope.userAuth.email}</div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0">Cash</h6></div>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.user.cash"/></h6></div>
                             <div class="col-sm-9 text-secondary"> ${sessionScope.userAuth.cash}</div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0">Role</h6></div>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.user.role.name"/></h6></div>
                             <div class="col-sm-9 text-secondary">${sessionScope.userAuth.role.name}</div>
                         </div>
                     </div>
                 </div>
-                <form class="form-inline">
-                    <a class="btn btn-primary btn-lg active"
-                       href="${pageContext.request.contextPath}/dispatcher?command=update_cash&addCash=10">
-                        <fmt:message key="label.addCash.10"/>
-                    </a>
-                    <a class="btn btn-primary btn-lg active"
-                       href="${pageContext.request.contextPath}/dispatcher?command=update_cash&addCash=25">
-                        <fmt:message key="label.addCash.25"/>
-                    </a>
-                    <a class="btn btn-primary btn-lg active"
-                       href="${pageContext.request.contextPath}/dispatcher?command=update_cash&addCash=100">
-                        <fmt:message key="label.addCash.100"/>
-                    </a>
-                </form>
-                <form class="form-inline">
-                    <a class="btn btn-primary btn-lg active"
-                       href="${pageContext.request.contextPath}/dispatcher?command=show_user_bets">
-                        <fmt:message key="label.registration.bets"/>
-                    </a>
-                </form>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <button class="btn btn-primary mr-1" type="submit" type="submit">
+                            <a class="text-reset notification-item"
+                               href="${pageContext.request.contextPath}/dispatcher?command=update_cash&addCash=10">
+                                <span class="noti-dot"><fmt:message key="label.addCash.10"/></span>
+                            </a>
+                        </button>
+
+                        <button class="btn btn-primary mr-1" type="submit" type="submit">
+                            <a class="text-reset notification-item"
+                               href="${pageContext.request.contextPath}/dispatcher?command=update_cash&addCash=25">
+                                <span class="noti-dot"><fmt:message key="label.addCash.25"/></span>
+                            </a>
+                        </button>
+
+                        <button class="btn btn-primary mr-1" type="submit" type="submit">
+                            <a class="text-reset notification-item"
+                               href="${pageContext.request.contextPath}/dispatcher?command=update_cash&addCash=100">
+                                <span class="noti-dot"><fmt:message key="label.addCash.100"/></span>
+                            </a>
+                        </button>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <button class="btn btn-primary mr-1" type="submit" type="submit">
+                            <a class="text-reset notification-item"
+                               href="${pageContext.request.contextPath}/dispatcher?command=show_user_bets">
+                                <span class="noti-dot"> <fmt:message key="label.registration.bets"/></span>
+                            </a>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <%@include file="/WEB-INF/pages/footer.jsp" %>
+        <%@include file="/WEB-INF/pages/fragments/footer.jsp" %>
     </div>
+</div>
 </body>
 </html>

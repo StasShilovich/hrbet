@@ -11,7 +11,7 @@
 </head>
 <body data-topbar="dark" data-layout="horizontal">
 <div id="layout-wrapper">
-    <%@include file="/WEB-INF/pages/header.jsp" %>
+    <%@include file="/WEB-INF/pages/fragments/header.jsp" %>
     <div class="container-fluid  page-content ">
 
         <div class="row">
@@ -36,7 +36,7 @@
                             document.getElementById("nameCol").value = "<c:out value="${userMap['name']}"/>";
                         </script>
                         <c:if test="${not empty  userMap &&empty userMap['name']}">
-                            <div class="alert alert-danger" role="alert">
+                            <div class="alert alert-primary" role="alert">
                                 <fmt:message key="label.registration.incorrect.name"/>
                             </div>
                         </c:if>
@@ -52,7 +52,7 @@
                             document.getElementById("surnameCol").value = "<c:out value="${userMap['surname']}"/>";
                         </script>
                         <c:if test="${not empty  userMap &&empty userMap['surname']}">
-                            <div class="alert alert-danger" role="alert">
+                            <div class="alert alert-primary" role="alert">
                                 <fmt:message key="label.registration.incorrect.surname"/>
                             </div>
                         </c:if>
@@ -68,7 +68,7 @@
                             document.getElementById("emailCol").value = "<c:out value="${userMap['email']}"/>";
                         </script>
                         <c:if test="${not empty  userMap &&empty userMap['email']}">
-                            <div class="alert alert-danger" role="alert">
+                            <div class="alert alert-primary" role="alert">
                                 <fmt:message key="label.registration.incorrect.email"/>
                             </div>
                         </c:if>
@@ -84,7 +84,7 @@
                             document.getElementById("passwordCol").value = "<c:out value="${userMap['password']}"/>";
                         </script>
                         <c:if test="${not empty  userMap &&empty userMap['password']}">
-                            <div class="alert alert-danger" role="alert">
+                            <div class="alert alert-primary" role="alert">
                                 <fmt:message key="label.registration.incorrect.password"/>
                             </div>
                         </c:if>
@@ -92,16 +92,17 @@
                 </div>
 
                 <c:if test="${not empty emptyParams}">
-                    <div class="alert alert-dismissible alert-primary">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <div class="alert alert-primary" role="alert">
                             ${emptyParams}
                     </div>
                 </c:if>
-                <input class="btn btn-primary btn-lg active" type="submit" value="Register"/>
+                <button class="btn btn-primary" type="submit" type="submit">
+                    <fmt:message key="label.registration.submit"/>
+                </button>
             </form>
 
         </div>
-        <%@include file="/WEB-INF/pages/footer.jsp" %>
+        <%@include file="/WEB-INF/pages/fragments/footer.jsp" %>
     </div>
 </body>
 </html>

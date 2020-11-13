@@ -1,9 +1,8 @@
 package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.bean.*;
-import com.shilovich.hrbet.dao.AbstractUserDao;
-import com.shilovich.hrbet.dao.connection.ConnectionManager;
-import com.shilovich.hrbet.dao.connection.ProxyConnection;
+import com.shilovich.hrbet.dao.UserDao;
+import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,10 +15,10 @@ import java.util.Optional;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
-public class UserDaoImpl extends AbstractUserDao {
+public class UserDaoImpl extends UserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
-    private final ConnectionManager manager = ConnectionManager.getInstance();
 
+    private static UserDao instance;
     private static final String USER_EXIST_SQL =
             "SELECT 1 FROM users WHERE email=?";
     private static final String FIND_ALL_USER_SQL =
@@ -32,6 +31,17 @@ public class UserDaoImpl extends AbstractUserDao {
             "SELECT u.id,u.name, u.surname,u.password,u.cash,r.id FROM users u " +
                     "INNER JOIN roles r ON u.role_id=r.id WHERE u.email=?";
     private static final String UPDATE_CASH_SQL = "UPDATE users u SET u.cash=? WHERE u.id=?";
+    private static final String DELETE_USER_SQL = "UPDATE users u SET u.deleted=1 WHERE u.id=?";
+
+    private UserDaoImpl() {
+    }
+
+    public static UserDao getInstance() {
+        if (instance == null) {
+            instance = new UserDaoImpl();
+        }
+        return instance;
+    }
 
     @Override
     public User authorization(User user) throws DaoException {
@@ -45,7 +55,6 @@ public class UserDaoImpl extends AbstractUserDao {
             statement.setString(1, user.getEmail());
             set = statement.executeQuery();
             while (set.next()) {
-                // TODO: 05.11.2020 2 option create User, maybe Builder
                 Long id = set.getLong(USER_ID);
                 String name = set.getString(USER_NAME);
                 String surname = set.getString(USER_SURNAME);
@@ -56,7 +65,7 @@ public class UserDaoImpl extends AbstractUserDao {
             }
             return userDao;
         } catch (SQLException e) {
-            logger.error("User authorization failed!");
+            logger.error("User authorization failed!", e);
             throw new DaoException("User authorization failed!", e);
         } finally {
             close(set);
@@ -89,7 +98,7 @@ public class UserDaoImpl extends AbstractUserDao {
             }
             return users;
         } catch (SQLException e) {
-            logger.error("User find all failed!");
+            logger.error("User find all failed!", e);
             throw new DaoException("User find all failed!", e);
         } finally {
             close(set);
@@ -113,7 +122,7 @@ public class UserDaoImpl extends AbstractUserDao {
             }
             return count;
         } catch (SQLException e) {
-            logger.error("Count races exception!");
+            logger.error("Count races exception!", e);
             throw new DaoException("Count races exception!", e);
         } finally {
             close(set);
@@ -134,8 +143,28 @@ public class UserDaoImpl extends AbstractUserDao {
             int rowEffected = statement.executeUpdate();
             return rowEffected > 0;
         } catch (SQLException e) {
-            logger.error("Update cash failed!");
+            logger.error("Update cash failed!", e);
             throw new DaoException("Update cash failed!", e);
+        } finally {
+            close(statement);
+            close(connection);
+        }
+    }
+
+    @Override
+    public boolean delete(String id) throws DaoException {
+        long userId = Long.parseLong(id);
+        ProxyConnection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = manager.getConnection();
+            statement = connection.prepareStatement(DELETE_USER_SQL);
+            statement.setLong(1, userId);
+            int rowEffected = statement.executeUpdate();
+            return rowEffected > 0;
+        } catch (SQLException e) {
+            logger.error("User delete failed!", e);
+            throw new DaoException("User delete failed!", e);
         } finally {
             close(statement);
             close(connection);
@@ -156,7 +185,7 @@ public class UserDaoImpl extends AbstractUserDao {
             statement.executeUpdate();
             return Optional.of(user);
         } catch (SQLException e) {
-            logger.error("User registration failed!");
+            logger.error("User registration failed!", e);
             throw new DaoException("User registration failed!", e);
         } finally {
             close(statement);
@@ -180,8 +209,8 @@ public class UserDaoImpl extends AbstractUserDao {
                 return Optional.empty();
             }
         } catch (SQLException e) {
-            logger.error("User registration failed!");
-            throw new DaoException("User registration failed!", e);
+            logger.error("User exist failed!", e);
+            throw new DaoException("User exist failed!", e);
         } finally {
             close(set);
             close(statement);

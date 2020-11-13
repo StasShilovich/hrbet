@@ -40,6 +40,8 @@ public class DaoTableField {
     public static final String BET_TYPE_NAME = "t.name";
     public static final String BET_HORSE_ID = "b.bet_horse_id";
     public static final String BET_HORSE_NAME = "h.name";
+    public static final String BET_COUNT = "COUNT(b.id)";
+    public static final String BET_SUM = "SUM(b.cash)";
     /**
      * HORSE
      */

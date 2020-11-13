@@ -17,6 +17,16 @@
 <link href="${pageContext.request.contextPath}/assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
 <!-- App Css-->
 <link href="${pageContext.request.contextPath}/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css"/>
+<!-- Sweet Alerts js -->
+<script src="${pageContext.request.contextPath}/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
+<!-- Sweet alert init js-->
+<script src="${pageContext.request.contextPath}/assets/js/pages/sweet-alerts.init.js"></script>
 
-
+<script src="${pageContext.request.contextPath}/assets/js/pages/materialdesign.init.js"></script>
+<%--<script src="${pageContext.request.contextPath}/assets/js/app.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/assets/libs/jquery/jquery.min.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/assets/libs/metismenu/metisMenu.min.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/assets/libs/simplebar/simplebar.min.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/assets/libs/node-waves/waves.min.js"></script>--%>

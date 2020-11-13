@@ -10,11 +10,11 @@ public class ServiceFactory {
 
     static {
         factory = Map.of(
-                UserService.class, new UserServiceImpl(),
-                RaceService.class, new RaceServiceImpl(),
-                BetService.class, new BetServiceImpl(),
-                RatioService.class, new RatioServiceImpl(),
-                HorseService.class, new HorseServiceImpl());
+                UserService.class, UserServiceImpl.getInstance(),
+                RaceService.class, RaceServiceImpl.getInstance(),
+                BetService.class, BetServiceImpl.getInstance(),
+                RatioService.class, RatioServiceImpl.getInstance(),
+                HorseService.class, HorseServiceImpl.getInstance());
     }
 
     private ServiceFactory() {

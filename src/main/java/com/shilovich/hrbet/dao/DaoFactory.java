@@ -10,12 +10,12 @@ public class DaoFactory {
 
     static {
         factory = Map.of(
-                AbstractUserDao.class, new UserDaoImpl(),
-                AbstractRaceDao.class, new RaceDaoImpl(),
-                AbstractRolePermissionsDao.class, new RolePermissionsDaoImpl(),
-                AbstractBetDao.class, new BetDaoImpl(),
-                AbstractHorseDao.class, new HorseDaoImpl(),
-                AbstractRatioDao.class, new RatioDaoImpl());
+                UserDao.class, UserDaoImpl.getInstance(),
+                RaceDao.class, RaceDaoImpl.getInstance(),
+                RolePermissionsDao.class, RolePermissionsDaoImpl.getInstance(),
+                BetDao.class, BetDaoImpl.getInstance(),
+                HorseDao.class, HorseDaoImpl.getInstance(),
+                RatioDao.class, RatioDaoImpl.getInstance());
     }
 
     private DaoFactory() {

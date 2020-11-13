@@ -9,7 +9,7 @@
 </head>
 <body data-topbar="dark" data-layout="horizontal">
 <div id="layout-wrapper">
-    <%@include file="/WEB-INF/pages/header.jsp" %>
+    <%@include file="/WEB-INF/pages/fragments/header.jsp" %>
     <div class="container-fluid  page-content ">
         <div class="col-lg-12 card  ">
             <div class="table-responsive">
@@ -17,14 +17,6 @@
                        data-page-length="5"
                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead class="thead-light">
-                    <th style="width: 20px;">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input"
-                                   id="ordercheck">
-                            <label class="custom-control-label"
-                                   for="ordercheck">&nbsp;</label>
-                        </div>
-                    </th>
                     <tr>
                         <th scope="col">№</th>
                         <th scope="col">
@@ -52,14 +44,6 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <td>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input"
-                                   id="ordercheck1">
-                            <label class="custom-control-label"
-                                   for="ordercheck1">&nbsp;</label>
-                        </div>
-                    </td>
                     <c:forEach var="bet" items="${userBets}" varStatus="count">
                         <tr>
                             <td>${count.index+1} </td>
@@ -77,7 +61,7 @@
             </div>
         </div>
     </div>
-    <%@include file="/WEB-INF/pages/footer.jsp" %>
+    <%@include file="/WEB-INF/pages/fragments/footer.jsp" %>
 </div>
 </body>
 </html>

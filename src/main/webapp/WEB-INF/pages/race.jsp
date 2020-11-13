@@ -8,10 +8,10 @@
     <title><fmt:message key="label.race"/></title>
 </head>
 <body>
-<%@include file="/WEB-INF/pages/header.jsp" %>
+<%@include file="/WEB-INF/pages/fragments/header.jsp" %>
 <body data-topbar="dark" data-layout="horizontal">
 <div id="layout-wrapper">
-    <%@include file="/WEB-INF/pages/header.jsp" %>
+    <%@include file="/WEB-INF/pages/fragments/header.jsp" %>
     <div class="container-fluid  page-content ">
         <div class="col-lg-12 card  ">
 
@@ -37,6 +37,9 @@
                         <th scope="col">
                             <fmt:message key="label.race.ratioType.win"/>
                         </th>
+                        <th>
+                            <fmt:message key="label.race.ratioType.prize"/>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -54,7 +57,7 @@
                 </table>
             </div>
         </div>
-        <%@include file="/WEB-INF/pages/footer.jsp" %>
+        <%@include file="/WEB-INF/pages/fragments/footer.jsp" %>
     </div>
 </body>
 </html>

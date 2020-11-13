@@ -11,22 +11,19 @@
 </head>
 <body data-topbar="dark" data-layout="horizontal">
 <div id="layout-wrapper">
-    <%@include file="/WEB-INF/pages/header.jsp" %>
+    <%@include file="/WEB-INF/pages/fragments/header.jsp" %>
     <div class="container-fluid  page-content ">
         <div class="col-lg-12 card  ">
+
+            <h4 class="card-title mb-4">
+                <fmt:message key="label.title.users"/>
+            </h4>
+
             <div class="table-responsive">
                 <table class="table table-centered datatable dt-responsive nowrap"
                        data-page-length="5"
                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead class="thead-light">
-                    <th style="width: 20px;">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input"
-                                   id="ordercheck">
-                            <label class="custom-control-label"
-                                   for="ordercheck">&nbsp;</label>
-                        </div>
-                    </th>
                     <tr>
                         <th scope="col">№</th>
                         <th scope="col">
@@ -43,6 +40,9 @@
                         </th>
                         <th scope="col">
                             <fmt:message key="label.user.role.name"/>
+                        </th>
+                        <th scope="col">
+                            <fmt:message key="label.user.action"/>
                         </th>
                     </tr>
                     </thead>
@@ -61,6 +61,12 @@
                             <td>${user.email}</td>
                             <td>${user.cash}</td>
                             <td>${user.role.name}</td>
+                            <td>
+                                <a href="${pageContext.request.contextPath}/dispatcher?command=delete_user&userId=${user.id}"
+                                   class="text-danger" data-toggle="tooltip"
+                                   data-placement="top" title="" data-original-title="Delete"><i
+                                        class="mdi mdi-trash-can font-size-18"></i></a>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -77,7 +83,7 @@
                 </nav>
             </div>
         </div>
-        <%@include file="/WEB-INF/pages/footer.jsp" %>
+        <%@include file="/WEB-INF/pages/fragments/footer.jsp" %>
     </div>
 </div>
 </body>

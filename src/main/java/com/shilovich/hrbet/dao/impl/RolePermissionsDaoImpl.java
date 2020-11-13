@@ -2,14 +2,12 @@ package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.bean.Permission;
 import com.shilovich.hrbet.bean.Role;
-import com.shilovich.hrbet.dao.AbstractRolePermissionsDao;
-import com.shilovich.hrbet.dao.connection.ConnectionManager;
-import com.shilovich.hrbet.dao.connection.ProxyConnection;
+import com.shilovich.hrbet.dao.RolePermissionsDao;
+import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,13 +18,23 @@ import java.util.Set;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
-public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
+public class RolePermissionsDaoImpl extends RolePermissionsDao {
     private static final Logger logger = LogManager.getLogger(RolePermissionsDaoImpl.class);
-    private final ConnectionManager manager = ConnectionManager.getInstance();
 
+    private static RolePermissionsDao instance;
     private static final String ROLE_PERMISSIONS_SQL =
             "SELECT r.id, r.name, p.id, p.name from roles r join role_permissions rp on rp.role_id = r.id " +
                     "join permission p on rp.permission_id = p.id";
+
+    private RolePermissionsDaoImpl() {
+    }
+
+    public static RolePermissionsDao getInstance() {
+        if (instance == null) {
+            instance = new RolePermissionsDaoImpl();
+        }
+        return instance;
+    }
 
     @Override
     public List<Role> findAll() throws DaoException {
@@ -59,7 +67,7 @@ public class RolePermissionsDaoImpl extends AbstractRolePermissionsDao {
             }
             return roles;
         } catch (SQLException e) {
-            logger.error("Role permissions dao fail!");
+            logger.error("Role permissions dao fail!", e);
             throw new DaoException("Role permissions dao fail!", e);
         } finally {
             close(set);
