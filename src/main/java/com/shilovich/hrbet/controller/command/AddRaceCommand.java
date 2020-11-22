@@ -16,27 +16,33 @@ import java.util.List;
 import java.util.Set;
 
 import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class AddRaceCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         try {
-            HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
-            List<Horse> horses = horseService.findAll();
-            req.setAttribute(ATTR_HORSE_LIST, horses);
             String location = req.getParameter(PARAM_LOCATION);
             String date = req.getParameter(PARAM_DATE);
             Set<Long> horseSet = new HashSet<>();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i <= 5; i++) {
                 String id = req.getParameter(PARAM_HORSE + i);
                 if (id != null && !id.trim().isEmpty()) {
                     horseSet.add(Long.parseLong(id));
                 }
             }
-            if (location != null && date != null && horseSet.size() >= MIN_HORSE_IN_RACE) {
+            if (isNoneEmpty(location) && isNotEmpty(date) && horseSet.size() >= MIN_HORSE_IN_RACE) {
                 RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
-                raceService.addRace(horseSet, location, date);
+                boolean result = raceService.addRace(horseSet, location, date);
+                if (result) {
+                    Router router = new Router(PAGE_REDIRECT_INDEX);
+                    router.redirect();
+                    return router;
+                }
             }
+            HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
+            List<Horse> horses = horseService.findAll();
+            req.setAttribute(ATTR_HORSE_LIST, horses);
             return new Router(PAGE_ADD_RACE);
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage(), e);

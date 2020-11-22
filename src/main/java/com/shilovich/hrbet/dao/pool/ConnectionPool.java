@@ -3,7 +3,6 @@ package com.shilovich.hrbet.dao.pool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
@@ -23,7 +22,7 @@ class ConnectionPool {
     public static ConnectionPool create(
             String url, String user, String password,
             int initialPoolSize, int maxPoolSize, int maxTimeout) throws SQLException {
-        BlockingQueue<ProxyConnection> pool = new LinkedBlockingQueue<>(initialPoolSize);
+        BlockingQueue<ProxyConnection> pool = new LinkedBlockingQueue<>(maxPoolSize);
         for (int i = 0; i < initialPoolSize; i++) {
             pool.add(createConnection(url, user, password));
         }
@@ -34,7 +33,7 @@ class ConnectionPool {
         return new ProxyConnection(DriverManager.getConnection(url, user, password));
     }
 
-    public ConnectionPool(
+    private ConnectionPool(
             String url, String user, String password, int maxPoolSize,
             int maxTimeout, BlockingQueue<ProxyConnection> connectionPool) {
         this.url = url;
@@ -46,32 +45,38 @@ class ConnectionPool {
     }
 
     public ProxyConnection getConnection() throws SQLException {
-        if (connectionPool.isEmpty()) {
-            if (usedConnections.size() < maxPoolSize) {
-                connectionPool.add(createConnection(url, user, password));
-            } else {
-                logger.error("Maximum pool size reached, no available connections!");
-            }
+        if (usedConnections.size() + connectionPool.size() < maxPoolSize && connectionPool.isEmpty()) {
+            connectionPool.add(createConnection(url, user, password));
         }
-        /// TODO: 11.11.2020 try catch remove()
-        ProxyConnection connection = connectionPool.remove();
+        ProxyConnection connection = null;
+        try {
+            connection = connectionPool.take();
+        } catch (InterruptedException e) {
+            logger.error(e.getMessage(), e);
+        }
         if (!connection.isValid(maxTimeout)) {
-            connection = createConnection(url, user, password);
+            throw new SQLException("Connection is closed!");
         }
         usedConnections.add(connection);
         return connection;
     }
 
-    public boolean releaseConnection(ProxyConnection connection) {
-        connectionPool.add(connection);
-        return usedConnections.remove(connection);
+    public void releaseConnection(ProxyConnection connection) {
+        if (usedConnections.remove(connection)) {
+            connectionPool.add(connection);
+        }
     }
 
     public void shutdown() throws SQLException {
-        usedConnections.forEach(this::releaseConnection);
-        for (Connection connection : connectionPool) {
-            connection.close();
+        try {
+            for (ProxyConnection connection : usedConnections) {
+                connection.reallyClose();
+            }
+            for (ProxyConnection connection : connectionPool) {
+                connection.reallyClose();
+            }
+        } catch (IllegalStateException e) {
+            logger.error(e.getMessage(), e);
         }
-        connectionPool.clear();
     }
 }

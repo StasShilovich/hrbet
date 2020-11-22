@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static com.shilovich.hrbet.service.ServiceParameter.RACES_ON_PAGE;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class RacesPageCommand implements Command {
 
@@ -21,30 +21,22 @@ public class RacesPageCommand implements Command {
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         try {
             String check = req.getParameter(PARAM_RACE_CHECK);
-            if (check == null || check.isEmpty()) {
-                req.setAttribute("switch","off");
+            if (isEmpty(check)) {
+                req.setAttribute(ATTR_CHECKBOX, ATTR_CHECKBOX_OFF);
                 RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
                 int pagesCount = raceService.pageNumberActive();
                 req.setAttribute(ATTR_PAGE_NUMBER, pagesCount);
-                int page = PAGE_OFFSET;
-                String parameter = req.getParameter(PARAM_PAGE);
-                if (parameter != null) {
-                    page = (Integer.parseInt(parameter) - 1) * RACES_ON_PAGE;
-                }
-                List<Race> races = raceService.showAllActive(RACES_ON_PAGE, page).getList();
+                String page = req.getParameter(PARAM_PAGE);
+                List<Race> races = raceService.showAllActive(page);
                 req.setAttribute(ATTR_RACES_LIST, races);
             }
-            if (check != null && check.equals(CHECKBOX)) {
-                req.setAttribute("switch","on");
+            if (isNotEmpty(check) && equalsIgnoreCase(check, CHECKBOX)) {
+                req.setAttribute(ATTR_CHECKBOX, ATTR_CHECKBOX_ON);
                 RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
                 int pagesCount = raceService.pageNumberAll();
                 req.setAttribute(ATTR_PAGE_NUMBER, pagesCount);
-                int page = PAGE_OFFSET;
-                String parameter = req.getParameter(PARAM_PAGE);
-                if (parameter != null) {
-                    page = (Integer.parseInt(parameter) - 1) * RACES_ON_PAGE;
-                }
-                List<Race> races = raceService.showAll(RACES_ON_PAGE, page).getList();
+                String page = req.getParameter(PARAM_PAGE);
+                List<Race> races = raceService.showAll(page);
                 req.setAttribute(ATTR_RACES_LIST, races);
             }
             return new Router(PAGE_RACES);

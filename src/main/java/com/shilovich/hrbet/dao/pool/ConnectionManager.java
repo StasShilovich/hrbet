@@ -49,9 +49,7 @@ public class ConnectionManager {
     }
 
     public void close(ProxyConnection connection) {
-        if (!connectionPool.releaseConnection(connection)) {
-            logger.fatal("Connection close fail!");
-        }
+        connectionPool.releaseConnection(connection);
     }
 
 

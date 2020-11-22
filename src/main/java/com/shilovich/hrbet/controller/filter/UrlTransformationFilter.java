@@ -5,9 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.shilovich.hrbet.controller.CommandParameter.PAGE_START;
-import static com.shilovich.hrbet.controller.CommandParameter.PAGE_USER_FRIENDLY;
-
 public class UrlTransformationFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

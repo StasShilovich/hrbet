@@ -17,6 +17,8 @@ public class CommandParameter {
     public static final String PARAM_RACE_CHECK = "checkAll";
     public static final String PARAM_ADD_CASH = "addCash";
     public static final String PARAM_COOKIE_LOCALE = "locale";
+    public static final String PARAM_BET_INFO = "info";
+    public static final String PARAM_BET_CASH = "cash";
     /**
      * Attributes
      */
@@ -35,6 +37,9 @@ public class CommandParameter {
     public static final String ATTR_INCORRECT_DATA = "incorrectData";
     public static final String ATTR_EMPTY_MESSAGE = "There should be no empty fields!";
     public static final String ATTR_INCORRECT_MESSAGE = "Incorrect email or password! Try again.";
+    public static final String ATTR_CHECKBOX = "switch";
+    public static final String ATTR_CHECKBOX_ON = "on";
+    public static final String ATTR_CHECKBOX_OFF = "off";
 
     /**
      * PAGES
@@ -52,8 +57,8 @@ public class CommandParameter {
     public static final String PAGE_SET_RATIO = "/WEB-INF/pages/setRatio.jsp";
     public static final String PAGE_404 = "/WEB-INF/pages/error/pages-404.jsp";
     public static final String PAGE_500 = "/WEB-INF/pages/error/pages-500.jsp";
-    public static final String PAGE_START = "http://localhost:8888/hrbets";
-    public static final String PAGE_USER_FRIENDLY = "www.races/hrbets";
+    public static final String PAGE_START_PREFIX = "http://localhost:8888/hrbets";
+    public static final String PAGE_START = "http://localhost:8080/";
     /**
      * LOCALIZATION
      */
@@ -75,6 +80,7 @@ public class CommandParameter {
     public static final String CHECKBOX = "on";
     public static final String WIN = "win";
     public static final String PRIZE = "prize";
+
 
     private CommandParameter() {
     }

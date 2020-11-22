@@ -16,7 +16,8 @@ public enum CommandType {
     DELETE_USER,
     ENTER_RESULT,
     DELETE_RACE,
-    SET_RATIO;
+    SET_RATIO,
+    BET;
 
     public static boolean isContains(String name) {
         for (CommandType value : CommandType.values()) {

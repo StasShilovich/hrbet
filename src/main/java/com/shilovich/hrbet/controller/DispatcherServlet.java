@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 
 public class DispatcherServlet extends HttpServlet {
@@ -34,8 +35,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String command = req.getParameter(COMMAND_PARAMETER);
-        logger.info(command);
-        if (command.isEmpty() || !CommandType.isContains(command)) {
+        if (isEmpty(command) || !CommandType.isContains(command)) {
             resp.sendRedirect(PAGE_404);
         }
         Command commandAction = factory.getCommand(CommandType.getCommand(command));

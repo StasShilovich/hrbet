@@ -23,13 +23,15 @@ public class RaceDaoImpl extends RaceDao {
     private static final String SHOW_ACTIVE_RACES_SQL =
             "SELECT r.id,r.location,r.time FROM races r WHERE r.time > CURRENT_TIMESTAMP order by r.time limit ? offset ?";
     private static final String SHOW_ALL_RACES_SQL =
-            "SELECT r.id,r.location,r.time FROM races r order by r.time limit ? offset ?";
+            "SELECT r.id,r.location,r.time FROM races r order by r.time DESC limit ? offset ?";
     private static final String COUNT_ACTUAL_RACES_SQL = "SELECT count(id) FROM races WHERE time > CURRENT_TIMESTAMP";
     private static final String COUNT_ALL_RACES_SQL = "SELECT count(id) FROM races";
     private static final String ADD_RACE_SQL = "INSERT INTO races (location, time) VALUES (?, ?)";
     private static final String RACE_ID_SQL = "SELECT r.id FROM races r WHERE r.location=? AND r.time=?";
     private static final String ADD_RACE_PARTICIPANTS_SQL =
             "INSERT INTO horse_participatings (races_id, horse_id) VALUES (?,?)";
+    private static final String DELETE_RACE_RATIO_SQL = "DELETE FROM ratio WHERE race_id=?";
+    private static final String DELETE_RACE_PARTICIPATING_SQL = "DELETE FROM horse_participatings WHERE races_id=?";
     private static final String DELETE_RACE_SQL = "DELETE FROM races WHERE id=?";
     private static final String SELECT_RACE_SQL =
             "SELECT r.location,r.time,COUNT(b.id),SUM(b.cash) FROM races r " +
@@ -157,11 +159,20 @@ public class RaceDaoImpl extends RaceDao {
         PreparedStatement statement = null;
         try {
             connection = manager.getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(DELETE_RACE_RATIO_SQL);
+            statement.setLong(1, id);
+            int ratioEffected = statement.executeUpdate();
+            statement = connection.prepareStatement(DELETE_RACE_PARTICIPATING_SQL);
+            statement.setLong(1, id);
+            int participatingEffected = statement.executeUpdate();
             statement = connection.prepareStatement(DELETE_RACE_SQL);
             statement.setLong(1, id);
             int rowsEffected = statement.executeUpdate();
-            return rowsEffected > 0;
+            connection.commit();
+            return ratioEffected > 0 || participatingEffected > 0 || rowsEffected > 0;
         } catch (SQLException e) {
+            rollback(connection);
             logger.error("Delete race exception!", e);
             throw new DaoException("Delete race exception!", e);
         } finally {

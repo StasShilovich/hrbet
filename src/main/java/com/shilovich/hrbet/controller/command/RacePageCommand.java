@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Set;
 
 import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class RacePageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         try {
-            String id = req.getParameter(PARAM_RACE_ID);
-            Long raceId = Long.parseLong(id);
+            String raceId = req.getParameter(PARAM_RACE_ID);
             HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
             Set<Horse> horses = horseService.showByRace(raceId);
             req.setAttribute(ATTR_RACE_SET, horses);

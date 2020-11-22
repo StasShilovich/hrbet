@@ -11,11 +11,6 @@ public abstract class BetDao implements Dao<Bet, Long> {
     public abstract List<Bet> findByUser(Long userId) throws DaoException;
 
     @Override
-    public final Optional<Bet>  create(Bet bet) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public final Optional<Bet> read(Long id) throws DaoException {
         throw new UnsupportedOperationException();
     }

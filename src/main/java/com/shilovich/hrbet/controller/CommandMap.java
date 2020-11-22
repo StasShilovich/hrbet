@@ -31,6 +31,7 @@ public class CommandMap {
         commands.put(ENTER_RESULT, new EnterResultCommand());
         commands.put(DELETE_RACE, new DeleteRaceCommand());
         commands.put(SET_RATIO, new SetRatioCommand());
+        commands.put(BET, new BetCommand());
     }
 
     public Command getCommand(CommandType commandType) {

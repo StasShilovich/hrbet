@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fld" uri="formatTag" %>
 <html>
 <head>
     <%@include file="/WEB-INF/pages/util/localization.jsp" %>
@@ -47,12 +48,33 @@
                     <c:forEach var="bet" items="${userBets}" varStatus="count">
                         <tr>
                             <td>${count.index+1} </td>
-                            <td> ${bet.status} </td>
-                            <td>${bet.date}</td>
+                            <td id="bet-status">
+                                <c:choose>
+                                    <c:when test="${bet.status=='NOT_PROCESSED'}">
+                                        <fmt:message key="label.profile.bet.processing"/>
+                                        <script>
+                                            document.getElementById('bet-status').style.backgroundColor = '#C9D6D3';
+                                        </script>
+                                    </c:when>
+                                    <c:when test="${bet.status=='WIN'}">
+                                        <fmt:message key="label.profile.bet.win"/>
+                                        <script>
+                                            document.getElementById('bet-status').style.backgroundColor = '#8CD687';
+                                        </script>
+                                    </c:when>
+                                    <c:when test="${bet.status=='LOSE'}">
+                                        <fmt:message key="label.profile.bet.lose"/>
+                                        <script>
+                                            document.getElementById('bet-status').style.backgroundColor = '#D66847';
+                                        </script>
+                                    </c:when>
+                                </c:choose>
+                            </td>
+                            <td><fld:format-date dateTime="${bet.date}"/></td>
                             <td>${bet.race.location}</td>
                             <td>${bet.cash}</td>
                             <td>${bet.ratio}</td>
-                            <td>${bet.type.type}</td>
+                            <td>${bet.type}</td>
                             <td>${bet.horse.name}</td>
                         </tr>
                     </c:forEach>

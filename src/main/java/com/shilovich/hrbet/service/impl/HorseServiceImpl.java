@@ -7,9 +7,11 @@ import com.shilovich.hrbet.exception.DaoException;
 import com.shilovich.hrbet.exception.ServiceException;
 import com.shilovich.hrbet.service.BetService;
 import com.shilovich.hrbet.service.HorseService;
+import com.shilovich.hrbet.validation.CommonValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,10 +31,14 @@ public class HorseServiceImpl implements HorseService {
     }
 
     @Override
-    public Set<Horse> showByRace(Long raceId) throws ServiceException {
+    public Set<Horse> showByRace(String raceId) throws ServiceException {
         try {
+            if (!CommonValidator.isIdValid(raceId)) {
+                return new HashSet<>();
+            }
+            Long id = Long.valueOf(raceId);
             HorseDao horseDao = (HorseDao) DaoFactory.getInstance().getClass(HorseDao.class);
-            Set<Horse> horses = horseDao.findByRace(raceId);
+            Set<Horse> horses = horseDao.findByRace(id);
             return horses;
         } catch (DaoException e) {
             logger.error("Show horses by race exception!", e);

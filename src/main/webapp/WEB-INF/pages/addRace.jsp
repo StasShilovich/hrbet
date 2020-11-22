@@ -7,8 +7,8 @@
     <%@include file="/WEB-INF/pages/util/bootstrap.jsp" %>
     <title><fmt:message key="label.title.profile"/></title>
 </head>
-<jsp:useBean id="now" class="java.util.Date"/>
-<fmt:formatDate var="date" value="${now}" pattern="yyyy-MM-dd"/>
+<%--<jsp:useBean id="now" class="java.util.Date"/>--%>
+<%--<fmt:formatDate var="date" value="${now}" pattern="yyyy-MM-dd"/>--%>
 <body data-topbar="dark" data-layout="horizontal">
 <div id="layout-wrapper">
     <%@include file="/WEB-INF/pages/fragments/header.jsp" %>
@@ -32,7 +32,7 @@
                             </label>
                             <div class="col-md-10">
                                 <input class="form-control" type="datetime-local" name="date"
-                                       value="${date}" id="example-datetime-local-input">
+                                       id="example-datetime-local-input">
                             </div>
                         </div>
                         <c:forEach var="i" begin="0" end="5" step="1">

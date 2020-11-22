@@ -35,6 +35,8 @@
 <script src="${pageContext.request.contextPath}/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
+<script src="${pageContext.request.contextPath}/assets/libs/admin-resources/rwd-table/rwd-table.min.js"></script>
+
 <script src="${pageContext.request.contextPath}/assets/js/pages/dashboard.init.js"></script>
 
 <script src="${pageContext.request.contextPath}/assets/js/app.js"></script>

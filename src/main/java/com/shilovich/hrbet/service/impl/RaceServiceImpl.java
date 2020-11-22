@@ -1,6 +1,5 @@
 package com.shilovich.hrbet.service.impl;
 
-import com.shilovich.hrbet.bean.Page;
 import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.cache.Cache;
 import com.shilovich.hrbet.cache.CacheFactory;
@@ -8,10 +7,10 @@ import com.shilovich.hrbet.cache.CacheType;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.RaceDao;
 import com.shilovich.hrbet.exception.DaoException;
-import com.shilovich.hrbet.service.HorseService;
 import com.shilovich.hrbet.service.RaceService;
 import com.shilovich.hrbet.exception.ServiceException;
-import com.shilovich.hrbet.validation.RaceValidation;
+import com.shilovich.hrbet.validation.CommonValidator;
+import com.shilovich.hrbet.validation.RaceValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,13 +40,16 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
-    public Page<Race> showAllActive(int limit, int offset) throws ServiceException {
+    public List<Race> showAllActive(String page) throws ServiceException {
         // TODO: 30.09.2020 Some logic
         try {
+            int offset = 0;
+            if (page != null && !page.isEmpty()) {
+                offset = (Integer.parseInt(page) - 1) * RACES_ON_PAGE;
+            }
             RaceDao raceDao = (RaceDao) DaoFactory.getInstance().getClass(RaceDao.class);
-            List<Race> races = raceDao.findActive(limit, offset);
-            int pageNumber = offset / RACES_ON_PAGE;
-            return new Page<>(pageNumber, races);
+            List<Race> races = raceDao.findActive(RACES_ON_PAGE, offset);
+            return races;
         } catch (DaoException e) {
             logger.error("Show all active races exception!", e);
             throw new ServiceException("Show all active races service exception!", e);
@@ -55,12 +57,15 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
-    public Page<Race> showAll(int limit, int offset) throws ServiceException {
+    public List<Race> showAll(String page) throws ServiceException {
         try {
+            int offset = 0;
+            if (page != null && !page.isEmpty()) {
+                offset = (Integer.parseInt(page) - 1) * RACES_ON_PAGE;
+            }
             RaceDao raceDao = (RaceDao) DaoFactory.getInstance().getClass(RaceDao.class);
-            List<Race> races = raceDao.findAll(limit, offset);
-            int pageNumber = offset / RACES_ON_PAGE;
-            return new Page<>(pageNumber, races);
+            List<Race> races = raceDao.findAll(RACES_ON_PAGE, offset);
+            return races;
         } catch (DaoException e) {
             logger.error("Show all races exception!", e);
             throw new ServiceException("Show all races service exception!", e);
@@ -111,7 +116,7 @@ public class RaceServiceImpl implements RaceService {
     @Override
     public boolean addRace(Set<Long> horseSet, String location, String dateTime) throws ServiceException {
         try {
-            if (!RaceValidation.isValidLocation(location) || !RaceValidation.isValidDateTime(dateTime)) {
+            if (!RaceValidator.isValidLocation(location) || !RaceValidator.isValidDateTime(dateTime)) {
                 return false;
             }
             RaceDao raceDao = (RaceDao) DaoFactory.getInstance().getClass(RaceDao.class);
@@ -122,11 +127,21 @@ public class RaceServiceImpl implements RaceService {
             boolean result = raceDao.addHorse(raceDB.get().getId(), horseSet);
             if (result) {
                 Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.RACES_COUNT);
-                if (!cache.isEmpty()) {
-                    AtomicLong aLong = (AtomicLong) cache.getCache(COUNT_ACTIVE);
-                    long newLong = aLong.incrementAndGet();
-                    AtomicLong newALong = new AtomicLong(newLong);
-                    cache.setCacheValue(COUNT_ACTIVE, aLong, newALong);
+                if (cache.containsKey(COUNT_ACTIVE)) {
+                    AtomicLong activeLong = (AtomicLong) cache.getCache(COUNT_ACTIVE);
+                    AtomicLong newActiveLong = new AtomicLong(activeLong.incrementAndGet());
+                    cache.setCacheValue(COUNT_ACTIVE, activeLong, newActiveLong);
+                } else {
+                    long countActive = raceDao.countActual();
+                    cache.addCache(COUNT_ACTIVE, new AtomicLong(countActive));
+                }
+                if (cache.containsKey(COUNT_ALL)) {
+                    AtomicLong allLong = (AtomicLong) cache.getCache(COUNT_ALL);
+                    AtomicLong newAllALong = new AtomicLong(allLong.incrementAndGet());
+                    cache.setCacheValue(COUNT_ALL, allLong, newAllALong);
+                } else {
+                    long countAll = raceDao.countAll();
+                    cache.addCache(COUNT_ALL, new AtomicLong(countAll));
                 }
             }
             return result;
@@ -137,19 +152,31 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
-    public boolean delete(Long raceId) throws ServiceException {
+    public boolean delete(String raceId) throws ServiceException {
         try {
+            if (!CommonValidator.isIdValid(raceId)) {
+                return false;
+            }
+            Long id = Long.valueOf(raceId);
             RaceDao raceDao = (RaceDao) DaoFactory.getInstance().getClass(RaceDao.class);
-            boolean result = raceDao.delete(raceId);
+            boolean result = raceDao.delete(id);
             if (result) {
                 Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.RACES_COUNT);
-                if (!cache.isEmpty()) {
-                    AtomicLong aLong = (AtomicLong) cache.getCache(COUNT_ACTIVE);
-                    logger.error(aLong.toString());
-                    long newLong = aLong.decrementAndGet();
-                    AtomicLong newALong = new AtomicLong(newLong);
-                    logger.error(newALong);
-                    cache.setCacheValue(COUNT_ACTIVE, aLong, newALong);
+                if (cache.containsKey(COUNT_ACTIVE)) {
+                    AtomicLong activeLong = (AtomicLong) cache.getCache(COUNT_ACTIVE);
+                    AtomicLong newActiveLong = new AtomicLong(activeLong.decrementAndGet());
+                    cache.setCacheValue(COUNT_ACTIVE, activeLong, newActiveLong);
+                } else {
+                    long countActive = raceDao.countActual();
+                    cache.addCache(COUNT_ACTIVE, new AtomicLong(countActive));
+                }
+                if (cache.containsKey(COUNT_ALL)) {
+                    AtomicLong allLong = (AtomicLong) cache.getCache(COUNT_ALL);
+                    AtomicLong newAllALong = new AtomicLong(allLong.decrementAndGet());
+                    cache.setCacheValue(COUNT_ALL, allLong, newAllALong);
+                } else {
+                    long countAll = raceDao.countAll();
+                    cache.addCache(COUNT_ALL, new AtomicLong(countAll));
                 }
             }
             return result;
@@ -160,10 +187,14 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
-    public Race findInfo(Long raceId) throws ServiceException {
+    public Race findInfo(String raceId) throws ServiceException {
         try {
+            if (!CommonValidator.isIdValid(raceId)) {
+                return new Race();
+            }
+            Long id = Long.valueOf(raceId);
             RaceDao raceDao = (RaceDao) DaoFactory.getInstance().getClass(RaceDao.class);
-            Optional<Race> raceOptional = raceDao.read(raceId);
+            Optional<Race> raceOptional = raceDao.read(id);
             Race race = new Race();
             if (raceOptional.isPresent()) {
                 race = raceOptional.get();

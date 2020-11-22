@@ -11,9 +11,7 @@ public class Router {
 
     public Router(HttpServletRequest request) {
         String url = request.getHeader(URL_REFERER);
-        System.out.println(url);
-        System.out.println(request.getContextPath());
-        this.page = url.replaceAll(PAGE_START, BLANK);
+        this.page = url.replaceAll(PAGE_START_PREFIX, BLANK);
     }
 
     public Router(String page) {

@@ -10,18 +10,20 @@ import com.shilovich.hrbet.service.ServiceFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.shilovich.hrbet.controller.CommandParameter.PARAM_RACE_ID;
+import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class DeleteRaceCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         try {
             String raceId = req.getParameter(PARAM_RACE_ID);
-            if (raceId != null && !raceId.isEmpty()) {
+            if (isNoneEmpty(raceId)) {
                 RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
-                raceService.delete(Long.valueOf(raceId));
+                raceService.delete(raceId);
             }
-            Router router = new Router(req);
+            // TODO: 21.11.2020 If race have bets u cant delete race or pay bets back
+            Router router = new Router(PAGE_REDIRECT_INDEX);
             router.redirect();
             return router;
         } catch (ServiceException e) {

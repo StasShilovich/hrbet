@@ -1,7 +1,7 @@
 package com.shilovich.hrbet.bean;
 
 public enum Status {
-    NOT_FRAMED,
+    NOT_PROCESSED,
     WIN,
     LOSE
 }

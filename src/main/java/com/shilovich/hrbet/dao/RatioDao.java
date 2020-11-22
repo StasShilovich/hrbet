@@ -7,10 +7,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public abstract class RatioDao implements Dao<Ratio, Long> {
 
-    public abstract boolean setRatios(Long raceId, Long typeId, Map<Long, BigDecimal> ratioMap) throws DaoException;
+    public abstract boolean setRatios(Set<Ratio> ratioSet) throws DaoException;
 
     public abstract List<Ratio> findRatio(Long raceId) throws DaoException;
 

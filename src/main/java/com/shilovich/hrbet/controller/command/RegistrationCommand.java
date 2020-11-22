@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class RegistrationCommand implements Command {
     @Override
@@ -22,7 +23,7 @@ public class RegistrationCommand implements Command {
             String surname = req.getParameter(PARAM_SURNAME);
             String password = req.getParameter(PARAM_PASSWORD);
             String email = req.getParameter(PARAM_EMAIL);
-            if (!name.isEmpty() && !surname.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
+            if (isNotEmpty(name) && isNotEmpty(surname) && isNotEmpty(password) && isNotEmpty(email)) {
                 UserService userService = (UserService) ServiceFactory.getInstance().getClass(UserService.class);
                 Map<String, String> userMap = userService.registration(new User(name, surname, password, email));
                 if (userMap == null) {

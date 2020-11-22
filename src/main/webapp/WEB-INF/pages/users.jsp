@@ -62,10 +62,13 @@
                             <td>${user.cash}</td>
                             <td>${user.role.name}</td>
                             <td>
-                                <a href="${pageContext.request.contextPath}/dispatcher?command=delete_user&userId=${user.id}"
-                                   class="text-danger" data-toggle="tooltip"
-                                   data-placement="top" title="" data-original-title="Delete"><i
-                                        class="mdi mdi-trash-can font-size-18"></i></a>
+                                <c:if test="${user.role.id!='1'}">
+                                    <a href="${pageContext.request.contextPath}/dispatcher?command=delete_user&userId=${user.id}"
+                                       class="text-danger" data-toggle="tooltip"
+                                       data-placement="top" title="" data-original-title="Delete">
+                                        <i class="mdi mdi-trash-can font-size-18"></i>
+                                    </a>
+                                </c:if>
                             </td>
                         </tr>
                     </c:forEach>

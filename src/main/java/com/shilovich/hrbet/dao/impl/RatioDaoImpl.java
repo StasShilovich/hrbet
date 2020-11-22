@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
@@ -38,7 +39,7 @@ public class RatioDaoImpl extends RatioDao {
     }
 
     @Override
-    public boolean setRatios(Long raceId, Long typeId, Map<Long, BigDecimal> ratioMap) throws DaoException {
+    public boolean setRatios(Set<Ratio> ratioSet) throws DaoException {
         boolean result = false;
         ProxyConnection connection = null;
         PreparedStatement statement = null;
@@ -46,31 +47,18 @@ public class RatioDaoImpl extends RatioDao {
             connection = manager.getConnection();
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(ADD_RATIO_SQL);
-            for (Map.Entry<Long, BigDecimal> entry : ratioMap.entrySet()) {
-                statement.setLong(1, raceId);
-                statement.setLong(2, entry.getKey());
-                statement.setLong(3, typeId);
-                statement.setBigDecimal(4, entry.getValue());
+            for (Ratio ratio : ratioSet) {
+                statement.setLong(1, ratio.getRaceId());
+                statement.setLong(2, ratio.getHorseId());
+                statement.setLong(3, ratio.getTypeId());
+                statement.setBigDecimal(4, ratio.getRatio());
                 statement.addBatch();
             }
             statement.executeBatch();
             connection.commit();
             result = true;
         } catch (SQLException e) {
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                    logger.error("Connection rollback!");
-                } catch (SQLException ex) {
-                    logger.error("Error while rollback!");
-                }
-                try {
-                    connection.setAutoCommit(true);
-                    logger.error("Set auto commit true!");
-                } catch (SQLException ex) {
-                    logger.error("Error while set auto commit!");
-                }
-            }
+            rollback(connection);
             logger.error("Set ratios error!", e);
             throw new DaoException("Set ratios error!", e);
         } finally {

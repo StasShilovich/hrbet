@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
@@ -22,12 +23,14 @@ public class BetDaoImpl extends BetDao {
 
     private static BetDao instance;
     private static final String SHOW_BET_BY_USER_SQL =
-            "SELECT b.id,b.time,b.race_id,r.location,b.cash,b.ratio,b.type_id,t.name,b.bet_horse_id,h.name,b.is_win " +
+            "SELECT b.id,b.time,b.race_id,r.location,b.cash,b.ratio,t.name,b.bet_horse_id,h.name,b.is_win " +
                     " FROM bets b " +
                     " INNER JOIN races r ON b.race_id = r.id" +
                     " INNER JOIN bet_types t ON b.type_id = t.id" +
                     " INNER JOIN horses h ON b.bet_horse_id = h.id" +
                     " WHERE b.user_id = ?";
+    private static final String ADD_BET_SQL = "INSERT INTO bets (user_id,time,race_id,cash,ratio,type_id,bet_horse_id) " +
+            "VALUES (?,CURRENT_TIMESTAMP,?,?,?,?,?)";
 
     private BetDaoImpl() {
     }
@@ -58,9 +61,7 @@ public class BetDaoImpl extends BetDao {
                 race.setLocation(set.getString(RACE_LOCATION));
                 BigDecimal cash = set.getBigDecimal(BET_CASH);
                 BigDecimal ratio = set.getBigDecimal(BET_RATIO);
-                BetType type = new BetType();
-                type.setId(set.getLong(BET_TYPE_ID));
-                type.setType(set.getString(BET_TYPE_NAME));
+                BetType type = BetType.valueOf(set.getString(BET_TYPE_NAME).toUpperCase());
                 Horse horse = new Horse();
                 horse.setId(set.getLong(BET_HORSE_ID));
                 horse.setName(set.getString(BET_HORSE_NAME));
@@ -73,6 +74,34 @@ public class BetDaoImpl extends BetDao {
             throw new DaoException("Show all races exception!", e);
         } finally {
             close(set);
+            close(statement);
+            close(connection);
+        }
+    }
+
+    @Override
+    public Optional<Bet> create(Bet bet) throws DaoException {
+        ProxyConnection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = manager.getConnection();
+            statement = connection.prepareStatement(ADD_BET_SQL);
+            statement.setLong(1, bet.getUserId());
+            statement.setLong(2, bet.getRace().getId());
+            statement.setBigDecimal(3, bet.getCash());
+            statement.setBigDecimal(4, bet.getRatio());
+            statement.setLong(5, bet.getType().ordinal() + 1L);
+            statement.setLong(6, bet.getHorse().getId());
+            int rowsEffected = statement.executeUpdate();
+            if (rowsEffected > 0) {
+                return Optional.of(bet);
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            logger.error("Add bet exception!", e);
+            throw new DaoException("Add bet exception!", e);
+        } finally {
             close(statement);
             close(connection);
         }

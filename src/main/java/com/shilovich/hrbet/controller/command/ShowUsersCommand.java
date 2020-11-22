@@ -22,12 +22,8 @@ public class ShowUsersCommand implements Command {
             UserService userService = (UserService) ServiceFactory.getInstance().getClass(UserService.class);
             int pagesCount = userService.getUsersPagesCount();
             req.setAttribute(ATTR_PAGE_NUMBER, pagesCount);
-            int page = PAGE_OFFSET;
-            String parameter = req.getParameter(PARAM_PAGE);
-            if (parameter != null) {
-                page = (Integer.parseInt(parameter) - 1) * USERS_ON_PAGE;
-            }
-            List<User> users = userService.findAll(USERS_ON_PAGE, page).getList();
+            String page = req.getParameter(PARAM_PAGE);
+            List<User> users = userService.findAll(page);
             req.setAttribute(ATTR_USERS_LIST, users);
             return new Router(PAGE_USERS);
         } catch (ServiceException e) {

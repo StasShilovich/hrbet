@@ -16,27 +16,27 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class EnterResultCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         try {
             String id = req.getParameter(PARAM_RACE_ID);
-            if (id != null && !id.trim().isEmpty()) {
-                Long raceId = Long.parseLong(id);
+            if (isNotEmpty(id)) {
                 RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
-                Race race = raceService.findInfo(raceId);
+                Race race = raceService.findInfo(id);
                 req.setAttribute(ATTR_RACE_INFO, race);
                 HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
-                Set<Horse> horses = horseService.showByRace(raceId);
+                Set<Horse> horses = horseService.showByRace(id);
                 req.setAttribute(ATTR_RACE_SET, horses);
                 return new Router(PAGE_ENTER_RESULT);
             }
-            Set<Long> horseSet = new HashSet<>();
+            Set<String> horseSet = new HashSet<>();
             for (int i = 0; i < 5; i++) {
                 String horseId = req.getParameter(PARAM_HORSE + i);
-                if (horseId != null && !horseId.trim().isEmpty()) {
-                    horseSet.add(Long.parseLong(horseId));
+                if (isNotEmpty(horseId)) {
+                    horseSet.add(horseId);
                 }
             }
             // TODO: 12.11.2020 pay bets

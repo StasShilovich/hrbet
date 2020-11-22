@@ -11,40 +11,48 @@
 <div id="layout-wrapper">
     <%@include file="/WEB-INF/pages/fragments/header.jsp" %>
     <div class="container-fluid  page-content ">
-        <div class="col-lg-12 card  ">
-            <div class="table-responsive">
 
-                <div class="card mb-3">
-                    <div class="card-body">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class=" card-body">
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.registration.name"/></h6>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message
+                                    key="label.registration.name"/></h6>
                             </div>
                             <div class="col-sm-9 text-secondary">${sessionScope.userAuth.name}</div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.registration.surname"/></h6>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message
+                                    key="label.registration.surname"/></h6>
                             </div>
                             <div class="col-sm-9 text-secondary"> ${sessionScope.userAuth.surname}</div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.user.email"/></h6></div>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.user.email"/></h6>
+                            </div>
                             <div class="col-sm-9 text-secondary"> ${sessionScope.userAuth.email}</div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.user.cash"/></h6></div>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.user.cash"/></h6>
+                            </div>
                             <div class="col-sm-9 text-secondary"> ${sessionScope.userAuth.cash}</div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message key="label.user.role.name"/></h6></div>
+                            <div class="col-sm-3"><h6 class="mb-0"><fmt:message
+                                    key="label.user.role.name"/></h6></div>
                             <div class="col-sm-9 text-secondary">${sessionScope.userAuth.role.name}</div>
                         </div>
                     </div>
                 </div>
-                <div class="card mb-3">
+            </div>
+            <div class="col-md-4">
+                <div class=" card">
                     <div class="card-body">
                         <button class="btn btn-primary mr-1" type="submit" type="submit">
                             <a class="text-reset notification-item"
@@ -67,8 +75,6 @@
                             </a>
                         </button>
                     </div>
-                </div>
-                <div class="card mb-3">
                     <div class="card-body">
                         <button class="btn btn-primary mr-1" type="submit" type="submit">
                             <a class="text-reset notification-item"
@@ -80,8 +86,9 @@
                 </div>
             </div>
         </div>
-        <%@include file="/WEB-INF/pages/fragments/footer.jsp" %>
     </div>
+    <%@include file="/WEB-INF/pages/fragments/footer.jsp" %>
+</div>
 </div>
 </body>
 </html>

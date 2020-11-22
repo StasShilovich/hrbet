@@ -1,16 +1,16 @@
 package com.shilovich.hrbet.service;
 
-import com.shilovich.hrbet.bean.Page;
 import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.exception.ServiceException;
 
+import java.util.List;
 import java.util.Set;
 
 
 public interface RaceService extends Service {
-    Page<Race> showAllActive(int limit, int offset) throws ServiceException;
+    List<Race> showAllActive(String page) throws ServiceException;
 
-    Page<Race> showAll(int limit, int offset) throws ServiceException;
+    List<Race> showAll(String page) throws ServiceException;
 
     int pageNumberActive() throws ServiceException;
 
@@ -18,7 +18,7 @@ public interface RaceService extends Service {
 
     boolean addRace(Set<Long> horseSet, String location, String dateTime) throws ServiceException;
 
-    boolean delete(Long raceId) throws ServiceException;
+    boolean delete(String raceId) throws ServiceException;
 
-    Race findInfo(Long raceId) throws ServiceException;
+    Race findInfo(String raceId) throws ServiceException;
 }

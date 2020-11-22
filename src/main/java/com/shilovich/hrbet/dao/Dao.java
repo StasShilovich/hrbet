@@ -53,4 +53,21 @@ public interface Dao<T, K extends Serializable> {
             }
         }
     }
+
+    default void rollback(ProxyConnection connection){
+        if (connection != null) {
+            try {
+                connection.rollback();
+                logger.error("Connection rollback!");
+            } catch (SQLException ex) {
+                logger.error("Error while rollback!");
+            }
+            try {
+                connection.setAutoCommit(true);
+                logger.error("Set auto commit true!");
+            } catch (SQLException ex) {
+                logger.error("Error while set auto commit!");
+            }
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package com.shilovich.hrbet.service.impl;
 
-import com.shilovich.hrbet.bean.Page;
 import com.shilovich.hrbet.bean.Role;
 import com.shilovich.hrbet.bean.User;
 import com.shilovich.hrbet.cache.Cache;
@@ -10,11 +9,11 @@ import com.shilovich.hrbet.dao.RolePermissionsDao;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.UserDao;
 import com.shilovich.hrbet.exception.DaoException;
-import com.shilovich.hrbet.service.RatioService;
 import com.shilovich.hrbet.service.UserService;
 import com.shilovich.hrbet.exception.ServiceException;
-import com.shilovich.hrbet.bcrypt.BCryptService;
-import com.shilovich.hrbet.validation.UserValidation;
+import com.shilovich.hrbet.util.BCryptService;
+import com.shilovich.hrbet.validation.CommonValidator;
+import com.shilovich.hrbet.validation.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User authorization(User user) throws ServiceException {
         try {
-            if (!UserValidation.isValidEmail(user.getEmail()) && !UserValidation.isValidPassword(user.getPassword())) {
+            if (!UserValidator.isValidEmail(user.getEmail()) && !UserValidator.isValidPassword(user.getPassword())) {
                 return null;
             }
             UserDao userDao = (UserDao) DaoFactory.getInstance().getClass(UserDao.class);
@@ -74,19 +73,19 @@ public class UserServiceImpl implements UserService {
         try {
             Map<String, String> userMAP = new HashMap<>();
             boolean invalidUser = false;
-            if (UserValidation.isValidName(userUI.getName())) {
+            if (UserValidator.isValidName(userUI.getName())) {
                 userMAP.put(PARAM_NAME, userUI.getName());
             } else {
                 invalidUser = true;
                 userMAP.put(PARAM_NAME, BLANK);
             }
-            if (UserValidation.isValidSurname(userUI.getSurname())) {
+            if (UserValidator.isValidSurname(userUI.getSurname())) {
                 userMAP.put(PARAM_SURNAME, userUI.getSurname());
             } else {
                 invalidUser = true;
                 userMAP.put(PARAM_SURNAME, BLANK);
             }
-            if (UserValidation.isValidPassword(userUI.getPassword())) {
+            if (UserValidator.isValidPassword(userUI.getPassword())) {
                 userMAP.put(PARAM_PASSWORD, userUI.getPassword());
             } else {
                 invalidUser = true;
@@ -94,7 +93,7 @@ public class UserServiceImpl implements UserService {
             }
             UserDao userDao = (UserDao) DaoFactory.getInstance().getClass(UserDao.class);
             Optional<User> user = userDao.read(userUI.getEmail());
-            if (UserValidation.isValidEmail(userUI.getEmail()) && user.isEmpty()) {
+            if (UserValidator.isValidEmail(userUI.getEmail()) && user.isEmpty()) {
                 userMAP.put(PARAM_EMAIL, userUI.getEmail());
             } else {
                 invalidUser = true;
@@ -121,15 +120,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findAll(int limit, int offset) throws ServiceException {
+    public List<User> findAll(String page) throws ServiceException {
         try {
+            int offset = 0;
+            if (page != null && !page.isEmpty()) {
+                offset = (Integer.parseInt(page) - 1) * USERS_ON_PAGE;
+            }
             UserDao userDao = (UserDao) DaoFactory.getInstance().getClass(UserDao.class);
-            List<User> users = userDao.findAll(limit, offset);
+            List<User> users = userDao.findAll(USERS_ON_PAGE, offset);
             for (User user : users) {
                 setCashRole(user);
             }
-            int pageNumber = offset / USERS_ON_PAGE;
-            return new Page<>(pageNumber, users);
+            return users;
         } catch (DaoException e) {
             logger.error("Show all users exception!", e);
             throw new ServiceException("Show all users service exception!", e);
@@ -168,10 +170,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean ban(Long id) throws ServiceException {
+    public boolean ban(String userId) throws ServiceException {
         try {
+            if (!CommonValidator.isIdValid(userId)) {
+                return false;
+            }
             UserDao userDao = (UserDao) DaoFactory.getInstance().getClass(UserDao.class);
-            return userDao.delete(id.toString());
+            return userDao.delete(userId);
         } catch (DaoException e) {
             logger.error("User ban exception!", e);
             throw new ServiceException("User ban exception!", e);

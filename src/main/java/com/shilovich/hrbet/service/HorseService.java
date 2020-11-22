@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface HorseService extends Service {
-    Set<Horse> showByRace(Long raceId) throws ServiceException;
+    Set<Horse> showByRace(String raceId) throws ServiceException;
 
     List<Horse> findAll() throws ServiceException;
 }

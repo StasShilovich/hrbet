@@ -55,13 +55,13 @@ public class Ratio implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder("Ratio{");
-        builder.append("raceId=").append(raceId);
-        builder.append(", horseId=").append(horseId);
-        builder.append(", typeId=").append(typeId);
-        builder.append(", ratio=").append(ratio);
-        builder.append('}');
-        return builder.toString();
+        final StringBuilder sb = new StringBuilder("Ratio{");
+        sb.append("raceId=").append(raceId);
+        sb.append(", horseId=").append(horseId);
+        sb.append(", typeId=").append(typeId);
+        sb.append(", ratio=").append(ratio);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
@@ -71,18 +71,19 @@ public class Ratio implements Serializable {
 
         Ratio ratio1 = (Ratio) o;
 
-        if (!getRaceId().equals(ratio1.getRaceId())) return false;
-        if (!getHorseId().equals(ratio1.getHorseId())) return false;
-        if (!getTypeId().equals(ratio1.getTypeId())) return false;
-        return getRatio().equals(ratio1.getRatio());
+        if (getRaceId() != null ? !getRaceId().equals(ratio1.getRaceId()) : ratio1.getRaceId() != null) return false;
+        if (getHorseId() != null ? !getHorseId().equals(ratio1.getHorseId()) : ratio1.getHorseId() != null)
+            return false;
+        if (getTypeId() != null ? !getTypeId().equals(ratio1.getTypeId()) : ratio1.getTypeId() != null) return false;
+        return getRatio() != null ? getRatio().equals(ratio1.getRatio()) : ratio1.getRatio() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getRaceId().hashCode();
-        result = 31 * result + getHorseId().hashCode();
-        result = 31 * result + getTypeId().hashCode();
-        result = 31 * result + getRatio().hashCode();
+        int result = getRaceId() != null ? getRaceId().hashCode() : 0;
+        result = 31 * result + (getHorseId() != null ? getHorseId().hashCode() : 0);
+        result = 31 * result + (getTypeId() != null ? getTypeId().hashCode() : 0);
+        result = 31 * result + (getRatio() != null ? getRatio().hashCode() : 0);
         return result;
     }
 }

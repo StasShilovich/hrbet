@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class LogInCommand implements Command {
     @Override
@@ -20,7 +21,7 @@ public class LogInCommand implements Command {
         try {
             String email = req.getParameter(PARAM_EMAIL);
             String password = req.getParameter(PARAM_PASSWORD);
-            if (email.isEmpty() || password.isEmpty()) {
+            if (isEmpty(email) || isEmpty(password)) {
                 req.setAttribute(ATTR_EMPTY_PARAM, ATTR_EMPTY_MESSAGE);
                 return new Router(PAGE_INDEX);
             }

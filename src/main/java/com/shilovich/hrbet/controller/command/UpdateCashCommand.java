@@ -13,13 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 
 import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class UpdateCashCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         try {
             String addCash = req.getParameter(PARAM_ADD_CASH);
-            if (addCash != null) {
+            if (isNotEmpty(addCash)) {
                 User user = (User) req.getSession().getAttribute(ATTR_USER_AUTH);
                 BigDecimal newCash = new BigDecimal(addCash).add(user.getCash());
                 user.setCash(newCash);

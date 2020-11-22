@@ -55,7 +55,7 @@
                                     <input class="form-control" id="winCol" type="text" name="${pageContext.request.getParameter('raceId')}|${horse.id}|win">
                                 </td>
                                 <td>
-                                    <input class="form-control" id="prizeCol" type="text" name="${pageContext.request.getParameter('raceId')}|${horse.id}|prize">
+                                    <input class="form-control" id="prizeCol" type="text" name="${pageContext.request.getParameter('raceId')}|${horse.id}|show">
                                 </td>
                             </tr>
                         </c:forEach>

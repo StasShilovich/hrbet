@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fld" uri="formatTag" %>
 <html>
 <head>
     <%@include file="/WEB-INF/pages/util/localization.jsp" %>
@@ -64,7 +65,9 @@
                             <td>
                                 <a href="${pageContext.request.contextPath}/dispatcher?command=race&raceId=${race.id}">${race.location}</a>
                             </td>
-                            <td>${race.date}</td>
+                            <td>
+                                <fld:format-date dateTime="${race.date}"/>
+                            </td>
                             <c:if test="${roleId==3}">
                                 <td>
                                     <%@include file="/WEB-INF/pages/role/customerAction.jsp" %>
