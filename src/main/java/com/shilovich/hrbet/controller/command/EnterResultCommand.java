@@ -39,7 +39,7 @@ public class EnterResultCommand implements Command {
                     horseSet.add(horseId);
                 }
             }
-            // TODO: 12.11.2020 pay bets
+
             Router router = new Router(req);
             router.redirect();
             return router;

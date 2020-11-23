@@ -31,6 +31,8 @@ public class BetDaoImpl extends BetDao {
                     " WHERE b.user_id = ?";
     private static final String ADD_BET_SQL = "INSERT INTO bets (user_id,time,race_id,cash,ratio,type_id,bet_horse_id) " +
             "VALUES (?,CURRENT_TIMESTAMP,?,?,?,?,?)";
+    private static final String SHOW_USER_CASH_SQL = "SELECT u.cash FROM users u WHERE id=?";
+    private static final String UPDATE_USER_CASH_SQL = "UPDATE users u SET u.cash=? WHERE u.id=?";
 
     private BetDaoImpl() {
     }
@@ -83,8 +85,10 @@ public class BetDaoImpl extends BetDao {
     public Optional<Bet> create(Bet bet) throws DaoException {
         ProxyConnection connection = null;
         PreparedStatement statement = null;
+        ResultSet set = null;
         try {
             connection = manager.getConnection();
+            connection.setAutoCommit(false);
             statement = connection.prepareStatement(ADD_BET_SQL);
             statement.setLong(1, bet.getUserId());
             statement.setLong(2, bet.getRace().getId());
@@ -93,15 +97,28 @@ public class BetDaoImpl extends BetDao {
             statement.setLong(5, bet.getType().ordinal() + 1L);
             statement.setLong(6, bet.getHorse().getId());
             int rowsEffected = statement.executeUpdate();
-            if (rowsEffected > 0) {
-                return Optional.of(bet);
-            } else {
+            if (rowsEffected <= 0) {
                 return Optional.empty();
             }
+            statement = connection.prepareStatement(SHOW_USER_CASH_SQL);
+            statement.setLong(1, bet.getUserId());
+            set = statement.executeQuery();
+            while (set.next()) {
+                BigDecimal cash = set.getBigDecimal(USER_CASH);
+                BigDecimal newCash = cash.subtract(bet.getCash());
+                statement = connection.prepareStatement(UPDATE_USER_CASH_SQL);
+                statement.setBigDecimal(1, newCash);
+                statement.setLong(2, bet.getUserId());
+                statement.executeUpdate();
+            }
+            connection.commit();
+            return Optional.of(bet);
         } catch (SQLException e) {
+            rollback(connection);
             logger.error("Add bet exception!", e);
             throw new DaoException("Add bet exception!", e);
         } finally {
+            close(set);
             close(statement);
             close(connection);
         }

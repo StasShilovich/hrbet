@@ -36,13 +36,18 @@
                             <div class="col-sm-9 text-secondary">${raceInfo.betCount}</div>
                         </div>
                         <hr>
-                        <div class="form-group row">
-                            <div class="col-sm-3"><fmt:message key="label.race.betSum"/>
+                        <c:if test="${not empty raceInfo.betSum}">
+                            <div class="form-group row">
+                                <div class="col-sm-3"><fmt:message key="label.race.betSum"/>
+                                </div>
+                                <div class="col-sm-9 text-secondary">${raceInfo.betSum}</div>
                             </div>
-                            <div class="col-sm-9 text-secondary">${raceInfo.betSum}</div>
-                        </div>
-                        <hr>
-
+                            <hr>
+                            <div class="form-group row">
+                                <div class="col-sm-3"><fmt:message key="label.customer.enterResult"/>:
+                                </div>
+                            </div>
+                        </c:if>
                         <c:forEach var="i" begin="0" end="${horseSet.size()-1}" step="1">
                             <div class="form-group row">
                                 <label for="horse-input" class="col-md-2 col-form-label">

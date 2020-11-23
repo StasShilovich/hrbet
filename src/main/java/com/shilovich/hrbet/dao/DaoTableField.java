@@ -34,6 +34,7 @@ public class DaoTableField {
     public static final String BET_STATUS = "b.is_win";
     public static final String BET_TIME = "b.time";
     public static final String BET_RACE_ID = "b.race_id";
+    public static final String BET_USER_ID = "b.user_id";
     public static final String BET_CASH = "b.cash";
     public static final String BET_RATIO = "b.ratio";
     public static final String BET_TYPE_ID = "b.type_id";
