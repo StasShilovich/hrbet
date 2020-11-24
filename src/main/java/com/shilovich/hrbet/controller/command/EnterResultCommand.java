@@ -23,8 +23,8 @@ public class EnterResultCommand implements Command {
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         try {
             String id = req.getParameter(PARAM_RACE_ID);
+            RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
             if (isNotEmpty(id)) {
-                RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
                 Race race = raceService.findInfo(id);
                 req.setAttribute(ATTR_RACE_INFO, race);
                 HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);

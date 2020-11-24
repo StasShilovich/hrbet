@@ -10,7 +10,7 @@ import com.shilovich.hrbet.service.RatioService;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.PowerMockUtils;
-import org.powermock.modules.testng.PowerMockObjectFactory;
+//import org.powermock.modules.testng.PowerMockObjectFactory;
 import org.testng.IObjectFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
