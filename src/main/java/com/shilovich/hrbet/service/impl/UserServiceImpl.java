@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User authorization(User user) throws ServiceException {
         try {
-            if (!UserValidator.isValidEmail(user.getEmail()) && !UserValidator.isValidPassword(user.getPassword())) {
+            if (!UserValidator.isValidEmail(user.getEmail()) || !UserValidator.isValidPassword(user.getPassword())) {
                 return null;
             }
             UserDao userDao = (UserDao) DaoFactory.getInstance().getClass(UserDao.class);
@@ -123,7 +123,8 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll(String page) throws ServiceException {
         try {
             int offset = 0;
-            if (page != null && !page.isEmpty()) {
+            // TODO: 26.11.2020 page common validator >1
+            if (page != null && !page.isEmpty()&&CommonValidator.isIdValid(page)) {
                 offset = (Integer.parseInt(page) - 1) * USERS_ON_PAGE;
             }
             UserDao userDao = (UserDao) DaoFactory.getInstance().getClass(UserDao.class);

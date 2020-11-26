@@ -59,24 +59,28 @@ public class RatioServiceImpl implements RatioService {
             for (Map.Entry<String, String> entry : parameterMap.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
-                if (RatioValidator.isMapKeyValid(key) && RatioValidator.isMapValueValid(value)) {
-                    String[] keys = key.split(MAP_KEY_DELIMITER);
-                    raceId = Long.parseLong(keys[0]);
-                    Long horseId = Long.parseLong(keys[1]);
-                    // TODO: 15.11.2020 type enum?
-                    Long typeId = (long) BetType.valueOf(keys[2].toUpperCase()).ordinal();
-                    typeId++;
-                    BigDecimal ratio = new BigDecimal(value);
-                    ratioSet.add(new Ratio(raceId, horseId, typeId, ratio));
-                }
-            }
-            if (raceId != 0L) {
-                HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
-                Set<Horse> horses = horseService.showByRace(raceId.toString());
-                if (ratioSet.size() != horses.size() * TYPE_COUNT) {
+                if (!RatioValidator.isMapKeyValid(key) || !RatioValidator.isMapValueValid(value)) {
                     return false;
                 }
+                String[] keys = key.split(MAP_KEY_DELIMITER);
+                raceId = Long.parseLong(keys[0]);
+                Long horseId = Long.parseLong(keys[1]);
+                // TODO: 15.11.2020 type enum?
+                Long typeId = (long) BetType.valueOf(keys[2].toUpperCase()).ordinal();
+                typeId++;
+                BigDecimal ratio = new BigDecimal(value);
+                ratioSet.add(new Ratio(raceId, horseId, typeId, ratio));
+
             }
+            if (ratioSet.isEmpty() || raceId == 0L) {
+                return false;
+            }
+            HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
+            Set<Horse> horses = horseService.showByRace(raceId.toString());
+            if (ratioSet.size() != horses.size() * TYPE_COUNT) {
+                return false;
+            }
+
             RatioDao ratioDao = (RatioDao) DaoFactory.getInstance().getClass(RatioDao.class);
             boolean result = ratioDao.setRatios(ratioSet);
             return result;
