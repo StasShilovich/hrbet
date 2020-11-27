@@ -17,6 +17,7 @@ import org.powermock.modules.testng.PowerMockTestCase;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.testng.Assert.*;
@@ -174,4 +175,95 @@ public class UserServiceImplTest extends PowerMockTestCase {
         fail("No exception was thrown!");
     }
 
+    @Test
+    public void testUsersPageCountPositive() {
+        try {
+            when(cache.isEmpty()).thenReturn(true);
+            when(userDao.count()).thenReturn(5L);
+            long expected = 3L;
+            long actual = service.getUsersPagesCount();
+            assertEquals(actual, expected);
+        } catch (DaoException | ServiceException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testUsersPageCountNegative() {
+        try {
+            when(cache.isEmpty()).thenReturn(true);
+            when(userDao.count()).thenReturn(5L);
+            long expected = 2L;
+            long actual = service.getUsersPagesCount();
+            assertNotEquals(actual, expected);
+        } catch (DaoException | ServiceException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test(expectedExceptions = ServiceException.class)
+    public void testUsersPageCountException() throws DaoException, ServiceException {
+        when(cache.isEmpty()).thenReturn(true);
+        when(userDao.count()).thenThrow(DaoException.class);
+        service.getUsersPagesCount();
+        fail("No exception was thrown!");
+    }
+
+    @Test
+    public void testUpdateCashPositive() {
+        try {
+            when(userDao.updateCash(Mockito.any(), Mockito.anyLong())).thenReturn(true);
+            boolean condition = service.updateCash(new BigDecimal("1"), 1L);
+            assertTrue(condition);
+        } catch (DaoException | ServiceException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testUpdateCashNegative() {
+        try {
+            when(userDao.updateCash(Mockito.any(), Mockito.anyLong())).thenReturn(false);
+            boolean condition = service.updateCash(new BigDecimal("1"), 1L);
+            assertFalse(condition);
+        } catch (DaoException | ServiceException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test(expectedExceptions = ServiceException.class)
+    public void testUpdateCashException() throws DaoException, ServiceException {
+        when(userDao.updateCash(Mockito.any(), Mockito.anyLong())).thenThrow(DaoException.class);
+        service.updateCash(new BigDecimal("1"), 1L);
+        fail("No exception was thrown!");
+    }
+
+    @Test
+    public void testBanPositive() {
+        try {
+            when(userDao.delete(Mockito.anyString())).thenReturn(true);
+            boolean condition = service.ban("11");
+            assertTrue(condition);
+        } catch (DaoException | ServiceException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testBanNegative() {
+        try {
+            when(userDao.delete(Mockito.anyString())).thenReturn(false);
+            boolean condition = service.ban("11");
+            assertFalse(condition);
+        } catch (DaoException | ServiceException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test(expectedExceptions = ServiceException.class)
+    public void testBanException() throws DaoException, ServiceException {
+        when(userDao.delete(Mockito.anyString())).thenThrow(DaoException.class);
+        service.ban("11");
+        fail("No exception was thrown!");
+    }
 }

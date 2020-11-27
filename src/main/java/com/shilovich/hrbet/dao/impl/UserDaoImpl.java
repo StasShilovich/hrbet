@@ -109,7 +109,6 @@ public class UserDaoImpl extends UserDao {
 
     @Override
     public long count() throws DaoException {
-        long count = -1L;
         ProxyConnection connection = null;
         Statement statement = null;
         ResultSet set = null;
@@ -117,7 +116,8 @@ public class UserDaoImpl extends UserDao {
             connection = manager.getConnection();
             statement = connection.createStatement();
             set = statement.executeQuery(COUNT_USERS_SQL);
-            while (set.next()) {
+            long count = 0L;
+            if (set.next()) {
                 count = set.getLong(ENTITY_COUNT);
             }
             return count;

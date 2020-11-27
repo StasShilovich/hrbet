@@ -41,7 +41,6 @@ public class RaceServiceImpl implements RaceService {
 
     @Override
     public List<Race> showAllActive(String page) throws ServiceException {
-        // TODO: 30.09.2020 Some logic
         try {
             int offset = 0;
             if (page != null && !page.isEmpty()) {
@@ -124,6 +123,9 @@ public class RaceServiceImpl implements RaceService {
             race.setLocation(location);
             race.setDate(LocalDateTime.parse(dateTime));
             Optional<Race> raceDB = raceDao.create(race);
+            if (raceDB.isEmpty()) {
+                return false;
+            }
             boolean result = raceDao.addHorse(raceDB.get().getId(), horseSet);
             if (result) {
                 Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.RACES_COUNT);
