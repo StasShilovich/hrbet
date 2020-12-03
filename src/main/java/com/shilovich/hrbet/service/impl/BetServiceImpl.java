@@ -130,6 +130,11 @@ public class BetServiceImpl implements BetService {
             if (resultSet.size() != horses.size()) {
                 return false;
             }
+            if (resultMap.size() < MAX_HORSE_PARTICIPANTS) {
+                for (int i = resultMap.size() + 1; i <= MAX_HORSE_PARTICIPANTS; i++) {
+                    resultMap.put(i, 0L);
+                }
+            }
             BetDao betDao = (BetDao) DaoFactory.getInstance().getClass(BetDao.class);
             boolean result = betDao.enterResult(resultMap, idRace);
             return result;

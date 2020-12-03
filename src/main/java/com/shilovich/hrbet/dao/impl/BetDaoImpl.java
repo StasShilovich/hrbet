@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -31,7 +32,7 @@ public class BetDaoImpl extends BetDao {
             "VALUES (?,CURRENT_TIMESTAMP,?,?,?,?,?)";
     private static final String SHOW_USER_CASH_SQL = "SELECT u.cash FROM users u WHERE id=?";
     private static final String UPDATE_USER_CASH_SQL = "UPDATE users u SET u.cash=? WHERE u.id=?";
-    private static final String ADD_RACE_RESULT_SQL = "INSERT INTO race_result(race_id,first_horse,_second_horse," +
+    private static final String ADD_RACE_RESULT_SQL = "INSERT INTO race_result(race_id,first_horse,second_horse," +
             "third_horse,fourth_horse,fifth_horse,sixth_horse) VALUES (?,?,?,?,?,?,?)";
     private static final String SELECT_BETS_BY_RACE_SQL = "SELECT b.id,b.user_id,b.cash,b.ratio,t.name,b.bet_horse_id " +
             "FROM bets b INNER JOIN bet_types t ON b.type_id = t.id WHERE b.race_id=?";
@@ -94,14 +95,17 @@ public class BetDaoImpl extends BetDao {
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(ADD_RACE_RESULT_SQL);
             statement.setLong(1, raceId);
-            for (int i = 1; i <= 6; i++) {
-                statement.setLong(i++, resultMap.get(i));
+            for (int i = 1; i <= resultMap.size(); i++) {
+                if (resultMap.get(i) == 0L) {
+                    statement.setNull(i + 1, Types.NULL);
+                }
+                statement.setLong(i + 1, resultMap.get(i));
             }
             statement.executeUpdate();
             statement = connection.prepareStatement(SELECT_BETS_BY_RACE_SQL);
             statement.setLong(1, raceId);
             set = statement.executeQuery();
-            Set<Bet> bets = new HashSet<>();
+            List<Bet> bets = new ArrayList<>();
             while (set.next()) {
                 Bet bet = new Bet();
                 bet.setId(set.getLong(BET_ID));

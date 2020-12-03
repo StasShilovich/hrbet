@@ -247,6 +247,25 @@ ALTER TABLE `hrbet`.`horse_participatings`
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;
 
+ALTER TABLE `hrbet`.`race_result`
+    DROP FOREIGN KEY `fk_race_result_fifth`,
+    DROP FOREIGN KEY `fk_race_result_fourth`,
+    DROP FOREIGN KEY `fk_race_result_six`;
+ALTER TABLE `hrbet`.`race_result`
+    CHANGE COLUMN `fourth_horse` `fourth_horse` INT(11) NULL ,
+    CHANGE COLUMN `fifth_horse` `fifth_horse` INT(11) NULL ,
+    CHANGE COLUMN `sixth_horse` `sixth_horse` INT(11) NULL ;
+ALTER TABLE `hrbet`.`race_result`
+    ADD CONSTRAINT `fk_race_result_fifth`
+        FOREIGN KEY (`fifth_horse`)
+            REFERENCES `hrbet`.`horses` (`id`),
+    ADD CONSTRAINT `fk_race_result_fourth`
+        FOREIGN KEY (`fourth_horse`)
+            REFERENCES `hrbet`.`horses` (`id`),
+    ADD CONSTRAINT `fk_race_result_six`
+        FOREIGN KEY (`sixth_horse`)
+            REFERENCES `hrbet`.`horses` (`id`);
+
 /**
   ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
  */

@@ -28,7 +28,7 @@ public class EnterResultCommand implements Command {
             for (int i = 0; i < 5; i++) {
                 String horseId = req.getParameter(PARAM_HORSE + i);
                 if (isNotEmpty(horseId)) {
-                    horseMap.put(i++, horseId);
+                    horseMap.put(i+1, horseId);
                 }
             }
             String id = req.getParameter(PARAM_RACE_ID);

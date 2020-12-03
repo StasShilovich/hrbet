@@ -1,7 +1,5 @@
 package com.shilovich.hrbet.bean;
 
-import org.testng.annotations.DataProvider;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 
