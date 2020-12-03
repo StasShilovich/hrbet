@@ -6,17 +6,20 @@ import com.shilovich.hrbet.bean.Horse;
 import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.dao.BetDao;
 import com.shilovich.hrbet.dao.DaoFactory;
+import com.shilovich.hrbet.dao.HorseDao;
 import com.shilovich.hrbet.exception.DaoException;
 import com.shilovich.hrbet.exception.ServiceException;
 import com.shilovich.hrbet.service.BetService;
-import com.shilovich.hrbet.validation.BetValidator;
 import com.shilovich.hrbet.validation.CommonValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.shilovich.hrbet.service.ServiceParameter.MAX_HORSE_PARTICIPANTS;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class BetServiceImpl implements BetService {
     private static final Logger logger = LogManager.getLogger(BetServiceImpl.class);
@@ -93,6 +96,46 @@ public class BetServiceImpl implements BetService {
         } catch (Exception e) {
             logger.error("Add bet exception!", e);
             throw new ServiceException("Add bet exception!", e);
+        }
+    }
+
+    @Override
+    public boolean enterResult(Map<Integer, String> horseMap, String raceId) throws ServiceException {
+        try {
+            if (!CommonValidator.isIdValid(raceId)) {
+                return false;
+            }
+            HorseDao horseDao = (HorseDao) DaoFactory.getInstance().getClass(HorseDao.class);
+            Long idRace = Long.valueOf(raceId);
+            Set<Horse> horses = horseDao.findByRace(idRace);
+            Set<Long> horsesId = horses.stream().map(Horse::getId).collect(Collectors.toSet());
+            Set<Long> resultSet = new HashSet<>();
+            Map<Integer, Long> resultMap = new HashMap<>();
+            for (Map.Entry<Integer, String> entry : horseMap.entrySet()) {
+                Integer key = entry.getKey();
+                String value = entry.getValue();
+                if (isNotBlank(value)) {
+                    if (!CommonValidator.isIdValid(value)) {
+                        return false;
+                    }
+                    Long id = Long.valueOf(value);
+                    if (horsesId.contains(id)) {
+                        resultSet.add(id);
+                        resultMap.put(key, id);
+                    }
+                } else {
+                    resultMap.put(key, 0L);
+                }
+            }
+            if (resultSet.size() != horses.size()) {
+                return false;
+            }
+            BetDao betDao = (BetDao) DaoFactory.getInstance().getClass(BetDao.class);
+            boolean result = betDao.enterResult(resultMap, idRace);
+            return result;
+        } catch (DaoException e) {
+            logger.error("Enter result exception!", e);
+            throw new ServiceException("Enter result exception!", e);
         }
     }
 }

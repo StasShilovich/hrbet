@@ -17,6 +17,7 @@
             <div class="table-responsive">
                 <form class="form-horizontal" action="${pageContext.request.contextPath}/dispatcher" method="post">
                     <input type="hidden" name="command" value="enter_result">
+                    <input type="hidden" name="raceId" value="${param.raceId}">
                     <div class="card card-body">
                         <div class="form-group row">
                             <div class="col-sm-3"><fmt:message key="label.location"/>
@@ -48,7 +49,7 @@
                                 </div>
                             </div>
                         </c:if>
-                        <c:forEach var="i" begin="0" end="${horseSet.size()-1}" step="1">
+                        <c:forEach var="i" begin="0" end="${horseSet.size()-1}">
                             <div class="form-group row">
                                 <label for="horse-input" class="col-md-2 col-form-label">
                                     <fmt:message key="label.profile.horse"/> ${i+1}

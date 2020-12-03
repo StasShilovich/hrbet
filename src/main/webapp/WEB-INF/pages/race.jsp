@@ -53,14 +53,16 @@
                                         <c:if test="${winRatio.horseId==horse.id&&winRatio.typeId=='1'}">
                                             <td onmouseover="this.style.backgroundColor='#5FC1F5';"
                                                 onmouseout="this.style.backgroundColor='white';"
-                                                onclick="showOrder('${winRatio}')"> ${winRatio.ratio}</td>
+                                                onclick="
+                                                <c:if test="${not empty sessionScope.userAuth}">showOrder('${winRatio}')</c:if>">
+                                                    ${winRatio.ratio}</td>
                                             <script>
                                                 function showOrder(ratio) {
                                                     document.getElementById('order').style.visibility = "visible";
-                                                    var array=ratio.split(',');
-                                                    var betRatio =array[array.length-1].slice(0,-1).replace('ratio=','');
+                                                    var array = ratio.split(',');
+                                                    var betRatio = array[array.length - 1].slice(0, -1).replace('ratio=', '');
                                                     document.getElementById('betInfo').innerText = betRatio;
-                                                    document.getElementById('add-parameter-ratio').value=ratio;
+                                                    document.getElementById('add-parameter-ratio').value = ratio;
                                                 }
                                             </script>
                                         </c:if>
@@ -69,7 +71,9 @@
                                         <c:if test="${winRatio.horseId==horse.id&&winRatio.typeId=='2'}">
                                             <td onmouseover="this.style.backgroundColor='#5FC1F5';"
                                                 onmouseout="this.style.backgroundColor='white';"
-                                                onclick="showOrder('${winRatio}')"> ${winRatio.ratio}</td>
+                                                onclick="
+                                                <c:if test="${not empty sessionScope.userAuth}">showOrder('${winRatio}')</c:if>">
+                                                    ${winRatio.ratio}</td>
                                         </c:if>
                                     </c:forEach>
                                 </tr>
@@ -83,8 +87,8 @@
             <div class="col-lg-6" style="visibility:hidden" id="order">
                 <form class="form-horizontal" action="${pageContext.request.contextPath}/dispatcher" method="post">
                     <input id="add-parameter" type="hidden" name="command" value="bet">
-                    <input id="add-parameter-ratio" type="hidden" name="info" >
-                    <input id="add-parameter-cash" type="hidden" name="cash" >
+                    <input id="add-parameter-ratio" type="hidden" name="info">
+                    <input id="add-parameter-cash" type="hidden" name="cash">
                     <div class="card ">
                         <div class="card-body">
                             <div class="media">
@@ -134,7 +138,7 @@
                                         var ratio = document.getElementById('betInfo').innerText;
                                         document.getElementById('potential-win').innerText =
                                             Math.round(parseFloat(input) * parseFloat(ratio) * 100) / 100;
-                                        document.getElementById('add-parameter-cash').value=input;
+                                        document.getElementById('add-parameter-cash').value = input;
                                     }
                                 </script>
                             </div>

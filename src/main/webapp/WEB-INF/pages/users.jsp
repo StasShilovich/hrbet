@@ -42,7 +42,7 @@
                             <fmt:message key="label.user.role.name"/>
                         </th>
                         <th scope="col">
-                            <fmt:message key="label.user.action"/>
+                            <fmt:message key="label.user.delete"/>
                         </th>
                     </tr>
                     </thead>

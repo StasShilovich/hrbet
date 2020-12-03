@@ -60,7 +60,7 @@ public class RatioServiceImpl implements RatioService {
                 String key = entry.getKey();
                 String value = entry.getValue();
                 if (!RatioValidator.isMapKeyValid(key) || !RatioValidator.isMapValueValid(value)) {
-                    return false;
+                    continue;
                 }
                 String[] keys = key.split(MAP_KEY_DELIMITER);
                 raceId = Long.parseLong(keys[0]);
@@ -70,7 +70,6 @@ public class RatioServiceImpl implements RatioService {
                 typeId++;
                 BigDecimal ratio = new BigDecimal(value);
                 ratioSet.add(new Ratio(raceId, horseId, typeId, ratio));
-
             }
             if (ratioSet.isEmpty() || raceId == 0L) {
                 return false;

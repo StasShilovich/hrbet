@@ -6,9 +6,12 @@ import com.shilovich.hrbet.exception.ServiceException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface BetService extends Service {
     List<Bet> showByUser(Long userId) throws ServiceException;
 
     boolean add(String info, String betCash, BigDecimal userCash, Long userId) throws ServiceException;
+
+    boolean enterResult(Map<Integer, String> horseMap, String raceId) throws ServiceException;
 }
