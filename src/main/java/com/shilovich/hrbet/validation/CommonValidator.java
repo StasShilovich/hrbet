@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommonValidator {
-    private static final String ID_REGEX = "^\\d{1,7}";
+    private static final String ID_REGEX = "^[1-9]\\d{0,6}$";
 
     private CommonValidator() {
     }

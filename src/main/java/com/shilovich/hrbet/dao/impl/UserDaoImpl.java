@@ -32,6 +32,7 @@ public class UserDaoImpl extends UserDao {
                     "INNER JOIN roles r ON u.role_id=r.id WHERE u.email=?";
     private static final String UPDATE_CASH_SQL = "UPDATE users u SET u.cash=? WHERE u.id=?";
     private static final String DELETE_USER_SQL = "UPDATE users u SET u.deleted=1 WHERE u.id=?";
+    private static final String SHOW_USER_CASH_SQL = "SELECT u.cash FROM users u WHERE id=?";
 
     private UserDaoImpl() {
     }
@@ -149,6 +150,27 @@ public class UserDaoImpl extends UserDao {
             close(statement);
             close(connection);
         }
+    }
+
+    @Override
+    public boolean updateCash(ProxyConnection connection, BigDecimal cash, Long userId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(UPDATE_CASH_SQL);
+        statement.setBigDecimal(1, cash);
+        statement.setLong(2, userId);
+        int rowEffected = statement.executeUpdate();
+        return rowEffected > 0;
+    }
+
+    @Override
+    protected BigDecimal findCash(ProxyConnection connection, Long userId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(SHOW_USER_CASH_SQL);
+        statement.setLong(1, userId);
+        ResultSet set = statement.executeQuery();
+        BigDecimal cash = BigDecimal.ZERO;
+        while (set.next()) {
+            cash = set.getBigDecimal(USER_CASH);
+        }
+        return cash;
     }
 
     @Override

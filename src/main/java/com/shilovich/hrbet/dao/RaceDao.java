@@ -1,9 +1,12 @@
 package com.shilovich.hrbet.dao;
 
 import com.shilovich.hrbet.bean.Race;
+import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,6 +20,8 @@ public abstract class RaceDao implements Dao<Race, Long> {
     public abstract long countAll() throws DaoException;
 
     public abstract boolean addHorse(Long raceId, Set<Long> horseSet) throws DaoException;
+
+    protected abstract boolean addRaceResult(ProxyConnection connection, Map<Integer, Long> resultMap, Long raceId) throws SQLException;
 
     @Override
     public final Optional<Race> update(Race race) throws DaoException {

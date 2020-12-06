@@ -12,6 +12,7 @@ import static com.shilovich.hrbet.controller.CommandParameter.PAGE_PROFILE;
 public class ProfileCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
+        // TODO: 05.12.2020 reload user  from db
         return new Router(PAGE_PROFILE);
     }
 }

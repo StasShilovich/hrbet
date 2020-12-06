@@ -48,28 +48,17 @@
                     <c:forEach var="bet" items="${userBets}" varStatus="count">
                         <tr>
                             <td>${count.index+1} </td>
-                            <td id="bet-status">
                                 <c:choose>
                                     <c:when test="${bet.status=='NOT_PROCESSED'}">
-                                        <fmt:message key="label.profile.bet.processing"/>
-                                        <script>
-                                            document.getElementById('bet-status').style.backgroundColor = '#C9D6D3';
-                                        </script>
+                                        <td bgcolor="#C9D6D3"><fmt:message key="label.profile.bet.processing"/></td>
                                     </c:when>
                                     <c:when test="${bet.status=='WIN'}">
-                                        <fmt:message key="label.profile.bet.win"/>
-                                        <script>
-                                            document.getElementById('bet-status').style.backgroundColor = '#8CD687';
-                                        </script>
+                                        <td bgcolor="#8CD687"><fmt:message key="label.profile.bet.win"/></td>
                                     </c:when>
                                     <c:when test="${bet.status=='LOSE'}">
-                                        <fmt:message key="label.profile.bet.lose"/>
-                                        <script>
-                                            document.getElementById('bet-status').style.backgroundColor = '#D66847';
-                                        </script>
+                                        <td bgcolor="#FC603E"><fmt:message key="label.profile.bet.lose"/></td>
                                     </c:when>
                                 </c:choose>
-                            </td>
                             <td><fld:format-date dateTime="${bet.date}"/></td>
                             <td>${bet.race.location}</td>
                             <td>${bet.cash}</td>

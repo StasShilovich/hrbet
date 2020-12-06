@@ -11,10 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
@@ -32,7 +29,7 @@ public class RaceDaoImpl extends RaceDao {
     private static final String RACE_ID_SQL = "SELECT r.id FROM races r WHERE r.location=? AND r.time=?";
     private static final String ADD_RACE_PARTICIPANTS_SQL =
             "INSERT INTO horse_participatings (races_id, horse_id) VALUES (?,?)";
-    private static final String SHOW_RACE_BET_SQL = "SELECT b.cash,b.user_id FROM bets b WHERE race_id=?";
+    private static final String SHOW_RACE_BET_SQL = "SELECT b.cash,b.user_id FROM bets b WHERE race_id=? AND b.is_win=0";
     private static final String SHOW_USER_CASH_SQL = "SELECT u.cash FROM users u WHERE id=?";
     private static final String UPDATE_USER_CASH_SQL = "UPDATE users u SET u.cash=? WHERE u.id=?";
     private static final String DELETE_RACE_BET_SQL = "DELETE FROM bets WHERE race_id=?";
@@ -42,6 +39,8 @@ public class RaceDaoImpl extends RaceDao {
     private static final String SELECT_RACE_SQL =
             "SELECT r.location,r.time,COUNT(b.id),SUM(b.cash) FROM races r " +
                     "LEFT JOIN bets b on r.id = b.race_id WHERE r.id=?";
+    private static final String ADD_RACE_RESULT_SQL = "INSERT INTO race_result(race_id,first_horse,second_horse," +
+            "third_horse,fourth_horse,fifth_horse,sixth_horse) VALUES (?,?,?,?,?,?,?)";
 
     private RaceDaoImpl() {
     }
@@ -96,6 +95,20 @@ public class RaceDaoImpl extends RaceDao {
             close(statement);
             close(connection);
         }
+    }
+
+    @Override
+    protected boolean addRaceResult(ProxyConnection connection, Map<Integer, Long> resultMap, Long raceId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(ADD_RACE_RESULT_SQL);
+        statement.setLong(1, raceId);
+        for (int i = 1; i <= resultMap.size(); i++) {
+            if (resultMap.get(i) == 0L) {
+                statement.setNull(i + 1, Types.NULL);
+            }
+            statement.setLong(i + 1, resultMap.get(i));
+        }
+        int rowsEffected = statement.executeUpdate();
+        return rowsEffected > 0;
     }
 
     @Override
@@ -216,6 +229,7 @@ public class RaceDaoImpl extends RaceDao {
             close(connection);
         }
     }
+
 
     private List<Race> findAll(String sql, int limit, int offset) throws DaoException {
         List<Race> races = new ArrayList<>();

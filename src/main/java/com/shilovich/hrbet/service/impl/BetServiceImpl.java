@@ -7,6 +7,7 @@ import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.dao.BetDao;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.HorseDao;
+import com.shilovich.hrbet.dao.TransactionManager;
 import com.shilovich.hrbet.exception.DaoException;
 import com.shilovich.hrbet.exception.ServiceException;
 import com.shilovich.hrbet.service.BetService;
@@ -135,9 +136,9 @@ public class BetServiceImpl implements BetService {
                     resultMap.put(i, 0L);
                 }
             }
-            BetDao betDao = (BetDao) DaoFactory.getInstance().getClass(BetDao.class);
-            boolean result = betDao.enterResult(resultMap, idRace);
-            return result;
+            // TODO: 06.12.2020 maybe return boolean in transaction
+            TransactionManager.getInstance().enterResult(resultMap, idRace);
+            return true;
         } catch (DaoException e) {
             logger.error("Enter result exception!", e);
             throw new ServiceException("Enter result exception!", e);

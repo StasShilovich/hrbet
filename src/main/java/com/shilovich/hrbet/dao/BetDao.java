@@ -1,8 +1,11 @@
 package com.shilovich.hrbet.dao;
 
 import com.shilovich.hrbet.bean.Bet;
+import com.shilovich.hrbet.bean.Status;
+import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,7 +15,9 @@ public abstract class BetDao implements Dao<Bet, Long> {
 
     public abstract List<Bet> findByUser(Long userId) throws DaoException;
 
-    public abstract boolean enterResult(Map<Integer, Long> resultMap, Long raceId) throws DaoException;
+    protected abstract List<Bet> findByRace(ProxyConnection connection, Long raceId) throws SQLException;
+
+    protected abstract boolean updateStatus(ProxyConnection connection, Status status, long betId) throws SQLException;
 
     @Override
     public final Optional<Bet> read(Long id) throws DaoException {
