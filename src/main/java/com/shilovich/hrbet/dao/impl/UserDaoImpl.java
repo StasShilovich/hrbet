@@ -153,7 +153,7 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
-    public boolean updateCash(ProxyConnection connection, BigDecimal cash, Long userId) throws SQLException {
+    protected boolean updateCash(ProxyConnection connection, BigDecimal cash, Long userId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(UPDATE_CASH_SQL);
         statement.setBigDecimal(1, cash);
         statement.setLong(2, userId);

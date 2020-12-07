@@ -20,7 +20,6 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
 
     private static final CommandMap factory = CommandMap.getInstance();
-    private static final String COMMAND_PARAMETER = "command";
     private ConnectionManager manager;
 
     @Override

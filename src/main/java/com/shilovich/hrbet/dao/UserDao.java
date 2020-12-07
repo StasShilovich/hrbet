@@ -19,7 +19,7 @@ public abstract class UserDao implements Dao<User, String> {
 
     public abstract boolean updateCash(BigDecimal cash, Long userId) throws DaoException;
 
-    public abstract boolean updateCash(ProxyConnection connection, BigDecimal cash, Long userId) throws SQLException;
+    protected abstract boolean updateCash(ProxyConnection connection, BigDecimal cash, Long userId) throws SQLException;
 
     protected abstract BigDecimal findCash(ProxyConnection connection, Long userId) throws SQLException;
 

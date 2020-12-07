@@ -299,15 +299,15 @@ VALUES ('3', '4');
 
 
 INSERT INTO `hrbet`.`users` (`name`, `surname`, `password`, `cash`, `email`, `role_id`)
-VALUES ('Стас', 'Шилович', '$2y$12$SS9teveGeEnvWVwoI11Li.6euRoUXLVYtPS4Ng6u0jRexVkG8VMb2', '300',
+VALUES ('Стас', 'Шилович', '$2y$12$CDC.h3J.7RXDC14I1UtOpOwhls3n8NaPo/kl4FNQbAey4rhuj51ba', '300',
         'stas.shilovich@gmail.com', '1');
 INSERT INTO `hrbet`.`users` (`name`, `surname`, `password`, `cash`, `email`, `role_id`)
-VALUES ('Василий', 'Петров', '$2y$12$ndRmGK0jhVJwJ4SHPR.kXud7G684wHkP828LJiDWYyN86cd8bjRx.', '300', 'vasya@gmail.com',
+VALUES ('Василий', 'Петров', '$2y$12$CDC.h3J.7RXDC14I1UtOpOwhls3n8NaPo/kl4FNQbAey4rhuj51ba', '300', 'vasya@gmail.com',
         '3');
 INSERT INTO `hrbet`.`users` (`name`, `surname`, `password`, `email`)
 VALUES ('User', 'Name', '$2y$12$8QTQCmw6VwB0Zcs/xvvOtuPho9MNOZSyiimYLRC9hJE54iKS4CarG', 'user@gmail.com');
 INSERT INTO `hrbet`.`users` (`name`, `surname`, `password`, `email`)
-VALUES ('Tom', 'Tompson', '$2y$12$MELXJMP7seWr4lTbydSWEeRcM4GbywEnRVPQFNqhuXDsTtWiwEwc6', 'tom@gmail.com');
+VALUES ('Tom', 'Tompson', '$2y$12$CDC.h3J.7RXDC14I1UtOpOwhls3n8NaPo/kl4FNQbAey4rhuj51ba', 'tom@gmail.com');
 INSERT INTO `hrbet`.`users` (`name`, `surname`, `password`, `email`)
 VALUES ('Son', 'Sonson', '$2y$12$9gfWrQhqASii3UdsHRPIP.MiiSqd7b8ViQ.N1h2rZ1m1Ol4GQUzee', 'son@gmail.com');
 INSERT INTO `hrbet`.`users` (`name`, `surname`, `password`, `email`)

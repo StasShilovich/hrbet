@@ -1,5 +1,6 @@
 package com.shilovich.hrbet.dao;
 
+import com.shilovich.hrbet.bean.Bet;
 import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
@@ -22,6 +23,15 @@ public abstract class RaceDao implements Dao<Race, Long> {
     public abstract boolean addHorse(Long raceId, Set<Long> horseSet) throws DaoException;
 
     protected abstract boolean addRaceResult(ProxyConnection connection, Map<Integer, Long> resultMap, Long raceId) throws SQLException;
+
+    protected abstract void deleteParticipant(ProxyConnection connection, long raceId) throws SQLException;
+
+    protected abstract boolean delete(ProxyConnection connection, long raceId) throws SQLException;
+
+    @Override
+    public final boolean delete(Long id) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public final Optional<Race> update(Race race) throws DaoException {

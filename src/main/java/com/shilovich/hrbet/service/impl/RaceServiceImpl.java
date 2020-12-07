@@ -6,6 +6,7 @@ import com.shilovich.hrbet.cache.CacheFactory;
 import com.shilovich.hrbet.cache.CacheType;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.dao.RaceDao;
+import com.shilovich.hrbet.dao.TransactionManager;
 import com.shilovich.hrbet.exception.DaoException;
 import com.shilovich.hrbet.service.RaceService;
 import com.shilovich.hrbet.exception.ServiceException;
@@ -161,7 +162,7 @@ public class RaceServiceImpl implements RaceService {
             }
             Long id = Long.valueOf(raceId);
             RaceDao raceDao = (RaceDao) DaoFactory.getInstance().getClass(RaceDao.class);
-            boolean result = raceDao.delete(id);
+            boolean result = TransactionManager.getInstance().deleteRace(id);
             if (result) {
                 Cache cache = (Cache) CacheFactory.getInstance().getCache(CacheType.RACES_COUNT);
                 if (cache.containsKey(COUNT_ACTIVE)) {

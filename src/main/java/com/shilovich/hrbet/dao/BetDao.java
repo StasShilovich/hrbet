@@ -19,18 +19,27 @@ public abstract class BetDao implements Dao<Bet, Long> {
 
     protected abstract boolean updateStatus(ProxyConnection connection, Status status, long betId) throws SQLException;
 
+    protected abstract Optional<Bet> create(ProxyConnection connection, Bet bet) throws SQLException;
+
+    protected abstract void deleteByRace(ProxyConnection connection, long raceId) throws SQLException;
+
     @Override
-    public final Optional<Bet> read(Long id) throws DaoException {
+    public final Optional<Bet> read(Long id) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final Optional<Bet> update(Bet bet) throws DaoException {
+    public final Optional<Bet> update(Bet bet) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public final boolean delete(Long id) throws DaoException {
+    public final boolean delete(Long id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public final Optional<Bet> create(Bet a) {
         throw new UnsupportedOperationException();
     }
 }

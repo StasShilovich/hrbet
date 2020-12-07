@@ -64,7 +64,6 @@ public class BetServiceImpl implements BetService {
             if (cash.compareTo(userCash) == 1) {
                 return false;
             }
-            BetDao betDao = (BetDao) DaoFactory.getInstance().getClass(BetDao.class);
             String string = info.replaceAll(INFO_TITLE, BLANK).substring(0, info.length() - 1 - INFO_TITLE.length());
             String[] split = string.split(COMMA);
             String[] infoArray = new String[INFO_ARRAY];
@@ -88,7 +87,7 @@ public class BetServiceImpl implements BetService {
             Horse horse = new Horse();
             horse.setId(Long.valueOf(infoArray[1]));
             bet.setHorse(horse);
-            Optional<Bet> betResult = betDao.create(bet);
+            Optional<Bet> betResult = TransactionManager.getInstance().addBet(bet);
             boolean result = false;
             if (betResult.isPresent()) {
                 result = true;

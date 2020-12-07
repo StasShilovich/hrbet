@@ -15,15 +15,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import static com.shilovich.hrbet.dao.DaoTableField.USER_CASH;
 
 public class TransactionManager {
     private static final Logger logger = LogManager.getLogger(TransactionManager.class);
     private static TransactionManager instance;
 
-    private static ConnectionManager manager = ConnectionManager.getInstance();
+    private static final ConnectionManager manager = ConnectionManager.getInstance();
     private final RaceDao raceDao = (RaceDao) DaoFactory.getInstance().getClass(RaceDao.class);
     private final BetDao betDao = (BetDao) DaoFactory.getInstance().getClass(BetDao.class);
     private final UserDao userDao = (UserDao) DaoFactory.getInstance().getClass(UserDao.class);
+    private final RatioDao ratioDao = (RatioDao) DaoFactory.getInstance().getClass(RatioDao.class);
 
     private TransactionManager() {
     }
@@ -85,8 +89,63 @@ public class TransactionManager {
         } finally {
             close(connection);
         }
+    }
 
+    public Optional<Bet> addBet(Bet bet) throws DaoException {
+        ProxyConnection connection = null;
+        try {
+            connection = manager.getConnection();
+            connection.setAutoCommit(false);
+            BigDecimal cash = userDao.findCash(connection, bet.getUserId());
+            if (bet.getCash().compareTo(cash) > 0) {
+                return Optional.empty();
+            }
+            Optional<Bet> betDB = betDao.create(connection, bet);
+            if (betDB.isEmpty()) {
+                return Optional.empty();
+            }
+            BigDecimal newCash = cash.subtract(bet.getCash());
+            boolean result = userDao.updateCash(connection, newCash, bet.getUserId());
+            connection.commit();
+            return result ? Optional.of(bet) : Optional.empty();
+        } catch (SQLException e) {
+            rollback(connection);
+            logger.error("Enter result exception!", e);
+            throw new DaoException("Enter result exception!", e);
+        } finally {
+            close(connection);
+        }
+    }
 
+    public boolean deleteRace(Long id) throws DaoException {
+        ProxyConnection connection = null;
+        try {
+            connection = manager.getConnection();
+            connection.setAutoCommit(false);
+            List<Bet> bets = betDao.findByRace(connection, id);
+            for (Bet bet : bets) {
+                if (bet.getStatus() == Status.LOSE || bet.getStatus() == Status.WIN) {
+                    return false;
+                }
+            }
+            for (Bet bet : bets) {
+                BigDecimal userCash = userDao.findCash(connection, bet.getUserId());
+                BigDecimal newCash = userCash.add(bet.getCash());
+                userDao.updateCash(connection, newCash, bet.getUserId());
+            }
+            betDao.deleteByRace(connection, id);
+            ratioDao.deleteByRace(connection, id);
+            raceDao.deleteParticipant(connection, id);
+            boolean result = raceDao.delete(connection, id);
+            connection.commit();
+            return result;
+        } catch (SQLException e) {
+            rollback(connection);
+            logger.error("Enter result exception!", e);
+            throw new DaoException("Enter result exception!", e);
+        } finally {
+            close(connection);
+        }
     }
 
     private void close(ProxyConnection connection) {
@@ -105,13 +164,13 @@ public class TransactionManager {
         if (connection != null) {
             try {
                 connection.rollback();
-                logger.error("Connection rollback!");
+                logger.info("Connection rollback!");
             } catch (SQLException ex) {
                 logger.error("Error while rollback!");
             }
             try {
                 connection.setAutoCommit(true);
-                logger.error("Set auto commit true!");
+                logger.info("Set auto commit true!");
             } catch (SQLException ex) {
                 logger.error("Error while set auto commit!");
             }

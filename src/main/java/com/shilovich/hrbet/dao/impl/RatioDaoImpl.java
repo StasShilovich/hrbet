@@ -27,6 +27,7 @@ public class RatioDaoImpl extends RatioDao {
             "INSERT INTO ratio(race_id, horse_id, type_id, ratio) VALUES (?,?,?,?)";
     private static final String FIND_RATIO_LIST_SQL =
             "SELECT r.horse_id,r.type_id,r.ratio FROM ratio r WHERE r.race_id=?";
+    private static final String DELETE_RACE_RATIO_SQL = "DELETE FROM ratio WHERE race_id=?";
 
     private RatioDaoImpl() {
     }
@@ -90,5 +91,12 @@ public class RatioDaoImpl extends RatioDao {
             logger.error("Find ratios error!", e);
             throw new DaoException("Find ratios error!", e);
         }
+    }
+
+    @Override
+    protected void deleteByRace(ProxyConnection connection, long raceId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(DELETE_RACE_RATIO_SQL);
+        statement.setLong(1, raceId);
+        statement.executeUpdate();
     }
 }

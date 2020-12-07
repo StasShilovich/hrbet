@@ -29,11 +29,6 @@ public class RaceDaoImpl extends RaceDao {
     private static final String RACE_ID_SQL = "SELECT r.id FROM races r WHERE r.location=? AND r.time=?";
     private static final String ADD_RACE_PARTICIPANTS_SQL =
             "INSERT INTO horse_participatings (races_id, horse_id) VALUES (?,?)";
-    private static final String SHOW_RACE_BET_SQL = "SELECT b.cash,b.user_id FROM bets b WHERE race_id=? AND b.is_win=0";
-    private static final String SHOW_USER_CASH_SQL = "SELECT u.cash FROM users u WHERE id=?";
-    private static final String UPDATE_USER_CASH_SQL = "UPDATE users u SET u.cash=? WHERE u.id=?";
-    private static final String DELETE_RACE_BET_SQL = "DELETE FROM bets WHERE race_id=?";
-    private static final String DELETE_RACE_RATIO_SQL = "DELETE FROM ratio WHERE race_id=?";
     private static final String DELETE_RACE_PARTICIPATING_SQL = "DELETE FROM horse_participatings WHERE races_id=?";
     private static final String DELETE_RACE_SQL = "DELETE FROM races WHERE id=?";
     private static final String SELECT_RACE_SQL =
@@ -112,6 +107,21 @@ public class RaceDaoImpl extends RaceDao {
     }
 
     @Override
+    protected void deleteParticipant(ProxyConnection connection, long raceId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(DELETE_RACE_PARTICIPATING_SQL);
+        statement.setLong(1, raceId);
+        statement.executeUpdate();
+    }
+
+    @Override
+    protected boolean delete(ProxyConnection connection, long raceId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(DELETE_RACE_SQL);
+        statement.setLong(1, raceId);
+        int rowsEffected = statement.executeUpdate();
+        return rowsEffected > 0;
+    }
+
+    @Override
     public Optional<Race> create(Race race) throws DaoException {
         ProxyConnection connection = null;
         PreparedStatement statement = null;
@@ -171,65 +181,6 @@ public class RaceDaoImpl extends RaceDao {
             close(connection);
         }
     }
-
-    @Override
-    public boolean delete(Long id) throws DaoException {
-        ProxyConnection connection = null;
-        PreparedStatement statement = null;
-        ResultSet set = null;
-        try {
-            connection = manager.getConnection();
-            connection.setAutoCommit(false);
-            statement = connection.prepareStatement(SHOW_RACE_BET_SQL);
-            statement.setLong(1, id);
-            set = statement.executeQuery();
-            List<Bet> raceBets = new ArrayList<>();
-            while (set.next()) {
-                Bet bet = new Bet();
-                bet.setCash(set.getBigDecimal(BET_CASH));
-                bet.setUserId(set.getLong(BET_USER_ID));
-                raceBets.add(bet);
-            }
-            if (!raceBets.isEmpty()) {
-                for (Bet bet : raceBets) {
-                    statement = connection.prepareStatement(SHOW_USER_CASH_SQL);
-                    statement.setLong(1, bet.getUserId());
-                    set = statement.executeQuery();
-                    while (set.next()) {
-                        BigDecimal cash = set.getBigDecimal(USER_CASH);
-                        BigDecimal newCash = cash.add(bet.getCash());
-                        statement = connection.prepareStatement(UPDATE_USER_CASH_SQL);
-                        statement.setBigDecimal(1, newCash);
-                        statement.setLong(2, bet.getUserId());
-                        statement.executeUpdate();
-                    }
-                }
-            }
-            statement = connection.prepareStatement(DELETE_RACE_BET_SQL);
-            statement.setLong(1, id);
-            int betsEffected = statement.executeUpdate();
-            statement = connection.prepareStatement(DELETE_RACE_RATIO_SQL);
-            statement.setLong(1, id);
-            int ratioEffected = statement.executeUpdate();
-            statement = connection.prepareStatement(DELETE_RACE_PARTICIPATING_SQL);
-            statement.setLong(1, id);
-            int participatingEffected = statement.executeUpdate();
-            statement = connection.prepareStatement(DELETE_RACE_SQL);
-            statement.setLong(1, id);
-            int rowsEffected = statement.executeUpdate();
-            connection.commit();
-            return betsEffected > 0 || ratioEffected > 0 || participatingEffected > 0 || rowsEffected > 0;
-        } catch (SQLException e) {
-            rollback(connection);
-            logger.error("Delete race exception!", e);
-            throw new DaoException("Delete race exception!", e);
-        } finally {
-            close(set);
-            close(statement);
-            close(connection);
-        }
-    }
-
 
     private List<Race> findAll(String sql, int limit, int offset) throws DaoException {
         List<Race> races = new ArrayList<>();

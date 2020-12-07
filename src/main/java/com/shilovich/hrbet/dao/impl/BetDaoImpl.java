@@ -30,11 +30,10 @@ public class BetDaoImpl extends BetDao {
                     " WHERE b.user_id = ? ORDER BY b.time";
     private static final String ADD_BET_SQL = "INSERT INTO bets (user_id,time,race_id,cash,ratio,type_id,bet_horse_id) " +
             "VALUES (?,CURRENT_TIMESTAMP,?,?,?,?,?)";
-    private static final String SHOW_USER_CASH_SQL = "SELECT u.cash FROM users u WHERE id=?";
-    private static final String UPDATE_USER_CASH_SQL = "UPDATE users u SET u.cash=? WHERE u.id=?";
-    private static final String SELECT_BETS_BY_RACE_SQL = "SELECT b.id,b.user_id,b.cash,b.ratio,t.name,b.bet_horse_id " +
+    private static final String SELECT_BETS_BY_RACE_SQL = "SELECT b.id,b.user_id,b.cash,b.ratio,t.name,b.bet_horse_id,b.is_win " +
             "FROM bets b INNER JOIN bet_types t ON b.type_id = t.id WHERE b.race_id=?";
     private static final String UPDATE_BET_STATUS_SQL = "UPDATE bets SET is_win=? WHERE id=?";
+    private static final String DELETE_RACE_BET_SQL = "DELETE FROM bets WHERE race_id=?";
 
     private BetDaoImpl() {
     }
@@ -115,46 +114,22 @@ public class BetDaoImpl extends BetDao {
     }
 
     @Override
-    public Optional<Bet> create(Bet bet) throws DaoException {
-        ProxyConnection connection = null;
-        PreparedStatement statement = null;
-        ResultSet set = null;
-        try {
-            connection = manager.getConnection();
-            connection.setAutoCommit(false);
-            statement = connection.prepareStatement(ADD_BET_SQL);
-            statement.setLong(1, bet.getUserId());
-            statement.setLong(2, bet.getRace().getId());
-            statement.setBigDecimal(3, bet.getCash());
-            statement.setBigDecimal(4, bet.getRatio());
-            statement.setLong(5, bet.getType().ordinal() + 1L);
-            statement.setLong(6, bet.getHorse().getId());
-            int rowsEffected = statement.executeUpdate();
-            if (rowsEffected <= 0) {
-                return Optional.empty();
-            }
-            // TODO: 05.12.2020 check cash enough
-            statement = connection.prepareStatement(SHOW_USER_CASH_SQL);
-            statement.setLong(1, bet.getUserId());
-            set = statement.executeQuery();
-            while (set.next()) {
-                BigDecimal cash = set.getBigDecimal(USER_CASH);
-                BigDecimal newCash = cash.subtract(bet.getCash());
-                statement = connection.prepareStatement(UPDATE_USER_CASH_SQL);
-                statement.setBigDecimal(1, newCash);
-                statement.setLong(2, bet.getUserId());
-                statement.executeUpdate();
-            }
-            connection.commit();
-            return Optional.of(bet);
-        } catch (SQLException e) {
-            rollback(connection);
-            logger.error("Add bet exception!", e);
-            throw new DaoException("Add bet exception!", e);
-        } finally {
-            close(set);
-            close(statement);
-            close(connection);
-        }
+    protected Optional<Bet> create(ProxyConnection connection, Bet bet) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(ADD_BET_SQL);
+        statement.setLong(1, bet.getUserId());
+        statement.setLong(2, bet.getRace().getId());
+        statement.setBigDecimal(3, bet.getCash());
+        statement.setBigDecimal(4, bet.getRatio());
+        statement.setLong(5, bet.getType().ordinal() + 1L);
+        statement.setLong(6, bet.getHorse().getId());
+        int rowsEffected = statement.executeUpdate();
+        return rowsEffected > 0 ? Optional.of(bet) : Optional.empty();
+    }
+
+    @Override
+    protected void deleteByRace(ProxyConnection connection, long raceId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(DELETE_RACE_BET_SQL);
+        statement.setLong(1, raceId);
+        statement.executeUpdate();
     }
 }

@@ -18,7 +18,7 @@
     </filter>
     <filter>
         <filter-name>SecurityFilter</filter-name>
-        <filter-class>com.shilovich.hrbet.controller.filter.SecurityFilter</filter-class>
+        <filter-class>com.shilovich.hrbet.controller.filter.PermissionAccessFilter</filter-class>
     </filter>
     <filter>
         <filter-name>UrlTransformationFilter</filter-name>

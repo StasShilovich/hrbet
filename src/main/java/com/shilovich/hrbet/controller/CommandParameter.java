@@ -79,7 +79,8 @@ public class CommandParameter {
     public static final String CHECKBOX = "on";
     public static final String WIN = "win";
     public static final String PRIZE = "prize";
-
+    public static final String QUEST_PERMISSION = "quest";
+    public static final String COMMAND_PARAMETER = "command";
 
     private CommandParameter() {
     }
