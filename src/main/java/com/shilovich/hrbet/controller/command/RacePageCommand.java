@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.controller.command;
 
 import com.shilovich.hrbet.bean.Horse;
+import com.shilovich.hrbet.bean.PermissionEnum;
 import com.shilovich.hrbet.bean.Ratio;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.exception.CommandException;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Set;
 
+import static com.shilovich.hrbet.bean.PermissionEnum.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
 import static com.shilovich.hrbet.controller.CommandParameter.*;
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -33,5 +36,11 @@ public class RacePageCommand implements Command {
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public boolean isAllowed(Set<PermissionEnum> permissions) {
+        return permissions.contains(QUEST_BASIC) || permissions.contains(USER_BASIC) ||
+                permissions.contains(ADMIN_BASIC) || permissions.contains(CUSTOMER_BASIC);
     }
 }

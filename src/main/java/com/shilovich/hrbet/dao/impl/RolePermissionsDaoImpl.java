@@ -1,6 +1,6 @@
 package com.shilovich.hrbet.dao.impl;
 
-import com.shilovich.hrbet.bean.Permission;
+import com.shilovich.hrbet.bean.PermissionEnum;
 import com.shilovich.hrbet.bean.Role;
 import com.shilovich.hrbet.dao.RolePermissionsDao;
 import com.shilovich.hrbet.dao.pool.ProxyConnection;
@@ -11,10 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.shilovich.hrbet.dao.DaoTableField.*;
 
@@ -23,7 +20,7 @@ public class RolePermissionsDaoImpl extends RolePermissionsDao {
 
     private static RolePermissionsDao instance;
     private static final String ROLE_PERMISSIONS_SQL =
-            "SELECT r.id, r.name, p.id, p.name from roles r join role_permissions rp on rp.role_id = r.id " +
+            "SELECT r.id, r.name, p.name from roles r join role_permissions rp on rp.role_id = r.id " +
                     "join permission p on rp.permission_id = p.id";
 
     private RolePermissionsDaoImpl() {
@@ -49,20 +46,19 @@ public class RolePermissionsDaoImpl extends RolePermissionsDao {
             while (set.next()) {
                 Long roleId = set.getLong(ROLE_ID);
                 String roleName = set.getString(ROLE_NAME);
-                Long permissionId = set.getLong(P_ID);
                 String permissionName = set.getString(P_NAME);
+                PermissionEnum permission = PermissionEnum.getPermission(permissionName);
                 int roleIndex = roleExist(roles, roleId);
                 if (roleIndex < 0) {
                     Role role = new Role();
                     role.setId(roleId);
                     role.setName(roleName);
-                    Set<Permission> permissions = new HashSet<>();
-                    permissions.add(new Permission(permissionId, permissionName));
+                    Set<PermissionEnum> permissions = EnumSet.of(permission);
                     role.setPermissions(permissions);
                     roles.add(role);
                 } else {
                     Role role = roles.get(roleIndex);
-                    role.getPermissions().add(new Permission(permissionId, permissionName));
+                    role.getPermissions().add(permission);
                 }
             }
             return roles;

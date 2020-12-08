@@ -277,14 +277,13 @@ VALUES ('user');
 INSERT INTO `hrbet`.`roles` (`name`)
 VALUES ('customer');
 
-INSERT INTO `hrbet`.`permission` (`name`)
-VALUES ('change_permission');
-INSERT INTO `hrbet`.`permission` (`name`)
-VALUES ('bet');
-INSERT INTO `hrbet`.`permission` (`name`)
-VALUES ('set_result');
-INSERT INTO `hrbet`.`permission` (`name`)
-VALUES ('set_ratio');
+INSERT INTO `hrbet`.`permission` (`name`)VALUES ('user_basic');
+INSERT INTO `hrbet`.`permission` (`name`)VALUES ('admin_basic');
+INSERT INTO `hrbet`.`permission` (`name`)VALUES ('customer_basic');
+INSERT INTO `hrbet`.`permission` (`name`)VALUES ('place_bet');
+INSERT INTO `hrbet`.`permission` (`name`)VALUES ('place_result');
+INSERT INTO `hrbet`.`permission` (`name`)VALUES ('place_ratio');
+INSERT INTO `hrbet`.`permission` (`name`)VALUES ('ban_user');
 
 
 INSERT INTO `hrbet`.`role_permissions` (`role_id`, `permission_id`)

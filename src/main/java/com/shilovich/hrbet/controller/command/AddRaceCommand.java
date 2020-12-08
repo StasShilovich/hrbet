@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.controller.command;
 
 import com.shilovich.hrbet.bean.Horse;
+import com.shilovich.hrbet.bean.PermissionEnum;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.controller.Router;
 import com.shilovich.hrbet.exception.CommandException;
@@ -47,5 +48,10 @@ public class AddRaceCommand implements Command {
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public boolean isAllowed(Set<PermissionEnum> permissions) {
+        return permissions.contains(PermissionEnum.CUSTOMER_BASIC);
     }
 }

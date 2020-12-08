@@ -56,6 +56,7 @@ public class CommandParameter {
     public static final String PAGE_ENTER_RESULT = "/WEB-INF/pages/enterResult.jsp";
     public static final String PAGE_SET_RATIO = "/WEB-INF/pages/setRatio.jsp";
     public static final String PAGE_404 = "/WEB-INF/pages/error/pages-404.jsp";
+    public static final String PAGE_403 = "/WEB-INF/pages/error/pages-403.jsp";
     public static final String PAGE_500 = "/WEB-INF/pages/error/pages-500.jsp";
     public static final String PAGE_START_PREFIX = "http://localhost:8080/hrbets/";
     /**

@@ -1,5 +1,6 @@
 package com.shilovich.hrbet.controller.command;
 
+import com.shilovich.hrbet.bean.PermissionEnum;
 import com.shilovich.hrbet.bean.User;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.controller.Router;
@@ -11,7 +12,9 @@ import com.shilovich.hrbet.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Set;
 
+import static com.shilovich.hrbet.bean.PermissionEnum.ADMIN_BASIC;
 import static com.shilovich.hrbet.controller.CommandParameter.*;
 import static com.shilovich.hrbet.service.ServiceParameter.USERS_ON_PAGE;
 
@@ -29,5 +32,10 @@ public class ShowUsersCommand implements Command {
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public boolean isAllowed(Set<PermissionEnum> permissions) {
+        return permissions.contains(ADMIN_BASIC);
     }
 }

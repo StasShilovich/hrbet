@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.controller.command;
 
 import com.shilovich.hrbet.bean.Horse;
+import com.shilovich.hrbet.bean.PermissionEnum;
 import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.controller.Router;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static com.shilovich.hrbet.bean.PermissionEnum.*;
 import static com.shilovich.hrbet.controller.CommandParameter.*;
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -28,7 +30,7 @@ public class EnterResultCommand implements Command {
             for (int i = 0; i < 5; i++) {
                 String horseId = req.getParameter(PARAM_HORSE + i);
                 if (isNotEmpty(horseId)) {
-                    horseMap.put(i+1, horseId);
+                    horseMap.put(i + 1, horseId);
                 }
             }
             String id = req.getParameter(PARAM_RACE_ID);
@@ -52,5 +54,10 @@ public class EnterResultCommand implements Command {
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public boolean isAllowed(Set<PermissionEnum> permissions) {
+        return permissions.contains(CUSTOMER_BASIC) && permissions.contains(PLACE_RESULT);
     }
 }

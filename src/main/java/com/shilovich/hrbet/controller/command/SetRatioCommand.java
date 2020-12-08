@@ -1,6 +1,7 @@
 package com.shilovich.hrbet.controller.command;
 
 import com.shilovich.hrbet.bean.Horse;
+import com.shilovich.hrbet.bean.PermissionEnum;
 import com.shilovich.hrbet.controller.Command;
 import com.shilovich.hrbet.controller.Router;
 import com.shilovich.hrbet.exception.CommandException;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
+import static com.shilovich.hrbet.bean.PermissionEnum.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
 import static com.shilovich.hrbet.controller.CommandParameter.*;
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -43,5 +46,10 @@ public class SetRatioCommand implements Command {
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public boolean isAllowed(Set<PermissionEnum> permissions) {
+        return permissions.contains(CUSTOMER_BASIC) || permissions.contains(PLACE_RATIO);
     }
 }

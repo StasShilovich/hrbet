@@ -8,7 +8,7 @@ public class Role implements Serializable {
 
     private Long id;
     private String name;
-    private Set<Permission> permissions;
+    private Set<PermissionEnum> permissions;
 
     public Role() {
     }
@@ -33,11 +33,11 @@ public class Role implements Serializable {
         this.name = name;
     }
 
-    public Set<Permission> getPermissions() {
+    public Set<PermissionEnum> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Set<Permission> permissions) {
+    public void setPermissions(Set<PermissionEnum> permissions) {
         this.permissions = permissions;
     }
 
@@ -53,27 +53,21 @@ public class Role implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Role role = (Role) o;
-        if (!id.equals(role.id)) {
-            return false;
-        }
-        if (!name.equals(role.name)) {
-            return false;
-        }
-        return permissions.equals(role.permissions);
+
+        if (id != null ? !id.equals(role.id) : role.id != null) return false;
+        if (name != null ? !name.equals(role.name) : role.name != null) return false;
+        return permissions != null ? permissions.equals(role.permissions) : role.permissions == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + permissions.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (permissions != null ? permissions.hashCode() : 0);
         return result;
     }
 }
