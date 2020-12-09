@@ -10,12 +10,12 @@ import com.shilovich.hrbet.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.ADMIN_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.BAN_USER;
 import static com.shilovich.hrbet.controller.CommandParameter.PARAM_USER_ID;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class DeleteUserCommand implements Command {
     @Override

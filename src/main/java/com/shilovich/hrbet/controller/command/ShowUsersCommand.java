@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.Set;
 
 import static com.shilovich.hrbet.bean.PermissionEnum.ADMIN_BASIC;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_PAGE_NUMBER;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_USERS_LIST;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_USERS;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_PAGE;
 
 public class ShowUsersCommand implements Command {
     @Override

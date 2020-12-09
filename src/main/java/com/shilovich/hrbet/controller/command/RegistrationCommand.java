@@ -14,10 +14,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.ADMIN_BASIC;
 import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.QUEST_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.USER_BASIC;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_EMPTY_MESSAGE;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_EMPTY_PARAM;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_USER_MAP;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_REDIRECT_INDEX;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_REGISTRATION;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_EMAIL;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_NAME;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_PASSWORD;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_SURNAME;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class RegistrationCommand implements Command {
     @Override

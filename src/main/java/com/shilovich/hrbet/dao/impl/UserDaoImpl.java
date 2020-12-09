@@ -8,12 +8,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.shilovich.hrbet.dao.DaoTableField.*;
+import static com.shilovich.hrbet.dao.DaoTableField.ENTITY_COUNT;
+import static com.shilovich.hrbet.dao.DaoTableField.ROLE_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.USER_CASH;
+import static com.shilovich.hrbet.dao.DaoTableField.USER_EMAIL;
+import static com.shilovich.hrbet.dao.DaoTableField.USER_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.USER_NAME;
+import static com.shilovich.hrbet.dao.DaoTableField.USER_PASSWORD;
+import static com.shilovich.hrbet.dao.DaoTableField.USER_SURNAME;
 
 public class UserDaoImpl extends UserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);

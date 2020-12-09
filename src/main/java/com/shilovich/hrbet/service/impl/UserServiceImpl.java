@@ -26,7 +26,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static com.shilovich.hrbet.cache.CacheVariables.COUNT_ACTIVE;
 import static com.shilovich.hrbet.cache.CacheVariables.USER_ROLES;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_EMAIL;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_NAME;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_PASSWORD;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_SURNAME;
 import static com.shilovich.hrbet.service.ServiceParameter.USERS_ON_PAGE;
 
 public class UserServiceImpl implements UserService {
@@ -66,7 +69,6 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Authorization exception!", e);
         }
     }
-
 
     @Override
     public Map<String, String> registration(User userUI) throws ServiceException {
@@ -123,7 +125,6 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll(String page) throws ServiceException {
         try {
             int offset = 0;
-            // TODO: 26.11.2020 page common validator >1
             if (page != null && !page.isEmpty()&&CommonValidator.isIdValid(page)) {
                 offset = (Integer.parseInt(page) - 1) * USERS_ON_PAGE;
             }

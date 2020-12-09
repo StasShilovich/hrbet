@@ -1,6 +1,5 @@
 package com.shilovich.hrbet.dao.impl;
 
-import com.shilovich.hrbet.bean.Bet;
 import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.dao.RaceDao;
 import com.shilovich.hrbet.dao.pool.ProxyConnection;
@@ -8,12 +7,25 @@ import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-import static com.shilovich.hrbet.dao.DaoTableField.*;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_COUNT;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_SUM;
+import static com.shilovich.hrbet.dao.DaoTableField.ENTITY_COUNT;
+import static com.shilovich.hrbet.dao.DaoTableField.RACE_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.RACE_LOCATION;
+import static com.shilovich.hrbet.dao.DaoTableField.RACE_TIME;
 
 public class RaceDaoImpl extends RaceDao {
     private static final Logger logger = LogManager.getLogger(RaceDaoImpl.class);

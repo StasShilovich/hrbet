@@ -55,22 +55,20 @@ public class Ratio implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Ratio{");
-        sb.append("raceId=").append(raceId);
-        sb.append(", horseId=").append(horseId);
-        sb.append(", typeId=").append(typeId);
-        sb.append(", ratio=").append(ratio);
-        sb.append('}');
-        return sb.toString();
+        final StringBuilder builder = new StringBuilder("Ratio{");
+        builder.append("raceId=").append(raceId);
+        builder.append(", horseId=").append(horseId);
+        builder.append(", typeId=").append(typeId);
+        builder.append(", ratio=").append(ratio);
+        builder.append('}');
+        return builder.toString();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Ratio)) return false;
-
         Ratio ratio1 = (Ratio) o;
-
         if (getRaceId() != null ? !getRaceId().equals(ratio1.getRaceId()) : ratio1.getRaceId() != null) return false;
         if (getHorseId() != null ? !getHorseId().equals(ratio1.getHorseId()) : ratio1.getHorseId() != null)
             return false;

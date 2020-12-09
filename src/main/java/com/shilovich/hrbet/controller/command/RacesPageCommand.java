@@ -14,10 +14,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.ADMIN_BASIC;
 import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.QUEST_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.USER_BASIC;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_CHECKBOX;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_CHECKBOX_OFF;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_CHECKBOX_ON;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_PAGE_NUMBER;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_RACES_LIST;
+import static com.shilovich.hrbet.controller.CommandParameter.CHECKBOX;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_RACES;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_PAGE;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_RACE_CHECK;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class RacesPageCommand implements Command {
 

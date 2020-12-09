@@ -8,11 +8,11 @@ import com.shilovich.hrbet.controller.Router;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.ADMIN_BASIC;
 import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.USER_BASIC;
 import static com.shilovich.hrbet.controller.CommandParameter.PAGE_INDEX;
 
 public class LogOutCommand implements Command {

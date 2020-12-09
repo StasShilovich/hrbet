@@ -18,9 +18,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.PLACE_RESULT;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_RACE_INFO;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_RACE_SET;
+import static com.shilovich.hrbet.controller.CommandParameter.MIN_HORSE_IN_RACE;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_ENTER_RESULT;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_REDIRECT_INDEX;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_HORSE;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_RACE_ID;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class EnterResultCommand implements Command {
     @Override

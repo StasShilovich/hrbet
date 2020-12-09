@@ -16,10 +16,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.ADMIN_BASIC;
 import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.QUEST_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.USER_BASIC;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_RACE_SET;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_RATIO_LIST;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_RACE;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_REDIRECT_INDEX;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_RACE_ID;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class RacePageCommand implements Command {
     @Override

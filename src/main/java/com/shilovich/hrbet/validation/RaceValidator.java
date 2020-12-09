@@ -8,7 +8,6 @@ public class RaceValidator {
             "^[ a-zA-ZАаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщъЫыьЭэЮюЯя'-]{3,50}$";
     private static final String DATE_TIME_REGEX = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}$";
 
-
     private RaceValidator() {
     }
 
@@ -23,5 +22,4 @@ public class RaceValidator {
         Matcher matcher = pattern.matcher(dateTime);
         return matcher.matches();
     }
-
 }

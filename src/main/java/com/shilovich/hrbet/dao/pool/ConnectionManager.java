@@ -25,7 +25,6 @@ public class ConnectionManager {
             connectionPool = ConnectionPool
                     .create(url, user, password, initialPoolSize, maxPoolSize, maxTimeout);
         } catch (Exception e) {
-            // TODO: 28.09.2020 logger maybe runtime when pool will be
             logger.fatal("Exception due sql connection",e);
         }
     }
@@ -51,7 +50,6 @@ public class ConnectionManager {
     public void close(ProxyConnection connection) {
         connectionPool.releaseConnection(connection);
     }
-
 
     public static ConnectionManager getInstance() {
         return instance;

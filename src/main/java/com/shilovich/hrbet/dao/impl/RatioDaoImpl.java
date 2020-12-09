@@ -2,7 +2,6 @@ package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.bean.Ratio;
 import com.shilovich.hrbet.dao.RatioDao;
-import com.shilovich.hrbet.dao.pool.ConnectionManager;
 import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -14,10 +13,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import static com.shilovich.hrbet.dao.DaoTableField.*;
+import static com.shilovich.hrbet.dao.DaoTableField.RATIO_HORSE_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.RATIO_RATIO;
+import static com.shilovich.hrbet.dao.DaoTableField.RATIO_TYPE_ID;
 
 public class RatioDaoImpl extends RatioDao {
     private static final Logger logger = LogManager.getLogger(RatioDaoImpl.class);
@@ -41,12 +41,10 @@ public class RatioDaoImpl extends RatioDao {
 
     @Override
     public boolean setRatios(Set<Ratio> ratioSet) throws DaoException {
-        boolean result = false;
         ProxyConnection connection = null;
         PreparedStatement statement = null;
         try {
             connection = manager.getConnection();
-            connection.setAutoCommit(false);
             statement = connection.prepareStatement(ADD_RATIO_SQL);
             for (Ratio ratio : ratioSet) {
                 statement.setLong(1, ratio.getRaceId());
@@ -55,18 +53,15 @@ public class RatioDaoImpl extends RatioDao {
                 statement.setBigDecimal(4, ratio.getRatio());
                 statement.addBatch();
             }
-            statement.executeBatch();
-            connection.commit();
-            result = true;
+            int[] executeBatch = statement.executeBatch();
+            return executeBatch.length > 0;
         } catch (SQLException e) {
-            rollback(connection);
             logger.error("Set ratios error!", e);
             throw new DaoException("Set ratios error!", e);
         } finally {
             close(statement);
             close(connection);
         }
-        return result;
     }
 
     @Override

@@ -11,9 +11,14 @@ import org.apache.logging.log4j.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 
-import static com.shilovich.hrbet.dao.DaoTableField.*;
+import static com.shilovich.hrbet.dao.DaoTableField.P_NAME;
+import static com.shilovich.hrbet.dao.DaoTableField.ROLE_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.ROLE_NAME;
 
 public class RolePermissionsDaoImpl extends RolePermissionsDao {
     private static final Logger logger = LogManager.getLogger(RolePermissionsDaoImpl.class);

@@ -4,10 +4,8 @@ import com.shilovich.hrbet.bean.Ratio;
 import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 

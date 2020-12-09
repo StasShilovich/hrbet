@@ -11,9 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.ADMIN_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.QUEST_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.USER_BASIC;
+import static com.shilovich.hrbet.controller.CommandParameter.LOCALE_COUNTRY_RU;
+import static com.shilovich.hrbet.controller.CommandParameter.LOCALE_COUNTRY_US;
+import static com.shilovich.hrbet.controller.CommandParameter.LOCALE_LANGUAGE_EN;
+import static com.shilovich.hrbet.controller.CommandParameter.LOCALE_LANGUAGE_RU;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_COOKIE_LOCALE;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.isNoneEmpty;
 
 public class CookieCommand implements Command {
     @Override

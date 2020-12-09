@@ -1,5 +1,8 @@
 package com.shilovich.hrbet.controller;
 
+/**
+ * The type Command parameter.
+ */
 public class CommandParameter {
     /**
      * Parameters
@@ -27,7 +30,6 @@ public class CommandParameter {
     public static final String ATTR_RACE_SET = "horseSet";
     public static final String ATTR_RATIO_LIST = "ratioList";
     public static final String ATTR_HORSE_LIST = "horseList";
-    public static final String ATTR_HORSE_MAP = "horseMap";
     public static final String ATTR_PAGE_NUMBER = "pageNumber";
     public static final String ATTR_RACES_LIST = "races";
     public static final String ATTR_RACE_INFO = "raceInfo";
@@ -40,7 +42,6 @@ public class CommandParameter {
     public static final String ATTR_CHECKBOX = "switch";
     public static final String ATTR_CHECKBOX_ON = "on";
     public static final String ATTR_CHECKBOX_OFF = "off";
-
     /**
      * PAGES
      */
@@ -66,21 +67,14 @@ public class CommandParameter {
     public static final String LOCALE_LANGUAGE_EN = "en";
     public static final String LOCALE_COUNTRY_RU = "RU";
     public static final String LOCALE_COUNTRY_US = "US";
-    /**
-     * Filter
-     */
     public static final String FILTER_ENCODING = "encoding";
     /**
      * OTHERS
      */
     public static final String URL_REFERER = "referer";
     public static final String BLANK = "";
-    public static final int PAGE_OFFSET = 0;
     public static final int MIN_HORSE_IN_RACE = 3;
     public static final String CHECKBOX = "on";
-    public static final String WIN = "win";
-    public static final String PRIZE = "prize";
-    public static final String QUEST_PERMISSION = "quest";
     public static final String COMMAND_PARAMETER = "command";
 
     private CommandParameter() {

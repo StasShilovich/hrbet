@@ -12,13 +12,18 @@ import com.shilovich.hrbet.exception.ServiceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
-import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.QUEST_BASIC;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_EMPTY_MESSAGE;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_EMPTY_PARAM;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_INCORRECT_DATA;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_INCORRECT_MESSAGE;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_USER_AUTH;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_INDEX;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_EMAIL;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_PASSWORD;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class LogInCommand implements Command {
     @Override

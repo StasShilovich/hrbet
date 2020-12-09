@@ -1,5 +1,8 @@
 package com.shilovich.hrbet.controller;
 
+/**
+ * The enum Command type.
+ */
 public enum CommandType {
     RACES,
     LOGIN,

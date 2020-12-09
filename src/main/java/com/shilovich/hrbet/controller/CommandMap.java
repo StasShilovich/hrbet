@@ -7,6 +7,11 @@ import java.util.Map;
 
 import static com.shilovich.hrbet.controller.CommandType.*;
 
+/**
+ * The type Command map.
+ * <p>
+ * Map that stores available commands with their implementation.
+ */
 public class CommandMap {
     private static final CommandMap instance = new CommandMap();
     private static final Map<CommandType, Command> commands = new EnumMap<>(CommandType.class);
@@ -34,10 +39,21 @@ public class CommandMap {
         commands.put(BET, new BetCommand());
     }
 
+    /**
+     * Gets command.
+     *
+     * @param commandType the command type
+     * @return the command
+     */
     public Command getCommand(CommandType commandType) {
         return commands.get(commandType);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static CommandMap getInstance() {
         return instance;
     }

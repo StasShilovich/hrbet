@@ -16,9 +16,16 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Set;
 
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_USER_AUTH;
+import static com.shilovich.hrbet.controller.CommandParameter.COMMAND_PARAMETER;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_403;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+/**
+ * The type Permission access filter.
+ * <p>
+ * A filter that takes care of user permissions when trying to access certain pages.
+ */
 public class PermissionAccessFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(PermissionAccessFilter.class);
 

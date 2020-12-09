@@ -5,7 +5,6 @@ import com.shilovich.hrbet.dao.HorseDao;
 import com.shilovich.hrbet.dao.DaoFactory;
 import com.shilovich.hrbet.exception.DaoException;
 import com.shilovich.hrbet.exception.ServiceException;
-import com.shilovich.hrbet.service.BetService;
 import com.shilovich.hrbet.service.HorseService;
 import com.shilovich.hrbet.validation.CommonValidator;
 import org.apache.logging.log4j.LogManager;

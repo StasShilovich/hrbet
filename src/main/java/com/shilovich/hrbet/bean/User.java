@@ -109,9 +109,7 @@ public class User implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
-
         User user = (User) o;
-
         if (getId() != null ? !getId().equals(user.getId()) : user.getId() != null) return false;
         if (getName() != null ? !getName().equals(user.getName()) : user.getName() != null) return false;
         if (getSurname() != null ? !getSurname().equals(user.getSurname()) : user.getSurname() != null) return false;

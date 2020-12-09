@@ -17,7 +17,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.shilovich.hrbet.service.ServiceParameter.MAX_HORSE_PARTICIPANTS;
@@ -136,7 +141,6 @@ public class BetServiceImpl implements BetService {
                     resultMap.put(i, 0L);
                 }
             }
-            // TODO: 06.12.2020 maybe return boolean in transaction
             TransactionManager.getInstance().enterResult(resultMap, idRace);
             return true;
         } catch (DaoException e) {

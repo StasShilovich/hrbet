@@ -1,6 +1,10 @@
 package com.shilovich.hrbet.dao.impl;
 
-import com.shilovich.hrbet.bean.*;
+import com.shilovich.hrbet.bean.Bet;
+import com.shilovich.hrbet.bean.BetType;
+import com.shilovich.hrbet.bean.Horse;
+import com.shilovich.hrbet.bean.Race;
+import com.shilovich.hrbet.bean.Status;
 import com.shilovich.hrbet.dao.BetDao;
 import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
@@ -11,11 +15,22 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import static com.shilovich.hrbet.dao.DaoTableField.*;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_CASH;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_HORSE_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_HORSE_NAME;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_RACE_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_RATIO;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_STATUS;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_TIME;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_TYPE_NAME;
+import static com.shilovich.hrbet.dao.DaoTableField.BET_USER_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.RACE_LOCATION;
 
 public class BetDaoImpl extends BetDao {
     private static final Logger logger = LogManager.getLogger(BetDaoImpl.class);

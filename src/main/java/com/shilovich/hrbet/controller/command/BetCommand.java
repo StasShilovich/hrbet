@@ -12,13 +12,17 @@ import com.shilovich.hrbet.service.ServiceFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.math.BigDecimal;
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.ADMIN_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
+import static com.shilovich.hrbet.bean.PermissionEnum.PLACE_BET;
+import static com.shilovich.hrbet.bean.PermissionEnum.USER_BASIC;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_USER_AUTH;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_BET_CASH;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_BET_INFO;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class BetCommand implements Command {
     @Override

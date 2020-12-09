@@ -3,7 +3,6 @@ package com.shilovich.hrbet.bean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Bet implements Serializable {
     private static final long serialVersionUID = -7442278899832735176L;
@@ -125,9 +124,7 @@ public class Bet implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Bet)) return false;
-
         Bet bet = (Bet) o;
-
         if (!getId().equals(bet.getId())) return false;
         if (!getUserId().equals(bet.getUserId())) return false;
         if (!getDate().equals(bet.getDate())) return false;

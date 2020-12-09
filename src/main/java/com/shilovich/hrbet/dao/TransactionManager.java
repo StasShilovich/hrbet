@@ -9,15 +9,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.shilovich.hrbet.dao.DaoTableField.USER_CASH;
 
 public class TransactionManager {
     private static final Logger logger = LogManager.getLogger(TransactionManager.class);
@@ -110,8 +105,8 @@ public class TransactionManager {
             return result ? Optional.of(bet) : Optional.empty();
         } catch (SQLException e) {
             rollback(connection);
-            logger.error("Enter result exception!", e);
-            throw new DaoException("Enter result exception!", e);
+            logger.error("Add bet exception!", e);
+            throw new DaoException("Add bet exception!", e);
         } finally {
             close(connection);
         }
@@ -141,8 +136,8 @@ public class TransactionManager {
             return result;
         } catch (SQLException e) {
             rollback(connection);
-            logger.error("Enter result exception!", e);
-            throw new DaoException("Enter result exception!", e);
+            logger.error("Delete race exception!", e);
+            throw new DaoException("Delete race exception!", e);
         } finally {
             close(connection);
         }
@@ -158,7 +153,6 @@ public class TransactionManager {
             }
         }
     }
-
 
     private void rollback(ProxyConnection connection) {
         if (connection != null) {

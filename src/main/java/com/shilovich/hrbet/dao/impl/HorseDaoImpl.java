@@ -2,19 +2,24 @@ package com.shilovich.hrbet.dao.impl;
 
 import com.shilovich.hrbet.bean.Horse;
 import com.shilovich.hrbet.dao.HorseDao;
-import com.shilovich.hrbet.dao.pool.ConnectionManager;
 import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.shilovich.hrbet.dao.DaoTableField.*;
+import static com.shilovich.hrbet.dao.DaoTableField.HORSE_AGE;
+import static com.shilovich.hrbet.dao.DaoTableField.HORSE_ID;
+import static com.shilovich.hrbet.dao.DaoTableField.HORSE_JOCKEY;
+import static com.shilovich.hrbet.dao.DaoTableField.HORSE_NAME;
 
 public class HorseDaoImpl extends HorseDao {
     private static final Logger logger = LogManager.getLogger(HorseDaoImpl.class);
@@ -22,7 +27,6 @@ public class HorseDaoImpl extends HorseDao {
     private static HorseDao instance;
     private static final String HORSE_SHOW_BY_RACE_SQL = "SELECT h.id,h.name,h.age,h.jockey FROM horse_participatings hp " +
             "INNER JOIN horses h ON hp.horse_id=h.id WHERE hp.races_id=?";
-
     private static final String FIND_ALL_HORSES_SQL = "SELECT h.id,h.name,h.age,h.jockey FROM horses h";
 
     private HorseDaoImpl() {

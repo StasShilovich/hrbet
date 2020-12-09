@@ -16,8 +16,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_HORSE_LIST;
+import static com.shilovich.hrbet.controller.CommandParameter.MIN_HORSE_IN_RACE;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_ADD_RACE;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_REDIRECT_INDEX;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_DATE;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_HORSE;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_LOCATION;
+import static org.apache.commons.lang3.StringUtils.isNoneEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class AddRaceCommand implements Command {
     @Override

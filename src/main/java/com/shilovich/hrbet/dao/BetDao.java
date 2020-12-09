@@ -7,9 +7,7 @@ import com.shilovich.hrbet.exception.DaoException;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public abstract class BetDao implements Dao<Bet, Long> {
 

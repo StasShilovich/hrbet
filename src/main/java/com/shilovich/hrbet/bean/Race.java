@@ -2,9 +2,7 @@ package com.shilovich.hrbet.bean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Race implements Serializable {
     private static final long serialVersionUID = 4834209940652886210L;
@@ -80,9 +78,7 @@ public class Race implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Race)) return false;
-
         Race race = (Race) o;
-
         if (!getId().equals(race.getId())) return false;
         if (!getLocation().equals(race.getLocation())) return false;
         return getDate().equals(race.getDate());

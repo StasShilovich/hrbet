@@ -12,10 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.controller.CommandParameter.COMMAND_PARAMETER;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_404;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_500;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-
+/**
+ * The type Dispatcher servlet.
+ * <p>
+ * Servlet that handles requests and issues responses.
+ */
 public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
 
@@ -40,7 +46,7 @@ public class DispatcherServlet extends HttpServlet {
         }
         Command commandAction = factory.getCommand(CommandType.getCommand(command));
         if (commandAction != null) {
-            Router router = null;
+            Router router;
             try {
                 router = commandAction.execute(req, resp);
             } catch (CommandException e) {

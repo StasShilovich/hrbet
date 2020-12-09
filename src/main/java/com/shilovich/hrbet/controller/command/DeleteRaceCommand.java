@@ -10,12 +10,12 @@ import com.shilovich.hrbet.service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.Set;
 
 import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_REDIRECT_INDEX;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_RACE_ID;
+import static org.apache.commons.lang3.StringUtils.isNoneEmpty;
 
 public class DeleteRaceCommand implements Command {
     @Override

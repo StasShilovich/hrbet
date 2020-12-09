@@ -1,11 +1,22 @@
 package com.shilovich.hrbet.controller.filter;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+/**
+ * The type Xss filter.
+ * <p>
+ * Anti cross-site scripting filter that remove all suspicious strings from request parameters
+ * before returning them to the application.
+ */
 public class XSSFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -22,26 +33,23 @@ public class XSSFilter implements Filter {
 
     private class XSSRequestWrapper extends HttpServletRequestWrapper {
         private Pattern[] patterns = new Pattern[]{
-                // Script fragments
                 Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE),
-                // src='...'
                 Pattern.compile("src[\r\n]*=[\r\n]*\\\'(.*?)\\\'", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
                 Pattern.compile("src[\r\n]*=[\r\n]*\\\"(.*?)\\\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
-                // lonely script tags
                 Pattern.compile("</script>", Pattern.CASE_INSENSITIVE),
                 Pattern.compile("<script(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
-                // eval(...)
                 Pattern.compile("eval\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
-                // expression(...)
                 Pattern.compile("expression\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
-                // javascript:...
                 Pattern.compile("javascript:", Pattern.CASE_INSENSITIVE),
-                // vbscript:...
                 Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE),
-                // onload(...)=...
                 Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL)
         };
 
+        /**
+         * Instantiates a new Xss request wrapper.
+         *
+         * @param servletRequest the servlet request
+         */
         public XSSRequestWrapper(HttpServletRequest servletRequest) {
             super(servletRequest);
         }
@@ -74,9 +82,7 @@ public class XSSFilter implements Filter {
 
         private String stripXSS(String value) {
             if (value != null) {
-                // Avoid null characters
                 value = value.replaceAll("\0", "");
-                // Remove all sections that match a pattern
                 for (Pattern scriptPattern : patterns) {
                     value = scriptPattern.matcher(value).replaceAll("");
                 }

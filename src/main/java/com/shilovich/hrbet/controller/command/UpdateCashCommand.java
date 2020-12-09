@@ -15,8 +15,10 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.shilovich.hrbet.bean.PermissionEnum.USER_BASIC;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_USER_AUTH;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_PROFILE;
+import static com.shilovich.hrbet.controller.CommandParameter.PARAM_ADD_CASH;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class UpdateCashCommand implements Command {
     @Override

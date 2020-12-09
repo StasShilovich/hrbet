@@ -10,7 +10,6 @@ public class Horse implements Serializable {
     private Integer age;
     private String jockey;
 
-
     public Horse() {
     }
 
@@ -68,9 +67,7 @@ public class Horse implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Horse horse = (Horse) o;
-
         if (!id.equals(horse.id)) return false;
         if (!name.equals(horse.name)) return false;
         if (!age.equals(horse.age)) return false;

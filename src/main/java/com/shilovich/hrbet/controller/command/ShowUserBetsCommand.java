@@ -16,8 +16,10 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Set;
 
-import static com.shilovich.hrbet.bean.PermissionEnum.*;
-import static com.shilovich.hrbet.controller.CommandParameter.*;
+import static com.shilovich.hrbet.bean.PermissionEnum.USER_BASIC;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_USER_AUTH;
+import static com.shilovich.hrbet.controller.CommandParameter.ATTR_USER_BETS;
+import static com.shilovich.hrbet.controller.CommandParameter.PAGE_PROFILE_BETS;
 
 public class ShowUserBetsCommand implements Command {
     @Override

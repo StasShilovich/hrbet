@@ -1,6 +1,5 @@
 package com.shilovich.hrbet.dao;
 
-import com.shilovich.hrbet.bean.Bet;
 import com.shilovich.hrbet.bean.Race;
 import com.shilovich.hrbet.dao.pool.ProxyConnection;
 import com.shilovich.hrbet.exception.DaoException;

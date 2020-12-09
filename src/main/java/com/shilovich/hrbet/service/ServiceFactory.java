@@ -4,6 +4,9 @@ import com.shilovich.hrbet.service.impl.*;
 
 import java.util.Map;
 
+/**
+ * The type Service factory.
+ */
 public class ServiceFactory {
     private static final ServiceFactory instance = new ServiceFactory();
     private static final Map<Class<? extends Service>, Service> factory;
@@ -20,10 +23,21 @@ public class ServiceFactory {
     private ServiceFactory() {
     }
 
+    /**
+     * Gets implementation of interface class.
+     *
+     * @param clazz the clazz
+     * @return the class
+     */
     public Service getClass(Class<?> clazz) {
         return factory.get(clazz);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ServiceFactory getInstance() {
         return instance;
     }
