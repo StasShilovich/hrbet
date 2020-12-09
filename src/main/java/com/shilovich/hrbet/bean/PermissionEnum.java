@@ -1,7 +1,5 @@
 package com.shilovich.hrbet.bean;
 
-import com.shilovich.hrbet.controller.CommandType;
-
 public enum PermissionEnum {
     QUEST_BASIC,
     USER_BASIC,

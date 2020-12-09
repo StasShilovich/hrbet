@@ -26,6 +26,9 @@ public class RacePageCommand implements Command {
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         try {
             String raceId = req.getParameter(PARAM_RACE_ID);
+            if (isEmpty(raceId)) {
+                return new Router(PAGE_REDIRECT_INDEX);
+            }
             HorseService horseService = (HorseService) ServiceFactory.getInstance().getClass(HorseService.class);
             Set<Horse> horses = horseService.showByRace(raceId);
             req.setAttribute(ATTR_RACE_SET, horses);

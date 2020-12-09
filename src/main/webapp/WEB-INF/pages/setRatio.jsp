@@ -52,10 +52,14 @@
                                 <td>${horse.age}</td>
                                 <td>${horse.jockey}</td>
                                 <td>
-                                    <input class="form-control" id="winCol" type="text" name="${pageContext.request.getParameter('raceId')}|${horse.id}|win">
+                                    <input class="form-control" id="winCol" type="text"
+                                           name="${pageContext.request.getParameter('raceId')}|${horse.id}|win"
+                                           required pattern="-?(?:\d+(?:\.\d+)?|\.\d+)">
                                 </td>
                                 <td>
-                                    <input class="form-control" id="prizeCol" type="text" name="${pageContext.request.getParameter('raceId')}|${horse.id}|show">
+                                    <input class="form-control" id="prizeCol" type="text"
+                                           name="${pageContext.request.getParameter('raceId')}|${horse.id}|show"
+                                           required pattern="-?(?:\d+(?:\.\d+)?|\.\d+)">
                                 </td>
                             </tr>
                         </c:forEach>

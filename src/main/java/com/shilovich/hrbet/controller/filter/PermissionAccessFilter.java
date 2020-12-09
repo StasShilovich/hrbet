@@ -44,7 +44,8 @@ public class PermissionAccessFilter implements Filter {
             Command command = CommandMap.getInstance().getCommand(commandType);
             boolean isAllowed = command.isAllowed(permissions);
             if (!isAllowed) {
-                response.sendRedirect(PAGE_403);
+                request.getRequestDispatcher(PAGE_403).forward(request, response);
+                return;
             }
         }
         filterChain.doFilter(request, response);

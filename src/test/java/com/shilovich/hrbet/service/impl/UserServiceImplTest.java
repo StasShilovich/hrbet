@@ -94,7 +94,7 @@ public class UserServiceImplTest extends PowerMockTestCase {
     @Test
     public void testAuthorizationInvalidEmail() {
         try {
-            User auth = new User("John2", "Jonas2", "Password1", "test@gmail.m");
+            User auth = new User("John2", "Jonas2", "Password1", "test.gm");
             when(userDao.authorization(auth)).thenReturn(hashUser);
             User condition = service.authorization(auth);
             assertNull(condition);

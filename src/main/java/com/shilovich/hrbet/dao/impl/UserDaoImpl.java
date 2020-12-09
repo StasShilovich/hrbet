@@ -23,13 +23,13 @@ public class UserDaoImpl extends UserDao {
             "SELECT 1 FROM users WHERE email=?";
     private static final String FIND_ALL_USER_SQL =
             "SELECT u.id,u.name, u.surname,u.email,u.cash,r.id FROM users u " +
-                    "INNER JOIN roles r ON u.role_id=r.id LIMIT ? OFFSET ?";
-    private static final String COUNT_USERS_SQL = "SELECT count(id) FROM users";
+                    "INNER JOIN roles r ON u.role_id=r.id WHERE u.deleted=0 LIMIT ? OFFSET ?";
+    private static final String COUNT_USERS_SQL = "SELECT count(id) FROM users WHERE deleted=0";
     private static final String USER_ADD_SQL =
             "INSERT INTO users (name,surname,password,email) VALUES (?,?,?,?)";
     private static final String USER_AUTHORIZED_SQL =
             "SELECT u.id,u.name, u.surname,u.password,u.cash,r.id FROM users u " +
-                    "INNER JOIN roles r ON u.role_id=r.id WHERE u.email=?";
+                    "INNER JOIN roles r ON u.role_id=r.id WHERE u.email=? AND u.deleted=0";
     private static final String UPDATE_CASH_SQL = "UPDATE users u SET u.cash=? WHERE u.id=?";
     private static final String DELETE_USER_SQL = "UPDATE users u SET u.deleted=1 WHERE u.id=?";
     private static final String SHOW_USER_CASH_SQL = "SELECT u.cash FROM users u WHERE id=?";

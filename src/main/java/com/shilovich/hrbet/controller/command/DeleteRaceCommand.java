@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 import static com.shilovich.hrbet.bean.PermissionEnum.CUSTOMER_BASIC;
-import static com.shilovich.hrbet.bean.PermissionEnum.USER_BASIC;
 import static com.shilovich.hrbet.controller.CommandParameter.*;
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -27,7 +26,6 @@ public class DeleteRaceCommand implements Command {
                 RaceService raceService = (RaceService) ServiceFactory.getInstance().getClass(RaceService.class);
                 raceService.delete(raceId);
             }
-            // TODO: 21.11.2020 If race have bets u cant delete race or pay bets back
             Router router = new Router(PAGE_REDIRECT_INDEX);
             router.redirect();
             return router;

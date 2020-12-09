@@ -50,7 +50,6 @@ public class LogInCommand implements Command {
 
     @Override
     public boolean isAllowed(Set<PermissionEnum> permissions) {
-        // TODO: 08.12.2020 Only quest?
         return permissions.contains(QUEST_BASIC);
     }
 }

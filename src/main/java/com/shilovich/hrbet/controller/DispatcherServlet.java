@@ -35,7 +35,8 @@ public class DispatcherServlet extends HttpServlet {
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String command = req.getParameter(COMMAND_PARAMETER);
         if (isEmpty(command) || !CommandType.isContains(command)) {
-            resp.sendRedirect(PAGE_404);
+            req.getRequestDispatcher(PAGE_404).forward(req, resp);
+            return;
         }
         Command commandAction = factory.getCommand(CommandType.getCommand(command));
         if (commandAction != null) {
@@ -44,11 +45,13 @@ public class DispatcherServlet extends HttpServlet {
                 router = commandAction.execute(req, resp);
             } catch (CommandException e) {
                 logger.error(e.getMessage(),e);
-                resp.sendRedirect(PAGE_500);
+                req.getRequestDispatcher(PAGE_500).forward(req, resp);
+                return;
             }
             if (router == null) {
                 logger.error("Null servlet forward");
-                resp.sendRedirect(PAGE_404);
+                req.getRequestDispatcher(PAGE_404).forward(req, resp);
+                return;
             }
             if (router.isRedirect()) {
                 logger.info("Redirect: " + router.getPage());

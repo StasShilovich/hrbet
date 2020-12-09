@@ -236,31 +236,6 @@ public class RaceServiceImplTest extends PowerMockTestCase {
         fail("No exception was thrown!");
     }
 
-    @Test
-    public void testDeleteNegative() {
-        try {
-            when(raceDao.delete(Mockito.anyLong())).thenReturn(false);
-            boolean condition = service.delete("1");
-            assertFalse(condition);
-        } catch (DaoException | ServiceException e) {
-            fail(e.getMessage());
-        }
-    }
-
-    @Test
-    public void testDeletePositive() {
-        try {
-            when(raceDao.delete(Mockito.anyLong())).thenReturn(true);
-            when(cache.containsKey(Mockito.anyString())).thenReturn(false);
-            when(raceDao.countActual()).thenReturn(1L);
-            when(raceDao.countAll()).thenReturn(1L);
-            doNothing().when(cache).addCache(Mockito.anyString(), Mockito.any());
-            boolean condition = service.delete("1");
-            assertTrue(condition);
-        } catch (DaoException | ServiceException e) {
-            fail(e.getMessage());
-        }
-    }
 
     @Test
     public void testDeleteInvalidParameter() {
@@ -270,13 +245,6 @@ public class RaceServiceImplTest extends PowerMockTestCase {
         } catch (ServiceException e) {
             fail(e.getMessage());
         }
-    }
-
-    @Test(expectedExceptions = ServiceException.class)
-    public void testDeleteException() throws DaoException, ServiceException {
-        when(raceDao.delete(Mockito.anyLong())).thenThrow(DaoException.class);
-        service.delete("1");
-        fail("No exception was thrown!");
     }
 
     @Test

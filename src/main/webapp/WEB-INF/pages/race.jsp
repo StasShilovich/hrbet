@@ -122,7 +122,7 @@
                                 </label>
                                 <div class="col-sm-9">
                                     <input onkeyup="updateField()" onkeydown="updateField()" class="form-control"
-                                           type="text" name="betCash"
+                                           type="text" name="betCash" required pattern="-?(?:\d+(?:\.\d+)?|\.\d+)"
                                            id="bet-cash">
                                 </div>
                             </div>

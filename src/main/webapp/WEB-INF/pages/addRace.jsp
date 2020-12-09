@@ -7,8 +7,6 @@
     <%@include file="/WEB-INF/pages/util/bootstrap.jsp" %>
     <title><fmt:message key="label.title.profile"/></title>
 </head>
-<%--<jsp:useBean id="now" class="java.util.Date"/>--%>
-<%--<fmt:formatDate var="date" value="${now}" pattern="yyyy-MM-dd"/>--%>
 <body data-topbar="dark" data-layout="horizontal">
 <div id="layout-wrapper">
     <%@include file="/WEB-INF/pages/fragments/header.jsp" %>
@@ -23,7 +21,8 @@
                                 <fmt:message key="label.location"/>
                             </label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" name="location" id="example-text-input">
+                                <input class="form-control" type="text" name="location" id="example-text-input"
+                                       required pattern="^[ a-zA-ZАаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщъЫыьЭэЮюЯя'-]{3,50}$">
                             </div>
                         </div>
                         <div class="form-group row">

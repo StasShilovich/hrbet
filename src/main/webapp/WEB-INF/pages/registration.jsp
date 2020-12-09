@@ -31,7 +31,9 @@
                         <fmt:message key="label.registration.name"/>
                     </label>
                     <div class="col-md-10">
-                        <input class="form-control" id="nameCol" type="text" name="name">
+                        <input class="form-control" id="nameCol" type="text" name="name"
+                               required pattern="^[a-zA-ZАаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщъЫыьЭэЮюЯя'-]{3,20}$"
+                               oninvalid="<fmt:message key="label.registration.incorrect.name"/>">
                         <script>
                             document.getElementById("nameCol").value = "<c:out value="${userMap['name']}"/>";
                         </script>
@@ -47,7 +49,9 @@
                         <fmt:message key="label.registration.surname"/>
                     </label>
                     <div class="col-md-10">
-                        <input class="form-control" id="surnameCol" type="text" name="surname">
+                        <input class="form-control" id="surnameCol" type="text" name="surname"
+                               required pattern="^[a-zA-ZАаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщъЫыьЭэЮюЯя'-]{3,40}$"
+                               oninvalid="<fmt:message key="label.registration.incorrect.surname"/>">
                         <script>
                             document.getElementById("surnameCol").value = "<c:out value="${userMap['surname']}"/>";
                         </script>
@@ -63,7 +67,8 @@
                         <fmt:message key="label.header.email"/>
                     </label>
                     <div class="col-md-10">
-                        <input class="form-control" id="emailCol" type="text" name="email">
+                        <input class="form-control" id="emailCol"type="email"
+                               oninvalid="<fmt:message key="label.registration.incorrect.email"/>">
                         <script>
                             document.getElementById("emailCol").value = "<c:out value="${userMap['email']}"/>";
                         </script>
@@ -79,7 +84,9 @@
                         <fmt:message key="label.header.password"/>
                     </label>
                     <div class="col-md-10">
-                        <input class="form-control" id="passwordCol" type="text" name="password">
+                        <input class="form-control" id="passwordCol" type="text" name="password"
+                               required pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,}$"
+                               oninvalid="<fmt:message key="label.registration.incorrect.password"/>">
                         <script>
                             document.getElementById("passwordCol").value = "<c:out value="${userMap['password']}"/>";
                         </script>

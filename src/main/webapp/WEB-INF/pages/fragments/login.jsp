@@ -2,9 +2,6 @@
       method="post">
     <input type="hidden" name="command" value="login">
     <div class="form-group">
-        <%--                    <label for="email">--%>
-        <%--                        <fmt:message key="label.header.email"/>--%>
-        <%--                    </label>:--%>
         <input type="email"
                id="email"
                name="email"
@@ -14,9 +11,6 @@
                value="${email}">
     </div>
     <div class="form-group">
-        <%--                    <label for="password">--%>
-        <%--                        <fmt:message key="label.header.password"/>--%>
-        <%--                    </label>:--%>
         <input type="password"
                id="password"
                name="password"

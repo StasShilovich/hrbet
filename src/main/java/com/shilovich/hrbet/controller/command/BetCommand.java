@@ -36,7 +36,6 @@ public class BetCommand implements Command {
                     BigDecimal newUserCash = userCash.subtract(new BigDecimal(cash));
                     user.setCash(newUserCash);
                     session.setAttribute(ATTR_USER_AUTH, user);
-                    // TODO: 21.11.2020 delete cash from database 
                     Router router = new Router(req);
                     router.redirect();
                     return router;
@@ -50,6 +49,7 @@ public class BetCommand implements Command {
 
     @Override
     public boolean isAllowed(Set<PermissionEnum> permissions) {
-        return permissions.contains(USER_BASIC) && permissions.contains(PLACE_BET);
+        return (permissions.contains(USER_BASIC) || permissions.contains(ADMIN_BASIC) ||
+                permissions.contains(CUSTOMER_BASIC)) && permissions.contains(PLACE_BET);
     }
 }

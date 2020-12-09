@@ -11,6 +11,7 @@ import com.shilovich.hrbet.dao.TransactionManager;
 import com.shilovich.hrbet.exception.DaoException;
 import com.shilovich.hrbet.exception.ServiceException;
 import com.shilovich.hrbet.service.BetService;
+import com.shilovich.hrbet.validation.BetValidator;
 import com.shilovich.hrbet.validation.CommonValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,11 +58,11 @@ public class BetServiceImpl implements BetService {
     @Override
     public boolean add(String info, String betCash, BigDecimal userCash, Long userId) throws ServiceException {
         try {
-//            if (!BetValidator.isInfoValid(info) || !CommonValidator.isBigDecimalValid(betCash)) {
-//                return false;
-//            }
+            if (!BetValidator.isInfoValid(info) || !CommonValidator.isBigDecimalValid(betCash)) {
+                return false;
+            }
             BigDecimal cash = new BigDecimal(betCash);
-            if (cash.compareTo(userCash) == 1) {
+            if (cash.compareTo(userCash) > 0) {
                 return false;
             }
             String string = info.replaceAll(INFO_TITLE, BLANK).substring(0, info.length() - 1 - INFO_TITLE.length());
